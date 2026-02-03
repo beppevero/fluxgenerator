@@ -1,8 +1,9 @@
-import { TrendingUp, CreditCard } from "lucide-react";
+import { TrendingUp, CreditCard, Calendar, CalendarDays } from "lucide-react";
 
 interface TotalsSummaryProps {
   totals: {
     mensile: number;
+    annuale: number;
     unaTantum: number;
     carteAziendaQuantita: number;
     carteAziendaCosto: number;
@@ -22,8 +23,19 @@ export function TotalsSummary({ totals }: TotalsSummaryProps) {
       
       <div className="space-y-3">
         <div className="flex justify-between items-center pb-2 border-b border-primary-foreground/20">
-          <span className="text-sm opacity-90">Canoni Mensili</span>
+          <span className="text-sm opacity-90 flex items-center gap-2">
+            <Calendar className="w-3 h-3" />
+            Canoni Mensili
+          </span>
           <span className="text-lg font-bold">{formatPrice(totals.mensile)}</span>
+        </div>
+        
+        <div className="flex justify-between items-center pb-2 border-b border-primary-foreground/20">
+          <span className="text-sm opacity-90 flex items-center gap-2">
+            <CalendarDays className="w-3 h-3" />
+            Canoni Annuali
+          </span>
+          <span className="text-lg font-bold">{formatPrice(totals.annuale)}</span>
         </div>
         
         <div className="flex justify-between items-center pb-2 border-b border-primary-foreground/20">
@@ -32,9 +44,9 @@ export function TotalsSummary({ totals }: TotalsSummaryProps) {
         </div>
 
         {totals.carteAziendaQuantita > 0 && (
-          <div className="flex items-center gap-2 text-xs opacity-80">
+          <div className="flex items-center gap-2 text-xs opacity-80 pt-1">
             <CreditCard className="w-3 h-3" />
-            <span>Include {totals.carteAziendaQuantita} Carta Azienda ({formatPrice(totals.carteAziendaCosto)})</span>
+            <span>Include {totals.carteAziendaQuantita} Carta Azienda ({formatPrice(totals.carteAziendaCosto)}/anno)</span>
           </div>
         )}
       </div>
