@@ -39,13 +39,19 @@ const Index = () => {
     
     // Monthly services
     const mensilePerMezzo = selectedServices
-      .filter((s) => s.tipo === "mensile")
+      .filter((s) => s.periodo === "MENSILE")
       .reduce((sum, s) => sum + s.prezzoRiservato, 0);
     const mensile = mensilePerMezzo * numeroMezzi;
 
+    // Annual services
+    const annualePerMezzo = selectedServices
+      .filter((s) => s.periodo === "ANNUALE")
+      .reduce((sum, s) => sum + s.prezzoRiservato, 0);
+    const annualeBase = annualePerMezzo * numeroMezzi;
+
     // One-time services
     const unaTantumBase = selectedServices
-      .filter((s) => s.tipo === "unaTantum")
+      .filter((s) => s.periodo === "U.T.")
       .reduce((sum, s) => sum + s.prezzoRiservato * numeroMezzi, 0);
 
     // Carte Azienda (1 per 25 veicoli if Crono service selected)
@@ -55,10 +61,13 @@ const Index = () => {
       : 0;
     const carteAziendaCosto = carteAziendaQuantita * CARTA_AZIENDA_COSTO;
 
-    const unaTantum = unaTantumBase + carteAziendaCosto;
+    // Add carte azienda to annual costs
+    const annuale = annualeBase + carteAziendaCosto;
+    const unaTantum = unaTantumBase;
 
     return {
       mensile,
+      annuale,
       unaTantum,
       carteAziendaQuantita,
       carteAziendaCosto,
@@ -99,7 +108,7 @@ const Index = () => {
             </div>
             <div>
               <h1 className="text-lg font-bold text-foreground">Generatore Preventivi</h1>
-              <p className="text-xs text-muted-foreground">Fleet Management Services</p>
+              <p className="text-xs text-muted-foreground">GT Fleet 365 Services</p>
             </div>
           </div>
           <Button onClick={handleExportPDF} className="gap-2">

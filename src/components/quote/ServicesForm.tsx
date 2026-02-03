@@ -1,9 +1,14 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { ListChecks } from "lucide-react";
+import { ListChecks, Info } from "lucide-react";
 import { Service, SelectedService, Configuration } from "@/types/quote";
 import { servicesList, categorieLabels } from "@/data/services";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ServicesFormProps {
   configuration: Configuration;
@@ -38,6 +43,15 @@ export function ServicesForm({ configuration, selectedServices, onChange }: Serv
   const formatPrice = (price: number) => 
     new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(price);
 
+  const getPeriodoLabel = (periodo: string) => {
+    switch (periodo) {
+      case 'MENSILE': return '/mese';
+      case 'ANNUALE': return '/anno';
+      case 'U.T.': return 'U.T.';
+      default: return periodo;
+    }
+  };
+
   return (
     <div className="form-section">
       <h3 className="form-section-title">
@@ -45,10 +59,14 @@ export function ServicesForm({ configuration, selectedServices, onChange }: Serv
         Servizi
       </h3>
       
+      <p className="text-xs text-muted-foreground mb-4 italic">
+        * L'installazione è a carico del cliente
+      </p>
+      
       <div className="space-y-5">
         {Object.entries(groupedServices).map(([categoria, services]) => (
           <div key={categoria} className="space-y-2">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border pb-1">
               {categorieLabels[categoria]}
             </h4>
             
@@ -69,23 +87,45 @@ export function ServicesForm({ configuration, selectedServices, onChange }: Serv
                     className="mt-0.5"
                   />
                   <div className="flex-1 min-w-0">
-                    <Label htmlFor={service.id} className="cursor-pointer text-sm font-medium block">
-                      {service.nome}
-                    </Label>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-sm font-semibold text-accent">
-                        {formatPrice(service.prezzoRiservato)}
-                      </span>
-                      <span className="text-xs text-muted-foreground line-through">
-                        {formatPrice(service.prezzoListino)}
-                      </span>
+                    <div className="flex items-center gap-2">
+                      <Label htmlFor={service.id} className="cursor-pointer text-sm font-medium block">
+                        {service.nome}
+                      </Label>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Info className="w-3.5 h-3.5 text-muted-foreground cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent side="right" className="max-w-xs">
+                          <p className="text-xs">{service.descrizione}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs text-muted-foreground">Listino:</span>
+                        <span className="text-xs text-muted-foreground line-through">
+                          {formatPrice(service.prezzoListino)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs text-muted-foreground">Scontato:</span>
+                        <span className="text-xs text-muted-foreground line-through">
+                          {formatPrice(service.prezzoScontato)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-medium text-accent">Riservato:</span>
+                        <span className="text-sm font-bold text-accent">
+                          {formatPrice(service.prezzoRiservato)}
+                        </span>
+                      </div>
                       <Badge variant="secondary" className="text-xs">
-                        {service.tipo === 'mensile' ? '/mese' : 'U.T.'}
+                        {getPeriodoLabel(service.periodo)}
                       </Badge>
                     </div>
                   </div>
                   {service.isCrono && (
-                    <Badge className="bg-primary text-primary-foreground text-xs">
+                    <Badge className="bg-primary text-primary-foreground text-xs shrink-0">
                       Crono
                     </Badge>
                   )}

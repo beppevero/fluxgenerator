@@ -17,10 +17,12 @@ export interface PaymentInfo {
 export interface Service {
   id: string;
   nome: string;
-  categoria: 'tachigrafo' | 'cronotachigrafo' | 'telematica' | 'accessori';
+  descrizione: string;
+  categoria: 'dispositivi' | 'fleet_base' | 'fleet_plus' | 'fleet_premium' | 'crono' | 'crono_telematica' | 'piattaforme' | 'accessori';
   prezzoListino: number;
+  prezzoScontato: number;
   prezzoRiservato: number;
-  tipo: 'mensile' | 'unaTantum';
+  periodo: 'MENSILE' | 'ANNUALE' | 'U.T.';
   isCrono?: boolean;
   applicaA?: 'truck' | 'light' | 'entrambi';
 }
@@ -36,6 +38,7 @@ export interface QuoteData {
   selectedServices: SelectedService[];
   totals: {
     mensile: number;
+    annuale: number;
     unaTantum: number;
     carteAziendaQuantita: number;
     carteAziendaCosto: number;
