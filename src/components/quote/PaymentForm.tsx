@@ -1,7 +1,8 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { CreditCard, FileText, Clock } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CreditCard, FileText, Clock, CalendarDays } from "lucide-react";
 import { PaymentInfo } from "@/types/quote";
 
 interface PaymentFormProps {
@@ -18,15 +19,36 @@ export function PaymentForm({ paymentInfo, onChange }: PaymentFormProps) {
       </h3>
       
       <div className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="condizioniPagamento" className="flex items-center gap-2 text-foreground/80">
+            <Label htmlFor="durataContrattuale" className="flex items-center gap-2 text-foreground/90 font-medium">
+              <CalendarDays className="w-3 h-3" />
+              Durata Contrattuale
+            </Label>
+            <Select
+              value={paymentInfo.durataContrattuale}
+              onValueChange={(value) => onChange({ ...paymentInfo, durataContrattuale: value })}
+            >
+              <SelectTrigger className="glass-input">
+                <SelectValue placeholder="Seleziona durata" />
+              </SelectTrigger>
+              <SelectContent className="bg-slate-900 border-white/20">
+                <SelectItem value="12">12 mesi</SelectItem>
+                <SelectItem value="24">24 mesi</SelectItem>
+                <SelectItem value="36">36 mesi</SelectItem>
+                <SelectItem value="60">60 mesi</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="condizioniPagamento" className="flex items-center gap-2 text-foreground/90 font-medium">
               <CreditCard className="w-3 h-3" />
               Condizioni di Pagamento
             </Label>
             <Input
               id="condizioniPagamento"
-              placeholder="Es: RIBA 30gg, Bonifico anticipato"
+              placeholder="Es: RIBA 30gg"
               value={paymentInfo.condizioniPagamento}
               onChange={(e) => onChange({ ...paymentInfo, condizioniPagamento: e.target.value })}
               className="glass-input"
@@ -34,13 +56,13 @@ export function PaymentForm({ paymentInfo, onChange }: PaymentFormProps) {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="validitaOfferta" className="flex items-center gap-2 text-foreground/80">
+            <Label htmlFor="validitaOfferta" className="flex items-center gap-2 text-foreground/90 font-medium">
               <Clock className="w-3 h-3" />
               Validità Offerta
             </Label>
             <Input
               id="validitaOfferta"
-              placeholder="Es: 30 giorni dalla data"
+              placeholder="Es: 30 giorni"
               value={paymentInfo.validitaOfferta}
               onChange={(e) => onChange({ ...paymentInfo, validitaOfferta: e.target.value })}
               className="glass-input"
@@ -49,7 +71,7 @@ export function PaymentForm({ paymentInfo, onChange }: PaymentFormProps) {
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="condizioniFornitura" className="flex items-center gap-2 text-foreground/80">
+          <Label htmlFor="condizioniFornitura" className="flex items-center gap-2 text-foreground/90 font-medium">
             <FileText className="w-3 h-3" />
             Condizioni di Fornitura
           </Label>

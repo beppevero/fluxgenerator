@@ -23,6 +23,7 @@ const Index = () => {
     condizioniPagamento: "",
     condizioniFornitura: "",
     validitaOfferta: "30 giorni dalla data di emissione",
+    durataContrattuale: "36",
   });
 
   const [selectedServices, setSelectedServices] = useState<SelectedService[]>([]);
