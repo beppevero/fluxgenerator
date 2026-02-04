@@ -99,19 +99,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
 
         {/* ============ PAGINA 2+ - CONTENUTO ============ */}
         <div className="p-6">
-          {/* Header ripetuto - senza ragione sociale */}
-          <div className={headerStyle}>
-            <div>
-              <div className="text-[9px] text-gray-500 leading-tight mb-1">
-                Piattaforma Software Avanzata | Mobilità, Gestione, Controllo e Sicurezza
-              </div>
-              <p className="text-[10px] text-gray-500 mt-0.5">
-                Emesso il: {formatDateLong()}
-              </p>
-            </div>
-            <img src={fluxLogo} alt="Flux" className="h-8 w-auto" />
-          </div>
-
           {/* SEZIONE 1: VALORIZZAZIONE ECONOMICA */}
           <div className="mb-6">
             <h3 className={sectionTitleStyle}>
