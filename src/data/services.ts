@@ -43,6 +43,16 @@ export const servicesList: Service[] = [
     periodo: 'U.T.',
   },
   {
+    id: 'dispositivo-shadow',
+    nome: 'DISPOSITIVO SHADOW',
+    descrizione: 'Localizzatore satellitare portatile 4G per garantire la protezione e il monitoraggio del mezzo in caso di furto. Può essere utilizzato come dispositivo di sicurezza di back-up perché facilmente occultabile. Dotato di batteria autonoma.',
+    categoria: 'dispositivi',
+    prezzoListino: 400.00,
+    prezzoScontato: 320.00,
+    prezzoRiservato: 250.00,
+    periodo: 'U.T.',
+  },
+  {
     id: 'beacon-bt',
     nome: 'BEACON BT',
     descrizione: 'Beacon Bluetooth per funzione riconoscimento driver/passeggero',
@@ -448,6 +458,16 @@ export const servicesList: Service[] = [
   },
 
   // ACCESSORI
+  {
+    id: 'attivazione-gt-fleet',
+    nome: 'ATTIVAZIONE GT FLEET 365',
+    descrizione: 'Attivazione piattaforma GT FLEET 365',
+    categoria: 'accessori',
+    prezzoListino: 100.00,
+    prezzoScontato: 80.00,
+    prezzoRiservato: 50.00,
+    periodo: 'U.T.',
+  },
   {
     id: 'carta-aziendale',
     nome: 'CARTA AZIENDALE CRONO (25 MEZZI)',
