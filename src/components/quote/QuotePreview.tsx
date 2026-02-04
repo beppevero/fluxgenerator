@@ -61,9 +61,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           {/* Header con logo */}
           <div className={headerStyle}>
             <div className="text-[9px] text-gray-500 leading-tight">
-              Piattaforma Software Avanzata | Mobilità, Gestione,<br />
-              Controllo e Sicurezza, Telematica di Mezzi Aziendali e Asset
+              Piattaforma Software Avanzata | Mobilità, Gestione, Controllo e Sicurezza, Telematica di Mezzi Aziendali e Asset
             </div>
+            
             
           </div>
 
