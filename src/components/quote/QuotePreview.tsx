@@ -1,6 +1,5 @@
 import { forwardRef } from "react";
 import { QuoteData } from "@/types/quote";
-import { durateContratto, tipiVeicolo, categorieLabels } from "@/data/services";
 
 interface QuotePreviewProps {
   quoteData: QuoteData;
@@ -8,7 +7,7 @@ interface QuotePreviewProps {
 
 export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
   ({ quoteData }, ref) => {
-    const { clientData, configuration, paymentInfo, selectedServices, totals } = quoteData;
+    const { clientData, paymentInfo, selectedServices, totals } = quoteData;
 
     const formatPrice = (price: number) =>
       new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(price);
@@ -21,14 +20,14 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
       }).format(new Date());
     };
 
-    const tipoVeicoloLabel = tipiVeicolo.find(t => t.value === configuration.tipoVeicolo)?.label;
-    const durataLabel = durateContratto.find(d => d.value === configuration.durataContratto)?.label;
+    const formatDateShort = () => {
+      const d = new Date();
+      return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
+    };
 
     const serviziMensili = selectedServices.filter(s => s.periodo === 'MENSILE');
     const serviziAnnuali = selectedServices.filter(s => s.periodo === 'ANNUALE');
     const serviziUnaTantum = selectedServices.filter(s => s.periodo === 'U.T.');
-
-    const hasCronoService = selectedServices.some(s => s.isCrono);
 
     const getPeriodoLabel = (periodo: string) => {
       switch (periodo) {
@@ -38,6 +37,8 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
         default: return periodo;
       }
     };
+
+    const totaleMezzi = selectedServices.reduce((sum, s) => sum + s.quantita, 0);
 
     return (
       <div 
@@ -56,34 +57,25 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
                 Servizi Fleet Management
               </p>
             </div>
-            <div className="text-right text-sm text-muted-foreground">
-              <p>Data: {formatDate()}</p>
-              <p className="mt-1">Rif. #{Math.random().toString(36).substr(2, 8).toUpperCase()}</p>
+            <div className="text-right">
+              <div className="text-2xl font-bold text-primary tracking-tight">Flux</div>
+              <p className="text-sm text-muted-foreground mt-1">
+                Data: {formatDate()}
+              </p>
             </div>
           </div>
         </div>
 
         {/* Client Info */}
-        <div className="grid grid-cols-2 gap-6 mb-8">
-          <div className="bg-muted/50 rounded-lg p-4">
-            <h3 className="quote-section-title">Dati Cliente</h3>
-            <div className="space-y-1 text-sm">
-              <p><span className="font-medium">Ragione Sociale:</span> {clientData.ragioneSociale || '—'}</p>
-              <p><span className="font-medium">Referente:</span> {clientData.referente || '—'}</p>
-              <p><span className="font-medium">N. Mezzi:</span> {clientData.numeroMezzi || '—'}</p>
-            </div>
-          </div>
-          
-          <div className="bg-muted/50 rounded-lg p-4">
-            <h3 className="quote-section-title">Configurazione</h3>
-            <div className="space-y-1 text-sm">
-              <p><span className="font-medium">Tipo Veicolo:</span> {tipoVeicoloLabel}</p>
-              <p><span className="font-medium">Durata Contratto:</span> {durataLabel}</p>
-            </div>
+        <div className="bg-muted/50 rounded-lg p-4 mb-6">
+          <h3 className="quote-section-title">Dati Cliente</h3>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <p><span className="font-medium">Ragione Sociale:</span> {clientData.ragioneSociale || '—'}</p>
+            <p><span className="font-medium">Partita IVA:</span> {clientData.partitaIva || '—'}</p>
           </div>
         </div>
 
-        {/* Services Tables */}
+        {/* Services Table */}
         {selectedServices.length > 0 && (
           <div className="mb-6">
             <h3 className="quote-section-title">Dettaglio Servizi</h3>
@@ -91,30 +83,35 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
               <thead>
                 <tr className="quote-table-header">
                   <th className="text-left p-3 rounded-tl-md">Servizio</th>
-                  <th className="text-left p-3 max-w-[200px]">Descrizione</th>
+                  <th className="text-left p-3">Descrizione</th>
                   <th className="text-right p-3">Listino</th>
                   <th className="text-right p-3">Scontato</th>
                   <th className="text-right p-3">Riservato</th>
-                  <th className="text-center p-3 rounded-tr-md">Periodo</th>
+                  <th className="text-center p-3">N° Servizi</th>
+                  <th className="text-center p-3">Periodo</th>
+                  <th className="text-right p-3 rounded-tr-md">Totale</th>
                 </tr>
               </thead>
               <tbody>
                 {selectedServices.map((service) => (
                   <tr key={service.id} className="quote-table-row">
                     <td className="p-3 font-medium">{service.nome}</td>
-                    <td className="p-3 text-xs text-muted-foreground max-w-[200px]">
-                      {service.descrizione.length > 60 
-                        ? service.descrizione.substring(0, 60) + '...'
+                    <td className="p-3 text-xs text-muted-foreground max-w-[150px]">
+                      {service.descrizione.length > 50 
+                        ? service.descrizione.substring(0, 50) + '...'
                         : service.descrizione}
                     </td>
-                    <td className="text-right p-3 text-muted-foreground line-through">
+                    <td className="text-right p-3 text-muted-foreground line-through text-xs">
                       {formatPrice(service.prezzoListino)}
                     </td>
-                    <td className="text-right p-3 text-muted-foreground line-through">
+                    <td className="text-right p-3 text-muted-foreground line-through text-xs">
                       {formatPrice(service.prezzoScontato)}
                     </td>
-                    <td className="text-right p-3 font-semibold text-accent">
-                      {formatPrice(service.prezzoRiservato)}
+                    <td className="text-right p-3 font-medium">
+                      {formatPrice(service.prezzoUnitario)}
+                    </td>
+                    <td className="text-center p-3 font-medium">
+                      {service.quantita}
                     </td>
                     <td className="text-center p-3">
                       <span className={`text-xs px-2 py-1 rounded ${
@@ -125,26 +122,11 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
                         {getPeriodoLabel(service.periodo)}
                       </span>
                     </td>
+                    <td className="text-right p-3 font-semibold text-accent">
+                      {formatPrice(service.prezzoUnitario * service.quantita)}
+                    </td>
                   </tr>
                 ))}
-                {hasCronoService && totals.carteAziendaQuantita > 0 && (
-                  <tr className="quote-table-row bg-accent/5">
-                    <td className="p-3 font-medium">CARTA AZIENDALE CRONO</td>
-                    <td className="p-3 text-xs text-muted-foreground">
-                      Obbligatoria ogni 25 mezzi per servizi Crono (x{totals.carteAziendaQuantita})
-                    </td>
-                    <td className="text-right p-3 text-muted-foreground">—</td>
-                    <td className="text-right p-3 text-muted-foreground">—</td>
-                    <td className="text-right p-3 font-semibold text-accent">
-                      {formatPrice(totals.carteAziendaCosto)}
-                    </td>
-                    <td className="text-center p-3">
-                      <span className="text-xs px-2 py-1 rounded bg-green-100 text-green-700">
-                        Annuale
-                      </span>
-                    </td>
-                  </tr>
-                )}
               </tbody>
             </table>
           </div>
@@ -162,34 +144,25 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
           <div className="mb-6 grid grid-cols-3 gap-4">
             {serviziMensili.length > 0 && (
               <div className="bg-blue-50 rounded-lg p-4 text-center">
-                <p className="text-xs text-blue-600 uppercase font-semibold mb-1">Totale Mensile</p>
+                <p className="text-xs text-blue-600 uppercase font-semibold mb-1">Totale Canoni Mensili</p>
                 <p className="text-lg font-bold text-blue-800">
                   {formatPrice(totals.mensile)}
-                </p>
-                <p className="text-xs text-blue-600 mt-1">
-                  ({clientData.numeroMezzi} mezzi)
                 </p>
               </div>
             )}
             {serviziAnnuali.length > 0 && (
               <div className="bg-green-50 rounded-lg p-4 text-center">
-                <p className="text-xs text-green-600 uppercase font-semibold mb-1">Totale Annuale</p>
+                <p className="text-xs text-green-600 uppercase font-semibold mb-1">Totale Canoni Annuali</p>
                 <p className="text-lg font-bold text-green-800">
                   {formatPrice(totals.annuale)}
                 </p>
-                <p className="text-xs text-green-600 mt-1">
-                  ({clientData.numeroMezzi} mezzi)
-                </p>
               </div>
             )}
-            {(serviziUnaTantum.length > 0 || totals.carteAziendaCosto > 0) && (
+            {serviziUnaTantum.length > 0 && (
               <div className="bg-orange-50 rounded-lg p-4 text-center">
-                <p className="text-xs text-orange-600 uppercase font-semibold mb-1">Una Tantum</p>
+                <p className="text-xs text-orange-600 uppercase font-semibold mb-1">Totale Una Tantum</p>
                 <p className="text-lg font-bold text-orange-800">
                   {formatPrice(totals.unaTantum)}
-                </p>
-                <p className="text-xs text-orange-600 mt-1">
-                  ({clientData.numeroMezzi} mezzi)
                 </p>
               </div>
             )}
@@ -203,18 +176,29 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
           </div>
         )}
 
-        {/* Payment Conditions */}
-        {(paymentInfo.modalitaPagamento || paymentInfo.validitaOfferta) && (
-          <div className="bg-muted/50 rounded-lg p-4 mb-6">
-            <h3 className="quote-section-title">Condizioni</h3>
-            <div className="space-y-2 text-sm">
-              {paymentInfo.modalitaPagamento && (
-                <p><span className="font-medium">Modalità di Pagamento:</span> {paymentInfo.modalitaPagamento}</p>
-              )}
-              {paymentInfo.validitaOfferta && (
-                <p><span className="font-medium">Validità Offerta:</span> {paymentInfo.validitaOfferta}</p>
-              )}
-            </div>
+        {/* Conditions */}
+        {(paymentInfo.condizioniPagamento || paymentInfo.validitaOfferta || paymentInfo.condizioniFornitura) && (
+          <div className="space-y-4 mb-6">
+            {(paymentInfo.condizioniPagamento || paymentInfo.validitaOfferta) && (
+              <div className="bg-muted/50 rounded-lg p-4">
+                <h3 className="quote-section-title">Condizioni di Pagamento</h3>
+                <div className="space-y-1 text-sm">
+                  {paymentInfo.condizioniPagamento && (
+                    <p><span className="font-medium">Modalità:</span> {paymentInfo.condizioniPagamento}</p>
+                  )}
+                  {paymentInfo.validitaOfferta && (
+                    <p><span className="font-medium">Validità Offerta:</span> {paymentInfo.validitaOfferta}</p>
+                  )}
+                </div>
+              </div>
+            )}
+            
+            {paymentInfo.condizioniFornitura && (
+              <div className="bg-muted/50 rounded-lg p-4">
+                <h3 className="quote-section-title">Condizioni di Fornitura</h3>
+                <p className="text-sm whitespace-pre-wrap">{paymentInfo.condizioniFornitura}</p>
+              </div>
+            )}
           </div>
         )}
 
@@ -224,7 +208,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
             <div className="flex justify-between items-center">
               <div>
                 <h3 className="font-semibold text-lg">Riepilogo Offerta</h3>
-                <p className="text-sm opacity-80">Contratto {durataLabel} • {clientData.numeroMezzi} mezzi</p>
+                <p className="text-sm opacity-80">Totale N° Servizi: {totaleMezzi}</p>
               </div>
               <div className="text-right space-y-1">
                 {totals.mensile > 0 && (
