@@ -5,7 +5,7 @@ export const servicesList: Service[] = [
   {
     id: 'dispositivo-bordo',
     nome: 'DISPOSITIVO DI BORDO',
-    descrizione: 'Dispositivo GPS / 4G (dispositivo in vendita) - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365, Geofencing, Reportistica',
+    descrizione: 'Dispositivo GPS / 4G (dispositivo in vendita) - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità con possibilità di visualizzazione del traffico, Stato del mezzo (in sosta, in fermata, in movimento), Consumo carburante (stimato)',
     categoria: 'dispositivi',
     prezzoListino: 200.00,
     prezzoScontato: 190.00,
@@ -15,7 +15,7 @@ export const servicesList: Service[] = [
   {
     id: 'dispositivo-rimorchio',
     nome: 'DISPOSITIVO RIMORCHIO',
-    descrizione: 'Dispositivo GPS per Rimorchio / Batteria ricaricabile / IP67 - Localizzazione Real Time, Notifica aggancio/sgancio rimorchio',
+    descrizione: 'Dispositivo GPS per Rimorchio / Batteria ricaricabile / IP67 (dispositivo in vendita)',
     categoria: 'dispositivi',
     prezzoListino: 200.00,
     prezzoScontato: 180.00,
@@ -25,7 +25,7 @@ export const servicesList: Service[] = [
   {
     id: 'dispositivo-asset',
     nome: 'DISPOSITIVO ASSET',
-    descrizione: 'Dispositivo GPS con batteria durata 2 anni, 4G, IP67 - Pacco civetta, Gruppi elettrogeni, Mezzi d\'opera, Trasmissione 1 dato GPS al giorno',
+    descrizione: 'Dispositivo GPS con batteria della durata di 2 anni, 4G, IP67 - Pacco civetta, Gruppi elettrogeni, Mezzi d\'opera, Trasmissione 1 dato GPS al giorno',
     categoria: 'dispositivi',
     prezzoListino: 300.00,
     prezzoScontato: 270.00,
@@ -35,7 +35,7 @@ export const servicesList: Service[] = [
   {
     id: 'dispositivo-tractor',
     nome: 'DISPOSITIVO TRACTOR',
-    descrizione: 'Dispositivo GPS 12/24 - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365, Geofencing',
+    descrizione: 'Dispositivo GPS 12/24 - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità con possibilità di visualizzazione del traffico, Stato del mezzo (in sosta, in fermata, in movimento), Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI',
     categoria: 'dispositivi',
     prezzoListino: 210.00,
     prezzoScontato: 180.00,
@@ -55,7 +55,7 @@ export const servicesList: Service[] = [
   {
     id: 'beacon-bt',
     nome: 'BEACON BT',
-    descrizione: 'Beacon Bluetooth per funzione riconoscimento driver/passeggero',
+    descrizione: 'Beacon BT per funzione riconoscimento driver/passeggero',
     categoria: 'dispositivi',
     prezzoListino: 20.00,
     prezzoScontato: 18.00,
@@ -105,7 +105,7 @@ export const servicesList: Service[] = [
   {
     id: 'pedale-antirapina',
     nome: 'PEDALE ANTIRAPINA',
-    descrizione: 'Pedale antirapina per sicurezza veicolo',
+    descrizione: 'Pedale antirapina',
     categoria: 'dispositivi',
     prezzoListino: 70.00,
     prezzoScontato: 63.00,
@@ -117,7 +117,7 @@ export const servicesList: Service[] = [
   {
     id: 'fleet-base-annuale',
     nome: 'GT FLEET 365 BASE',
-    descrizione: 'Mezzi Aziendali, Mezzi Pesanti, Mezzi d\'Opera (dispositivo in comodato d\'uso) - Localizzazione, App, Geofencing, Reportistica, Assistenza',
+    descrizione: '(dispositivo in comodato d\'uso) - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità con possibilità di visualizzazione del traffico, Stato del mezzo, Consumo carburante (stimato), Km percorsi da GPS, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Reportistica, Formazione, Assistenza',
     categoria: 'fleet_base',
     prezzoListino: 200.00,
     prezzoScontato: 150.00,
@@ -127,7 +127,7 @@ export const servicesList: Service[] = [
   {
     id: 'fleet-base-mensile',
     nome: 'GT FLEET 365 BASE',
-    descrizione: 'Mezzi Aziendali, Mezzi Pesanti, Mezzi d\'Opera (dispositivo in comodato d\'uso) - Localizzazione, App, Geofencing, Reportistica, Assistenza',
+    descrizione: '(dispositivo in comodato d\'uso) - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità con possibilità di visualizzazione del traffico, Stato del mezzo, Consumo carburante (stimato), Km percorsi da GPS, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Reportistica, Formazione, Assistenza',
     categoria: 'fleet_base',
     prezzoListino: 19.00,
     prezzoScontato: 16.00,
@@ -139,7 +139,7 @@ export const servicesList: Service[] = [
   {
     id: 'fleet-gold-annuale',
     nome: 'GT FLEET 365 GOLD',
-    descrizione: 'Mezzi Aziendali, Mezzi Pesanti (dispositivo in comodato d\'uso) - Include funzionalità BASE + Km da odometro, Consumo Carburante telematica',
+    descrizione: '(dispositivo in comodato d\'uso) - Include funzionalità BASE + Km percorsi da odometro con telematica (se fornita dal mezzo), Consumo Carburante con telematica (se fornita dal mezzo), Formazione, Assistenza',
     categoria: 'fleet_gold',
     prezzoListino: 275.00,
     prezzoScontato: 245.00,
@@ -149,7 +149,7 @@ export const servicesList: Service[] = [
   {
     id: 'fleet-gold-mensile',
     nome: 'GT FLEET 365 GOLD',
-    descrizione: 'Mezzi Aziendali, Mezzi Pesanti (dispositivo in comodato d\'uso) - Include funzionalità BASE + Km da odometro, Consumo Carburante telematica',
+    descrizione: '(dispositivo in comodato d\'uso) - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità, Stato del mezzo, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Reportistica, Km percorsi da odometro con telematica (se fornita dal mezzo), Consumo Carburante con telematica (se fornita dal mezzo), Formazione, Assistenza',
     categoria: 'fleet_gold',
     prezzoListino: 25.00,
     prezzoScontato: 22.00,
@@ -161,7 +161,7 @@ export const servicesList: Service[] = [
   {
     id: 'fleet-plus-annuale',
     nome: 'GT FLEET 365 PLUS',
-    descrizione: 'Mezzi Aziendali, Mezzi Pesanti - Include Allarme Taglio Cavi, Antijammer, Blocco Avviamento, Parking Protection, Tasto SOS',
+    descrizione: '(dispositivo in comodato d\'uso) - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità, Stato del mezzo, Consumo carburante (stimato), Km percorsi da GPS, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Reportistica, Allarme Taglio Cavi e Distacco Batteria, Antijammer, Blocco Avviamento da Remoto, Parking Protection, Gestione Referenti Allarmi e Notifiche, Funzione Veicolo in Officina, Tasto SOS, Formazione, Assistenza',
     categoria: 'fleet_plus',
     prezzoListino: 250.00,
     prezzoScontato: 220.00,
@@ -171,7 +171,7 @@ export const servicesList: Service[] = [
   {
     id: 'fleet-plus-mensile',
     nome: 'GT FLEET 365 PLUS',
-    descrizione: 'Mezzi Aziendali, Mezzi Pesanti - Include Allarme Taglio Cavi, Antijammer, Blocco Avviamento, Parking Protection, Tasto SOS',
+    descrizione: '(dispositivo in comodato d\'uso) - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità, Stato del mezzo, Consumo carburante (stimato), Km percorsi da GPS, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Reportistica, Allarme Taglio Cavi e Distacco Batteria, Antijammer, Blocco Avviamento da Remoto, Parking Protection, Gestione Referenti Allarmi e Notifiche, Funzione Veicolo in Officina, Tasto SOS, Formazione, Assistenza',
     categoria: 'fleet_plus',
     prezzoListino: 23.00,
     prezzoScontato: 21.00,
@@ -183,7 +183,7 @@ export const servicesList: Service[] = [
   {
     id: 'fleet-premium-annuale',
     nome: 'GT FLEET 365 PREMIUM',
-    descrizione: 'Mezzi Aziendali, Mezzi Pesanti - Km da odometro, Consumo Carburante telematica, tutte le funzionalità PLUS',
+    descrizione: '(dispositivo in comodato d\'uso) - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità, Stato del mezzo, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (utilizzando i km), Gestione Referenti Notifiche, Reportistica, Allarme Taglio Cavi e Distacco Batteria, Antijammer, Blocco Avviamento da Remoto, Parking Protection, Gestione Referenti Allarmi e Notifiche, Funzione Veicolo in Officina, Tasto SOS, Km percorsi da odometro con telematica (se fornita dal mezzo), Consumo Carburante con telematica (se fornita dal mezzo), Formazione, Assistenza',
     categoria: 'fleet_premium',
     prezzoListino: 297.00,
     prezzoScontato: 267.00,
@@ -193,7 +193,7 @@ export const servicesList: Service[] = [
   {
     id: 'fleet-premium-mensile',
     nome: 'GT FLEET 365 PREMIUM',
-    descrizione: 'Mezzi Aziendali, Mezzi Pesanti - Km da odometro, Consumo Carburante telematica, tutte le funzionalità PLUS',
+    descrizione: '(dispositivo in comodato d\'uso) - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità, Stato del mezzo, Consumo carburante (stimato), Km percorsi da GPS, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (utilizzando i km), Gestione Referenti Notifiche, Reportistica, Allarme Taglio Cavi e Distacco Batteria, Antijammer, Blocco Avviamento da Remoto, Parking Protection, Gestione Referenti Allarmi e Notifiche, Funzione Veicolo in Officina, Tasto SOS, Km percorsi da odometro con telematica (se fornita dal mezzo), Consumo Carburante con telematica (se fornita dal mezzo), Formazione, Assistenza',
     categoria: 'fleet_premium',
     prezzoListino: 27.00,
     prezzoScontato: 24.00,
@@ -205,7 +205,7 @@ export const servicesList: Service[] = [
   {
     id: 'crono-base-annuale',
     nome: 'GT FLEET 365 TRUCK CRONO',
-    descrizione: 'Mezzi Pesanti - Cronotachigrafo Digitale, Scarico File DDD, Report Truck Base, Tempi guida autista Real Time',
+    descrizione: '(dispositivo in comodato d\'uso) - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità, Stato del mezzo, Consumo carburante (stimato), Km percorsi da GPS, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Reportistica, Cronotachigrafo Digitale - Scarico File DDD, Report Truck Base: Lettere di infrazione e attività dell\'autista, Dati tempi di guida autista Real Time, Formazione, Assistenza',
     categoria: 'crono',
     prezzoListino: 350.00,
     prezzoScontato: 316.00,
@@ -216,7 +216,7 @@ export const servicesList: Service[] = [
   {
     id: 'crono-base-mensile',
     nome: 'GT FLEET 365 TRUCK CRONO',
-    descrizione: 'Mezzi Pesanti - Cronotachigrafo Digitale, Scarico File DDD, Report Truck Base, Tempi guida autista Real Time',
+    descrizione: '(dispositivo in comodato d\'uso) - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità, Stato del mezzo, Consumo carburante (stimato), Km percorsi da GPS, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Reportistica, Cronotachigrafo Digitale - Scarico File DDD, Report Truck Base: Lettere di infrazione e attività dell\'autista, Dati tempi di guida autista Real Time, Formazione, Assistenza',
     categoria: 'crono',
     prezzoListino: 32.00,
     prezzoScontato: 28.00,
@@ -229,7 +229,7 @@ export const servicesList: Service[] = [
   {
     id: 'crono-telematica-annuale',
     nome: 'GT FLEET 365 TRUCK CRONO TELEMATICA',
-    descrizione: 'Mezzi Pesanti - Km da odometro, Consumo Carburante, Cronotachigrafo, Scarico DDD, Tempi guida Real Time',
+    descrizione: '(dispositivo in comodato d\'uso) - Funzione Veicolo in Officina, Reportistica, Km percorsi da odometro con telematica (se fornita dal mezzo), Consumo Carburante con telematica (se fornita dal mezzo), Cronotachigrafo Digitale - Scarico File DDD, Report Truck Base: Lettere di infrazione e attività dell\'autista, Dati tempi di guida autista Real Time, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Gestione Avvisi Scadenze, Formazione, Assistenza',
     categoria: 'crono_telematica',
     prezzoListino: 430.00,
     prezzoScontato: 380.00,
@@ -240,7 +240,7 @@ export const servicesList: Service[] = [
   {
     id: 'crono-telematica-mensile',
     nome: 'GT FLEET 365 TRUCK CRONO TELEMATICA',
-    descrizione: 'Mezzi Pesanti - Km da odometro, Consumo Carburante, Cronotachigrafo, Scarico DDD, Tempi guida Real Time',
+    descrizione: '(dispositivo in comodato d\'uso) - Funzione Veicolo in Officina, Reportistica, Km percorsi da odometro con telematica (se fornita dal mezzo), Consumo Carburante con telematica (se fornita dal mezzo), Cronotachigrafo Digitale - Scarico File DDD, Report Truck Base: Lettere di infrazione e attività dell\'autista, Dati tempi di guida autista Real Time, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Gestione Avvisi Scadenze, Formazione, Assistenza',
     categoria: 'crono_telematica',
     prezzoListino: 39.00,
     prezzoScontato: 35.00,
@@ -253,7 +253,7 @@ export const servicesList: Service[] = [
   {
     id: 'crono-premium-annuale',
     nome: 'GT FLEET 365 TRUCK CRONO PREMIUM',
-    descrizione: 'Mezzi Pesanti - Blocco Avviamento, Parking Protection, Allarmi, Tasto SOS, Telematica completa, Cronotachigrafo',
+    descrizione: '(dispositivo in comodato d\'uso) - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità, Stato del mezzo, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Allarme Taglio Cavi e Distacco Batteria, Antijammer, Blocco Avviamento da Remoto, Parking Protection, Gestione Referenti Allarmi e Notifiche, Funzione Veicolo in Officina, Tasto SOS, Reportistica, Km percorsi da odometro con telematica (se fornita dal mezzo), Consumo Carburante con telematica (se fornita dal mezzo), Cronotachigrafo Digitale - Scarico File DDD, Report Truck Base: Lettere di infrazione e attività dell\'autista, Dati tempi di guida autista Real Time, Formazione, Assistenza',
     categoria: 'crono_premium',
     prezzoListino: 430.00,
     prezzoScontato: 380.00,
@@ -264,7 +264,7 @@ export const servicesList: Service[] = [
   {
     id: 'crono-premium-mensile',
     nome: 'GT FLEET 365 TRUCK CRONO PREMIUM',
-    descrizione: 'Mezzi Pesanti - Blocco Avviamento, Parking Protection, Allarmi, Tasto SOS, Telematica completa, Cronotachigrafo',
+    descrizione: '(dispositivo in comodato d\'uso) - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità, Stato del mezzo, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Allarme Taglio Cavi e Distacco Batteria, Antijammer, Blocco Avviamento da Remoto, Parking Protection, Gestione Referenti Allarmi e Notifiche, Funzione Veicolo in Officina, Tasto SOS, Reportistica, Km percorsi da odometro con telematica (se fornita dal mezzo), Consumo Carburante con telematica (se fornita dal mezzo), Cronotachigrafo Digitale - Scarico File DDD, Report Truck Base: Lettere di infrazione e attività dell\'autista, Dati tempi di guida autista Real Time, Formazione, Assistenza',
     categoria: 'crono_premium',
     prezzoListino: 39.00,
     prezzoScontato: 35.00,
@@ -277,7 +277,7 @@ export const servicesList: Service[] = [
   {
     id: 'servizio-rimorchi-annuale',
     nome: 'GT FLEET 365 SERVIZIO RIMORCHI',
-    descrizione: 'Localizzazione rimorchio sganciato, Geofencing, Gestione scadenze e manutenzioni, Km percorsi',
+    descrizione: 'Localizzazione Real Time, Percorsi, Soste via WEB (a rimorchio agganciato alla motrice), App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Notifica aggancio rimorchio alla motrice, Notifica sgancio del rimorchio dalla motrice, Localizzazione a rimorchio fermo (sganciato dalla Motrice) 1 dato GPS al giorno, Localizzazione a rimorchio sganciato ma in movimento 1 dato ogni 10 minuti, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione avvisi scadenze, Gestione Manutenzioni (per km e per data), Gestione referenti notifiche, Km percorsi, Formazione, Assistenza',
     categoria: 'servizio_rimorchi',
     prezzoListino: 110.00,
     prezzoScontato: 100.00,
@@ -287,7 +287,7 @@ export const servicesList: Service[] = [
   {
     id: 'servizio-rimorchi-mensile',
     nome: 'GT FLEET 365 SERVIZIO RIMORCHI',
-    descrizione: 'Localizzazione rimorchio sganciato, Geofencing, Gestione scadenze e manutenzioni, Km percorsi',
+    descrizione: 'Localizzazione Real Time, Percorsi, Soste via WEB (a rimorchio agganciato alla motrice), App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Notifica aggancio rimorchio alla motrice, Notifica sgancio del rimorchio dalla motrice, Localizzazione a rimorchio fermo (sganciato dalla Motrice) 1 dato GPS al giorno, Localizzazione a rimorchio sganciato ma in movimento 1 dato ogni 10 minuti, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione avvisi scadenze, Gestione Manutenzioni (per km e per data), Gestione referenti notifiche, Km percorsi, Formazione, Assistenza',
     categoria: 'servizio_rimorchi',
     prezzoListino: 12.00,
     prezzoScontato: 10.00,
@@ -299,7 +299,7 @@ export const servicesList: Service[] = [
   {
     id: 'tractor-annuale',
     nome: 'GT FLEET 365 TRACTOR',
-    descrizione: 'Allarme Taglio Cavi e Distacco Batteria, Antijammer, Blocco Avviamento da Remoto, Parking Protection, Tasto SOS',
+    descrizione: 'Allarme Taglio Cavi e Distacco Batteria, Antijammer, Blocco Avviamento da Remoto, Parking Protection, Gestione Referenti Allarmi e Notifiche, Funzione Veicolo in Officina, Tasto SOS, Formazione, Assistenza',
     categoria: 'tractor',
     prezzoListino: 250.00,
     prezzoScontato: 220.00,
@@ -309,7 +309,7 @@ export const servicesList: Service[] = [
   {
     id: 'tractor-mensile',
     nome: 'GT FLEET 365 TRACTOR',
-    descrizione: 'Allarme Taglio Cavi e Distacco Batteria, Antijammer, Blocco Avviamento da Remoto, Parking Protection, Tasto SOS',
+    descrizione: 'Allarme Taglio Cavi e Distacco Batteria, Antijammer, Blocco Avviamento da Remoto, Parking Protection, Gestione Referenti Allarmi e Notifiche, Funzione Veicolo in Officina, Tasto SOS, Formazione, Assistenza',
     categoria: 'tractor',
     prezzoListino: 23.00,
     prezzoScontato: 20.00,
@@ -321,7 +321,7 @@ export const servicesList: Service[] = [
   {
     id: 'asset-annuale',
     nome: 'GT FLEET 365 ASSET',
-    descrizione: 'Durata batteria 2 anni, Lettura livello batteria dispositivo, Notifica batteria in esaurimento, Trasmissione 1 dato GPS al giorno',
+    descrizione: 'Durata della batteria 2 anni, Lettura livello batteria dispositivo, Notifica batteria in esaurimento, Trasmissione 1 dato GPS al giorno',
     categoria: 'asset',
     prezzoListino: 110.00,
     prezzoScontato: 100.00,
@@ -331,7 +331,7 @@ export const servicesList: Service[] = [
   {
     id: 'asset-mensile',
     nome: 'GT FLEET 365 ASSET',
-    descrizione: 'Durata batteria 2 anni, Lettura livello batteria dispositivo, Notifica batteria in esaurimento, Trasmissione 1 dato GPS al giorno',
+    descrizione: 'Durata della batteria 2 anni, Lettura livello batteria dispositivo, Notifica batteria in esaurimento, Trasmissione 1 dato GPS al giorno',
     categoria: 'asset',
     prezzoListino: 10.00,
     prezzoScontato: 9.00,
@@ -343,7 +343,7 @@ export const servicesList: Service[] = [
   {
     id: 'crono-silver',
     nome: 'CRONO - DDD MANAGER - SILVER',
-    descrizione: 'Piattaforma web crono, Archivio dati e reportistica (per flotta), Assistenza tecnica, Archiviazione dati 2 anni',
+    descrizione: 'Accesso alla piattaforma web crono, Archivio dati e reportistica (per flotta), Assistenza tecnica, Archiviazione dati 2 anni',
     categoria: 'piattaforme',
     prezzoListino: 800.00,
     prezzoScontato: 600.00,
@@ -354,7 +354,7 @@ export const servicesList: Service[] = [
   {
     id: 'crono-gold',
     nome: 'CRONO - DDD MANAGER - GOLD',
-    descrizione: 'Piattaforma web crono, Archiviazione 5 anni, Report automatici, Terminale comodato d\'uso, Consulenza legale',
+    descrizione: 'Accesso alla piattaforma web crono, Archivio dati e reportistica, Assistenza tecnica, Archiviazione dati 5 anni (per flotta), Possibilità pianificazione report automatici, N°1 terminale comodato d\'uso, Scarico dati tachigrafici, Consulenza legale di prima fascia',
     categoria: 'piattaforme',
     prezzoListino: 1600.00,
     prezzoScontato: 1200.00,
@@ -419,7 +419,7 @@ export const servicesList: Service[] = [
   {
     id: 'centrale-live-annuale',
     nome: 'CENTRALE OPERATIVA LIVE',
-    descrizione: 'Centrale operativa H24 - Tutti gli allarmi sono gestiti dalla centrale operativa',
+    descrizione: 'Centrale operativa H24 - Tutti gli allarmi sono gestiti dalla centrale',
     categoria: 'centrale_operativa',
     prezzoListino: 165.00,
     prezzoScontato: 148.00,
@@ -429,7 +429,7 @@ export const servicesList: Service[] = [
   {
     id: 'centrale-live-mensile',
     nome: 'CENTRALE OPERATIVA LIVE',
-    descrizione: 'Centrale operativa H24 - Tutti gli allarmi sono gestiti dalla centrale operativa',
+    descrizione: 'Centrale operativa H24 - Tutti gli allarmi sono gestiti dalla centrale',
     categoria: 'centrale_operativa',
     prezzoListino: 15.00,
     prezzoScontato: 13.00,
@@ -471,7 +471,7 @@ export const servicesList: Service[] = [
   {
     id: 'carta-aziendale',
     nome: 'CARTA AZIENDALE CRONO (25 MEZZI)',
-    descrizione: 'Copia carta aziendale crono - obbligatoria ogni 25 mezzi per servizi Crono',
+    descrizione: 'Copia carta aziendale crono (ogni 25 mezzi)',
     categoria: 'accessori',
     prezzoListino: 160.00,
     prezzoScontato: 120.00,
@@ -482,7 +482,7 @@ export const servicesList: Service[] = [
   {
     id: 'piani-viaggio-annuale',
     nome: 'GT FLEET 365 - PIANI DI VIAGGIO',
-    descrizione: 'Predisposizione piano viaggio via web/app, Trasmissione al driver, Gestione automatica geo fencing, Reportistica',
+    descrizione: 'Predisposizione piano di viaggio o delle attività via web ed app, Trasmissione piano attività dal web all\'app driver, Gestione delle attività attraverso l\'app driver, Gestione automatica del piano di viaggio (in auto geo fencing), Gestione referenti notifiche, Reportistica, Formazione, Assistenza',
     categoria: 'accessori',
     prezzoListino: 360.00,
     prezzoScontato: 240.00,
@@ -492,7 +492,7 @@ export const servicesList: Service[] = [
   {
     id: 'piani-viaggio-mensile',
     nome: 'GT FLEET 365 - PIANI DI VIAGGIO',
-    descrizione: 'Predisposizione piano viaggio via web/app, Trasmissione al driver, Gestione automatica geo fencing, Reportistica',
+    descrizione: 'Predisposizione piano di viaggio o delle attività via web ed app, Trasmissione piano attività dal web all\'app driver, Gestione delle attività attraverso l\'app driver, Gestione automatica del piano di viaggio (in auto geo fencing), Gestione referenti notifiche, Reportistica, Formazione, Assistenza',
     categoria: 'accessori',
     prezzoListino: 40.00,
     prezzoScontato: 30.00,
@@ -502,7 +502,7 @@ export const servicesList: Service[] = [
   {
     id: 'scorta-digitale',
     nome: 'GT FLEET 365 SCORTA DIGITALE',
-    descrizione: 'Predisposizione piano viaggio via web/app, Gestione automatica geo fencing, Reportistica, Formazione, Assistenza',
+    descrizione: 'Predisposizione piano di viaggio o delle attività via web ed app, Gestione automatica del piano di viaggio (in auto geo fencing), Gestione referenti notifiche, Reportistica, Formazione, Assistenza',
     categoria: 'accessori',
     prezzoListino: 1000.00,
     prezzoScontato: 1000.00,
