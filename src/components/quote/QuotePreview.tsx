@@ -123,11 +123,12 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                 <table className="w-full text-[10px] border-collapse mb-3">
                   <thead>
                     <tr className="bg-[#0066b3] text-white text-[9px] font-semibold uppercase">
-                      <th className="text-left p-2 border border-[#0066b3]">Servizio</th>
-                      <th className="text-center p-2 border border-[#0066b3] w-20">N° Servizi</th>
-                      <th className="text-center p-2 border border-[#0066b3] w-20">Durata</th>
-                      <th className="text-right p-2 border border-[#0066b3] w-28">Canone Unitario</th>
-                      <th className="text-right p-2 border border-[#0066b3] w-24">Una Tantum</th>
+                      <th className="text-left p-2 border border-[#0066b3] w-[22%]">Servizio</th>
+                      <th className="text-left p-2 border border-[#0066b3] w-[30%]">Descrizione</th>
+                      <th className="text-center p-2 border border-[#0066b3] w-[10%]">N° Servizi</th>
+                      <th className="text-center p-2 border border-[#0066b3] w-[10%]">Durata</th>
+                      <th className="text-right p-2 border border-[#0066b3] w-[14%]">Canone Unitario</th>
+                      <th className="text-right p-2 border border-[#0066b3] w-[14%]">Una Tantum</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -136,12 +137,15 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                 const durataLabel = paymentInfo.durataContrattuale ? `${paymentInfo.durataContrattuale} mesi` : '—';
                 return <tr key={service.id} className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
                           <td className="p-2 border border-gray-200">
-                            <div className="font-medium text-gray-900">{service.nome}</div>
-                            <div className="text-[8px] text-gray-500">
+                            <div className="font-medium text-gray-900 text-[9px]">{service.nome}</div>
+                            <div className="text-[7px] text-gray-500">
                               {service.periodo === 'MENSILE' && '(Mensile)'}
                               {service.periodo === 'ANNUALE' && '(Annuale)'}
                               {service.periodo === 'U.T.' && '(Una Tantum)'}
                             </div>
+                          </td>
+                          <td className="p-2 border border-gray-200 text-[8px] text-gray-600">
+                            {service.descrizione}
                           </td>
                           <td className="p-2 border border-gray-200 text-center font-medium">
                             {service.quantita}

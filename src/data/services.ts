@@ -25,31 +25,81 @@ export const servicesList: Service[] = [
   {
     id: 'dispositivo-asset',
     nome: 'DISPOSITIVO ASSET',
-    descrizione: 'Dispositivo GPS per Asset / Batteria lunga durata / IP67 - Localizzazione Real Time, Geofencing, Notifiche movimento',
+    descrizione: 'Dispositivo GPS con batteria durata 2 anni, 4G, IP67 - Pacco civetta, Gruppi elettrogeni, Mezzi d\'opera, Trasmissione 1 dato GPS al giorno',
     categoria: 'dispositivi',
-    prezzoListino: 180.00,
-    prezzoScontato: 160.00,
-    prezzoRiservato: 140.00,
+    prezzoListino: 300.00,
+    prezzoScontato: 270.00,
+    prezzoRiservato: 270.00,
+    periodo: 'U.T.',
+  },
+  {
+    id: 'dispositivo-tractor',
+    nome: 'DISPOSITIVO TRACTOR',
+    descrizione: 'Dispositivo GPS 12/24 - Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365, Geofencing',
+    categoria: 'dispositivi',
+    prezzoListino: 210.00,
+    prezzoScontato: 180.00,
+    prezzoRiservato: 180.00,
     periodo: 'U.T.',
   },
   {
     id: 'beacon-bt',
     nome: 'BEACON BT',
-    descrizione: 'Beacon Bluetooth per tracciamento prossimità - Identificazione autista, Associazione veicolo-conducente',
+    descrizione: 'Beacon Bluetooth per funzione riconoscimento driver/passeggero',
     categoria: 'dispositivi',
-    prezzoListino: 50.00,
-    prezzoScontato: 45.00,
-    prezzoRiservato: 40.00,
+    prezzoListino: 20.00,
+    prezzoScontato: 18.00,
+    prezzoRiservato: 18.00,
     periodo: 'U.T.',
   },
   {
-    id: 'sensore',
-    nome: 'SENSORE',
-    descrizione: 'Sensore telematico universale - Monitoraggio temperatura, apertura porte, livello carburante',
+    id: 'sensore-temperatura',
+    nome: 'SENSORE TEMPERATURA',
+    descrizione: 'Sensore di temperatura/umidità (in aggiunta a dispositivo GPS) per motrice o per rimorchio',
+    categoria: 'dispositivi',
+    prezzoListino: 40.00,
+    prezzoScontato: 36.00,
+    prezzoRiservato: 36.00,
+    periodo: 'U.T.',
+  },
+  {
+    id: 'chiave-dallas',
+    nome: 'CHIAVE DALLAS',
+    descrizione: 'Chiave Dallas per funzione riconoscimento driver',
+    categoria: 'dispositivi',
+    prezzoListino: 20.00,
+    prezzoScontato: 18.00,
+    prezzoRiservato: 18.00,
+    periodo: 'U.T.',
+  },
+  {
+    id: 'kit-lettore-dallas',
+    nome: 'KIT LETTORE + CHIAVE DALLAS',
+    descrizione: 'Lettore per riconoscimento chiave Dallas + N°1 chiave Dallas',
+    categoria: 'dispositivi',
+    prezzoListino: 27.00,
+    prezzoScontato: 25.00,
+    prezzoRiservato: 25.00,
+    periodo: 'U.T.',
+  },
+  {
+    id: 'tastierino',
+    nome: 'TASTIERINO',
+    descrizione: 'Tastierino per funzione riconoscimento driver',
     categoria: 'dispositivi',
     prezzoListino: 80.00,
-    prezzoScontato: 70.00,
+    prezzoScontato: 60.00,
     prezzoRiservato: 60.00,
+    periodo: 'U.T.',
+  },
+  {
+    id: 'pedale-antirapina',
+    nome: 'PEDALE ANTIRAPINA',
+    descrizione: 'Pedale antirapina per sicurezza veicolo',
+    categoria: 'dispositivi',
+    prezzoListino: 70.00,
+    prezzoScontato: 63.00,
+    prezzoRiservato: 63.00,
     periodo: 'U.T.',
   },
 
@@ -75,11 +125,11 @@ export const servicesList: Service[] = [
     periodo: 'MENSILE',
   },
 
-  // GT FLEET 365 GOLD (separato)
+  // GT FLEET 365 GOLD
   {
     id: 'fleet-gold-annuale',
     nome: 'GT FLEET 365 GOLD',
-    descrizione: 'Mezzi Aziendali, Mezzi Pesanti (dispositivo in comodato d\'uso) - Include funzionalità BASE + Avvisi Scadenze, Manutenzioni, Referenti Notifiche',
+    descrizione: 'Mezzi Aziendali, Mezzi Pesanti (dispositivo in comodato d\'uso) - Include funzionalità BASE + Km da odometro, Consumo Carburante telematica',
     categoria: 'fleet_gold',
     prezzoListino: 275.00,
     prezzoScontato: 245.00,
@@ -89,7 +139,7 @@ export const servicesList: Service[] = [
   {
     id: 'fleet-gold-mensile',
     nome: 'GT FLEET 365 GOLD',
-    descrizione: 'Mezzi Aziendali, Mezzi Pesanti (dispositivo in comodato d\'uso) - Include funzionalità BASE + Avvisi Scadenze, Manutenzioni, Referenti Notifiche',
+    descrizione: 'Mezzi Aziendali, Mezzi Pesanti (dispositivo in comodato d\'uso) - Include funzionalità BASE + Km da odometro, Consumo Carburante telematica',
     categoria: 'fleet_gold',
     prezzoListino: 25.00,
     prezzoScontato: 22.00,
@@ -165,7 +215,7 @@ export const servicesList: Service[] = [
     isCrono: true,
   },
 
-  // GT FLEET 365 TRUCK CRONO TELEMATICA (separato)
+  // GT FLEET 365 TRUCK CRONO TELEMATICA
   {
     id: 'crono-telematica-annuale',
     nome: 'GT FLEET 365 TRUCK CRONO TELEMATICA',
@@ -189,7 +239,7 @@ export const servicesList: Service[] = [
     isCrono: true,
   },
 
-  // GT FLEET 365 TRUCK CRONO PREMIUM (separato)
+  // GT FLEET 365 TRUCK CRONO PREMIUM
   {
     id: 'crono-premium-annuale',
     nome: 'GT FLEET 365 TRUCK CRONO PREMIUM',
@@ -235,6 +285,50 @@ export const servicesList: Service[] = [
     periodo: 'MENSILE',
   },
 
+  // GT FLEET 365 TRACTOR
+  {
+    id: 'tractor-annuale',
+    nome: 'GT FLEET 365 TRACTOR',
+    descrizione: 'Allarme Taglio Cavi e Distacco Batteria, Antijammer, Blocco Avviamento da Remoto, Parking Protection, Tasto SOS',
+    categoria: 'tractor',
+    prezzoListino: 250.00,
+    prezzoScontato: 220.00,
+    prezzoRiservato: 198.00,
+    periodo: 'ANNUALE',
+  },
+  {
+    id: 'tractor-mensile',
+    nome: 'GT FLEET 365 TRACTOR',
+    descrizione: 'Allarme Taglio Cavi e Distacco Batteria, Antijammer, Blocco Avviamento da Remoto, Parking Protection, Tasto SOS',
+    categoria: 'tractor',
+    prezzoListino: 23.00,
+    prezzoScontato: 20.00,
+    prezzoRiservato: 18.00,
+    periodo: 'MENSILE',
+  },
+
+  // GT FLEET 365 ASSET
+  {
+    id: 'asset-annuale',
+    nome: 'GT FLEET 365 ASSET',
+    descrizione: 'Durata batteria 2 anni, Lettura livello batteria dispositivo, Notifica batteria in esaurimento, Trasmissione 1 dato GPS al giorno',
+    categoria: 'asset',
+    prezzoListino: 110.00,
+    prezzoScontato: 100.00,
+    prezzoRiservato: 100.00,
+    periodo: 'ANNUALE',
+  },
+  {
+    id: 'asset-mensile',
+    nome: 'GT FLEET 365 ASSET',
+    descrizione: 'Durata batteria 2 anni, Lettura livello batteria dispositivo, Notifica batteria in esaurimento, Trasmissione 1 dato GPS al giorno',
+    categoria: 'asset',
+    prezzoListino: 10.00,
+    prezzoScontato: 9.00,
+    prezzoRiservato: 9.00,
+    periodo: 'MENSILE',
+  },
+
   // PIATTAFORME CRONO
   {
     id: 'crono-silver',
@@ -259,7 +353,101 @@ export const servicesList: Service[] = [
     isCrono: true,
   },
 
-  // CARTA AZIENDALE CRONO
+  // SERVIZI AGGIUNTIVI
+  {
+    id: 'servizio-temperatura-annuale',
+    nome: 'SERVIZIO TEMPERATURA CONTROLLATA',
+    descrizione: 'Canone per servizio temperatura controllata',
+    categoria: 'servizi_aggiuntivi',
+    prezzoListino: 110.00,
+    prezzoScontato: 100.00,
+    prezzoRiservato: 100.00,
+    periodo: 'ANNUALE',
+  },
+  {
+    id: 'servizio-temperatura-mensile',
+    nome: 'SERVIZIO TEMPERATURA CONTROLLATA',
+    descrizione: 'Canone per servizio temperatura controllata',
+    categoria: 'servizi_aggiuntivi',
+    prezzoListino: 10.00,
+    prezzoScontato: 9.00,
+    prezzoRiservato: 9.00,
+    periodo: 'MENSILE',
+  },
+  {
+    id: 'riconoscimento-driver-annuale',
+    nome: 'SERVIZIO RICONOSCIMENTO DRIVER',
+    descrizione: 'Canone per riconoscimento autista',
+    categoria: 'servizi_aggiuntivi',
+    prezzoListino: 110.00,
+    prezzoScontato: 100.00,
+    prezzoRiservato: 100.00,
+    periodo: 'ANNUALE',
+  },
+  {
+    id: 'riconoscimento-driver-mensile',
+    nome: 'SERVIZIO RICONOSCIMENTO DRIVER',
+    descrizione: 'Canone per riconoscimento autista',
+    categoria: 'servizi_aggiuntivi',
+    prezzoListino: 10.00,
+    prezzoScontato: 9.00,
+    prezzoRiservato: 9.00,
+    periodo: 'MENSILE',
+  },
+  {
+    id: 'riconoscimento-driver-app',
+    nome: 'SERVIZIO RICONOSCIMENTO DRIVER CON APP',
+    descrizione: 'App per funzione riconoscimento driver',
+    categoria: 'servizi_aggiuntivi',
+    prezzoListino: 20.00,
+    prezzoScontato: 18.00,
+    prezzoRiservato: 18.00,
+    periodo: 'U.T.',
+  },
+
+  // CENTRALE OPERATIVA
+  {
+    id: 'centrale-live-annuale',
+    nome: 'CENTRALE OPERATIVA LIVE',
+    descrizione: 'Centrale operativa H24 - Tutti gli allarmi sono gestiti dalla centrale operativa',
+    categoria: 'centrale_operativa',
+    prezzoListino: 165.00,
+    prezzoScontato: 148.00,
+    prezzoRiservato: 148.00,
+    periodo: 'ANNUALE',
+  },
+  {
+    id: 'centrale-live-mensile',
+    nome: 'CENTRALE OPERATIVA LIVE',
+    descrizione: 'Centrale operativa H24 - Tutti gli allarmi sono gestiti dalla centrale operativa',
+    categoria: 'centrale_operativa',
+    prezzoListino: 15.00,
+    prezzoScontato: 13.00,
+    prezzoRiservato: 13.00,
+    periodo: 'MENSILE',
+  },
+  {
+    id: 'centrale-ondemand-annuale',
+    nome: 'CENTRALE OPERATIVA ON DEMAND',
+    descrizione: 'Centrale operativa H24 - Tutti gli allarmi sono gestiti dal cliente',
+    categoria: 'centrale_operativa',
+    prezzoListino: 77.00,
+    prezzoScontato: 69.00,
+    prezzoRiservato: 69.00,
+    periodo: 'ANNUALE',
+  },
+  {
+    id: 'centrale-ondemand-mensile',
+    nome: 'CENTRALE OPERATIVA ON DEMAND',
+    descrizione: 'Centrale operativa H24 - Tutti gli allarmi sono gestiti dal cliente',
+    categoria: 'centrale_operativa',
+    prezzoListino: 7.00,
+    prezzoScontato: 6.00,
+    prezzoRiservato: 6.00,
+    periodo: 'MENSILE',
+  },
+
+  // ACCESSORI
   {
     id: 'carta-aziendale',
     nome: 'CARTA AZIENDALE CRONO (25 MEZZI)',
@@ -271,8 +459,6 @@ export const servicesList: Service[] = [
     periodo: 'ANNUALE',
     isCrono: true,
   },
-
-  // PIANI DI VIAGGIO
   {
     id: 'piani-viaggio-annuale',
     nome: 'GT FLEET 365 - PIANI DI VIAGGIO',
@@ -293,7 +479,28 @@ export const servicesList: Service[] = [
     prezzoRiservato: 30.00,
     periodo: 'MENSILE',
   },
+  {
+    id: 'scorta-digitale',
+    nome: 'GT FLEET 365 SCORTA DIGITALE',
+    descrizione: 'Predisposizione piano viaggio via web/app, Gestione automatica geo fencing, Reportistica, Formazione, Assistenza',
+    categoria: 'accessori',
+    prezzoListino: 1000.00,
+    prezzoScontato: 1000.00,
+    prezzoRiservato: 1000.00,
+    periodo: 'ANNUALE',
+  },
 
+  // SOFTWARE DEVELOPMENT
+  {
+    id: 'software-development',
+    nome: 'SOFTWARE DEVELOPMENT',
+    descrizione: 'Attività di sviluppo interfaccia con software aziendali su specifiche tecniche in relazione alle esigenze del cliente',
+    categoria: 'software',
+    prezzoListino: 10000.00,
+    prezzoScontato: 9000.00,
+    prezzoRiservato: 9000.00,
+    periodo: 'U.T.',
+  },
 ];
 
 export const CARTA_AZIENDA_COSTO = 120; // €120 annuale per carta
@@ -309,6 +516,11 @@ export const categorieLabels: Record<string, string> = {
   crono_telematica: 'GT Fleet 365 Truck Crono Telematica',
   crono_premium: 'GT Fleet 365 Truck Crono Premium',
   servizio_rimorchi: 'GT Fleet 365 Servizio Rimorchi',
+  tractor: 'GT Fleet 365 Tractor',
+  asset: 'GT Fleet 365 Asset',
   piattaforme: 'Piattaforme Crono',
-  accessori: 'Accessori & Servizi'
+  servizi_aggiuntivi: 'Servizi Aggiuntivi',
+  centrale_operativa: 'Centrale Operativa',
+  accessori: 'Accessori & Servizi',
+  software: 'Software Development'
 };
