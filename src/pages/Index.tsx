@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useMemo } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText } from "lucide-react";
+import { FileText, RotateCcw } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
@@ -73,6 +73,11 @@ const Index = () => {
     };
     html2pdf().set(opt).from(element).save();
   }, [clientData.ragioneSociale]);
+
+  const handleClearSelection = useCallback(() => {
+    setSelectedServices([]);
+  }, []);
+
   return <div className="min-h-screen">
       {/* Header */}
       <header className="sticky top-0 z-50 glass-card-intense border-b border-white/10">
@@ -84,10 +89,16 @@ const Index = () => {
               <span className="text-xs text-muted-foreground">Fleet Quotes Generator</span>
             </div>
           </div>
-          <button onClick={handleExportPDF} className="btn-adobe-pdf">
-            <FileText className="w-5 h-5" />
-            Esporta PDF
-          </button>
+          <div className="flex items-center gap-3">
+            <button onClick={handleClearSelection} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold text-sm bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-all">
+              <RotateCcw className="w-4 h-4" />
+              Pulisci
+            </button>
+            <button onClick={handleExportPDF} className="btn-adobe-pdf">
+              <FileText className="w-5 h-5" />
+              Esporta PDF
+            </button>
+          </div>
         </div>
       </header>
 
