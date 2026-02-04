@@ -127,8 +127,8 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                       <th className="text-left p-2 border border-[#0066b3]" style={{ width: '38%' }}>Descrizione</th>
                       <th className="text-center p-2 border border-[#0066b3]" style={{ width: '8%' }}>N° Servizi</th>
                       <th className="text-center p-2 border border-[#0066b3]" style={{ width: '10%' }}>Durata</th>
-                      <th className="text-right p-2 border border-[#0066b3]" style={{ width: '13%' }}>Canone Unitario</th>
-                      <th className="text-right p-2 border border-[#0066b3]" style={{ width: '13%' }}>Una Tantum</th>
+                      <th className="text-center p-2 border border-[#0066b3]" style={{ width: '13%' }}>Canone Unitario</th>
+                      <th className="text-center p-2 border border-[#0066b3]" style={{ width: '13%' }}>Una Tantum</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -153,10 +153,10 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                           <td className="p-2 border border-gray-200 text-center align-middle">
                             {!isUnaTantum ? durataLabel : '—'}
                           </td>
-                          <td className="p-2 border border-gray-200 text-right align-middle">
+                          <td className="p-2 border border-gray-200 text-center align-middle">
                             {!isUnaTantum ? formatPrice(service.prezzoUnitario) : '—'}
                           </td>
-                          <td className="p-2 border border-gray-200 text-right align-middle">
+                          <td className="p-2 border border-gray-200 text-center align-middle">
                             {isUnaTantum ? formatPrice(service.prezzoUnitario) : '—'}
                           </td>
                         </tr>;
