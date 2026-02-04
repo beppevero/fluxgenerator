@@ -22,6 +22,36 @@ export const servicesList: Service[] = [
     prezzoRiservato: 162.00,
     periodo: 'U.T.',
   },
+  {
+    id: 'dispositivo-asset',
+    nome: 'DISPOSITIVO ASSET',
+    descrizione: 'Dispositivo GPS per Asset / Batteria lunga durata / IP67 - Localizzazione Real Time, Geofencing, Notifiche movimento',
+    categoria: 'dispositivi',
+    prezzoListino: 180.00,
+    prezzoScontato: 160.00,
+    prezzoRiservato: 140.00,
+    periodo: 'U.T.',
+  },
+  {
+    id: 'beacon-bt',
+    nome: 'BEACON BT',
+    descrizione: 'Beacon Bluetooth per tracciamento prossimità - Identificazione autista, Associazione veicolo-conducente',
+    categoria: 'dispositivi',
+    prezzoListino: 50.00,
+    prezzoScontato: 45.00,
+    prezzoRiservato: 40.00,
+    periodo: 'U.T.',
+  },
+  {
+    id: 'sensore',
+    nome: 'SENSORE',
+    descrizione: 'Sensore telematico universale - Monitoraggio temperatura, apertura porte, livello carburante',
+    categoria: 'dispositivi',
+    prezzoListino: 80.00,
+    prezzoScontato: 70.00,
+    prezzoRiservato: 60.00,
+    periodo: 'U.T.',
+  },
 
   // GT FLEET 365 BASE
   {
