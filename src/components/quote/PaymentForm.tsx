@@ -23,14 +23,14 @@ export function PaymentForm({ paymentInfo, onChange }: PaymentFormProps) {
           <div className="space-y-2">
             <Label htmlFor="durataContrattuale" className="flex items-center gap-2 text-foreground/90 font-medium">
               <CalendarDays className="w-3 h-3" />
-              Durata Contrattuale
+              Durata
             </Label>
             <Select
               value={paymentInfo.durataContrattuale}
               onValueChange={(value) => onChange({ ...paymentInfo, durataContrattuale: value })}
             >
               <SelectTrigger className="glass-input">
-                <SelectValue placeholder="Seleziona durata" />
+                <SelectValue placeholder="Mesi" />
               </SelectTrigger>
               <SelectContent className="bg-white border-border">
                 <SelectItem value="12">12 mesi</SelectItem>
@@ -44,7 +44,7 @@ export function PaymentForm({ paymentInfo, onChange }: PaymentFormProps) {
           <div className="space-y-2">
             <Label htmlFor="condizioniPagamento" className="flex items-center gap-2 text-foreground/90 font-medium">
               <CreditCard className="w-3 h-3" />
-              Condizioni di Pagamento
+              Cond. Pagamento
             </Label>
             <Input
               id="condizioniPagamento"
