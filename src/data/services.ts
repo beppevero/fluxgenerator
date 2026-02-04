@@ -213,6 +213,28 @@ export const servicesList: Service[] = [
     isCrono: true,
   },
 
+  // GT FLEET 365 SERVIZIO RIMORCHI
+  {
+    id: 'servizio-rimorchi-annuale',
+    nome: 'GT FLEET 365 SERVIZIO RIMORCHI',
+    descrizione: 'Localizzazione rimorchio sganciato, Geofencing, Gestione scadenze e manutenzioni, Km percorsi',
+    categoria: 'servizio_rimorchi',
+    prezzoListino: 110.00,
+    prezzoScontato: 100.00,
+    prezzoRiservato: 90.00,
+    periodo: 'ANNUALE',
+  },
+  {
+    id: 'servizio-rimorchi-mensile',
+    nome: 'GT FLEET 365 SERVIZIO RIMORCHI',
+    descrizione: 'Localizzazione rimorchio sganciato, Geofencing, Gestione scadenze e manutenzioni, Km percorsi',
+    categoria: 'servizio_rimorchi',
+    prezzoListino: 12.00,
+    prezzoScontato: 10.00,
+    prezzoRiservato: 9.00,
+    periodo: 'MENSILE',
+  },
+
   // PIATTAFORME CRONO
   {
     id: 'crono-silver',
@@ -272,17 +294,6 @@ export const servicesList: Service[] = [
     periodo: 'MENSILE',
   },
 
-  // SERVIZIO RIMORCHI
-  {
-    id: 'servizio-rimorchi',
-    nome: 'GT FLEET 365 SERVIZIO RIMORCHI',
-    descrizione: 'Localizzazione rimorchio sganciato, Geofencing, Gestione scadenze e manutenzioni, Km percorsi',
-    categoria: 'accessori',
-    prezzoListino: 110.00,
-    prezzoScontato: 100.00,
-    prezzoRiservato: 90.00,
-    periodo: 'ANNUALE',
-  }
 ];
 
 export const CARTA_AZIENDA_COSTO = 120; // €120 annuale per carta
@@ -297,6 +308,7 @@ export const categorieLabels: Record<string, string> = {
   crono: 'GT Fleet 365 Truck Crono',
   crono_telematica: 'GT Fleet 365 Truck Crono Telematica',
   crono_premium: 'GT Fleet 365 Truck Crono Premium',
+  servizio_rimorchi: 'GT Fleet 365 Servizio Rimorchi',
   piattaforme: 'Piattaforme Crono',
   accessori: 'Accessori & Servizi'
 };
