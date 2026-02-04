@@ -131,7 +131,7 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
                       <Checkbox
                         id={service.id}
                         checked={isChecked}
-                        className="mt-0.5 border-white/30 data-[state=checked]:bg-accent data-[state=checked]:border-accent"
+                        className="mt-0.5 h-5 w-5 border-2 border-accent/60 data-[state=checked]:bg-accent data-[state=checked]:border-accent"
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">

@@ -125,6 +125,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                     <tr className="bg-[#0066b3] text-white text-[9px] font-semibold uppercase">
                       <th className="text-left p-2 border border-[#0066b3]">Servizio</th>
                       <th className="text-center p-2 border border-[#0066b3] w-20">N° Servizi</th>
+                      <th className="text-center p-2 border border-[#0066b3] w-20">Durata</th>
                       <th className="text-right p-2 border border-[#0066b3] w-28">Canone Unitario</th>
                       <th className="text-right p-2 border border-[#0066b3] w-24">Una Tantum</th>
                     </tr>
@@ -132,6 +133,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                   <tbody>
                     {selectedServices.map((service, idx) => {
                 const isUnaTantum = service.periodo === 'U.T.';
+                const durataLabel = paymentInfo.durataContrattuale ? `${paymentInfo.durataContrattuale} mesi` : '—';
                 return <tr key={service.id} className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
                           <td className="p-2 border border-gray-200">
                             <div className="font-medium text-gray-900">{service.nome}</div>
@@ -143,6 +145,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                           </td>
                           <td className="p-2 border border-gray-200 text-center font-medium">
                             {service.quantita}
+                          </td>
+                          <td className="p-2 border border-gray-200 text-center">
+                            {!isUnaTantum ? durataLabel : '—'}
                           </td>
                           <td className="p-2 border border-gray-200 text-right">
                             {!isUnaTantum ? formatPrice(service.prezzoUnitario) : '—'}
