@@ -1,9 +1,7 @@
 import { forwardRef } from "react";
 import { QuoteData } from "@/types/quote";
 import fluxLogo from "@/assets/flux-logo.png";
-import certEsg from "@/assets/cert-esg.png";
-import certImpresa from "@/assets/cert-impresa.png";
-import certTinexta from "@/assets/cert-tinexta.png";
+import gtFleet365Logo from "@/assets/gt-fleet-365-logo.png";
 
 interface QuotePreviewProps {
   quoteData: QuoteData;
@@ -69,6 +67,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
 
           {/* Contenuto centrale */}
           <div className="flex-1 flex flex-col justify-center items-center text-center py-8">
+            {/* Logo GT Fleet 365 sopra il titolo */}
+            <img src={gtFleet365Logo} alt="GT Fleet 365" className="h-12 w-auto mb-4" />
+            
             <h2 className="text-base text-gray-600 font-medium mb-1">
               Progetto per la DIGITAL TRANSFORMATION
             </h2>
@@ -85,6 +86,13 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
                 {ragioneSociale}
               </p>
             </div>
+
+            {/* Durata Contrattuale */}
+            {paymentInfo.durataContrattuale && (
+              <p className="mt-4 text-sm text-gray-600">
+                Durata contrattuale: <strong>{paymentInfo.durataContrattuale} mesi</strong>
+              </p>
+            )}
           </div>
 
           {/* Footer pagina 1 */}
@@ -294,12 +302,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
               <p>
                 MACNIL nel presentare la propria offerta tecnico/economica comunica che, nell'intento di garantire ai propri Clienti un livello di qualità elevato nella fornitura dei propri servizi di progettazione, realizzazione, assistenza tecnica e manutenzione, ha elaborato un Sistema Integrato di Gestione ISO 9001/14001/27001 con Linee Guida 27017 e 27018, oltre che tutte le certificazioni di seguito riportate:
               </p>
-              {/* Loghi certificazioni */}
-              <div className="flex items-center justify-center gap-4 py-3 bg-gray-50 rounded">
-                <img src={certEsg} alt="ESG Impact" className="h-10 w-auto object-contain" />
-                <img src={certImpresa} alt="Impresa 5.0" className="h-10 w-auto object-contain" />
-                <img src={certTinexta} alt="Tinexta" className="h-10 w-auto object-contain" />
-              </div>
+              <p className="text-[9px] text-gray-500 italic">
+                (ISO 9001, ISO 14001, ISO 27001, ISO 27017, ISO 27018, ESG Impact, Rating Impresa 5.0, Tinexta Certified)
+              </p>
             </div>
           </div>
 
@@ -406,7 +411,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
           {/* Footer */}
           <div className="mt-6 pt-3 border-t border-gray-200 text-center text-[9px] text-gray-400">
             <p>Documento generato automaticamente • I prezzi si intendono IVA esclusa</p>
-            <p className="mt-1 text-gray-300">Credit to Beppe Vero</p>
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 /* Flux - Fleet Management Quoter - Glassmorphism Design System */
 
@@ -143,6 +143,17 @@
   
   .form-section-title {
     @apply text-base font-semibold text-foreground mb-4 flex items-center gap-2;
+  }
+
+  /* Improved text contrast for glass cards */
+  .glass-card label {
+    color: hsl(var(--foreground) / 0.95);
+    font-weight: 500;
+  }
+  
+  .glass-card-intense span,
+  .glass-card-intense p {
+    color: hsl(var(--foreground));
   }
   
   /* Adobe PDF Button */

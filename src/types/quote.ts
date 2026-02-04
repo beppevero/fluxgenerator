@@ -7,6 +7,7 @@ export interface PaymentInfo {
   condizioniPagamento: string;
   condizioniFornitura: string;
   validitaOfferta: string;
+  durataContrattuale: string;
 }
 
 export interface Service {
