@@ -79,6 +79,10 @@ const Index = () => {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between text-inherit">
           <div className="flex items-center gap-3">
             <img src={fluxLogo} alt="Flux Logo" className="h-10 w-auto" />
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-foreground tracking-tight">FLUX</span>
+              <span className="text-xs text-muted-foreground">Fleet Quotes Generator</span>
+            </div>
           </div>
           <button onClick={handleExportPDF} className="btn-adobe-pdf">
             <FileText className="w-5 h-5" />

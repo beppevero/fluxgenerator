@@ -53,8 +53,10 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
     fontSize: '11px'
   }}>
         {/* ============ PAGINA 1 - FRONTESPIZIO ============ */}
-        <div className="p-6 min-h-[600px] flex flex-col" style={{
-      pageBreakAfter: 'always'
+        <div className="p-6 flex flex-col" style={{
+      minHeight: '297mm',
+      pageBreakAfter: 'always',
+      pageBreakInside: 'avoid'
     }}>
           {/* Header con logo */}
           <div className={headerStyle}>
@@ -122,16 +124,14 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                   <thead>
                     <tr className="bg-[#0066b3] text-white text-[9px] font-semibold uppercase">
                       <th className="text-left p-2 border border-[#0066b3]">Servizio</th>
-                      <th className="text-center p-2 border border-[#0066b3] w-16">N° Servizi</th>
-                      <th className="text-right p-2 border border-[#0066b3] w-24">Canone Unit.</th>
-                      <th className="text-right p-2 border border-[#0066b3] w-20">U.T.</th>
-                      <th className="text-right p-2 border border-[#0066b3] w-24">Totale</th>
+                      <th className="text-center p-2 border border-[#0066b3] w-20">N° Servizi</th>
+                      <th className="text-right p-2 border border-[#0066b3] w-28">Canone Unitario</th>
+                      <th className="text-right p-2 border border-[#0066b3] w-24">Una Tantum</th>
                     </tr>
                   </thead>
                   <tbody>
                     {selectedServices.map((service, idx) => {
                 const isUnaTantum = service.periodo === 'U.T.';
-                const totaleRiga = service.prezzoUnitario * service.quantita;
                 return <tr key={service.id} className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
                           <td className="p-2 border border-gray-200">
                             <div className="font-medium text-gray-900">{service.nome}</div>
@@ -150,27 +150,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                           <td className="p-2 border border-gray-200 text-right">
                             {isUnaTantum ? formatPrice(service.prezzoUnitario) : '—'}
                           </td>
-                          <td className="p-2 border border-gray-200 text-right font-semibold text-[#0066b3]">
-                            {formatPrice(totaleRiga)}
-                          </td>
                         </tr>;
               })}
                   </tbody>
-                  <tfoot>
-                    <tr className="bg-gray-100 font-semibold text-[10px]">
-                      <td colSpan={2} className="p-2 border border-gray-200 text-right">TOTALI</td>
-                      <td className="p-2 border border-gray-200 text-right">
-                        {totaleCanoneMensile > 0 && <div className="text-blue-600">{formatPrice(totaleCanoneMensile)}/mese</div>}
-                        {totaleCanoneAnnuale > 0 && <div className="text-green-600">{formatPrice(totaleCanoneAnnuale)}/anno</div>}
-                      </td>
-                      <td className="p-2 border border-gray-200 text-right text-orange-600">
-                        {totaleUnaTantum > 0 ? formatPrice(totaleUnaTantum) : '—'}
-                      </td>
-                      <td className="p-2 border border-gray-200 text-right text-[#0066b3] font-bold">
-                        {formatPrice(totals.mensile + totals.annuale + totals.unaTantum)}
-                      </td>
-                    </tr>
-                  </tfoot>
                 </table>
 
                 <div className="p-2 bg-amber-50 border border-amber-200 rounded text-[10px] text-amber-800">
