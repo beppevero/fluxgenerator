@@ -20,7 +20,7 @@ export function PaymentForm({ paymentInfo, onChange }: PaymentFormProps) {
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="condizioniPagamento" className="flex items-center gap-2">
+            <Label htmlFor="condizioniPagamento" className="flex items-center gap-2 text-foreground/80">
               <CreditCard className="w-3 h-3" />
               Condizioni di Pagamento
             </Label>
@@ -29,11 +29,12 @@ export function PaymentForm({ paymentInfo, onChange }: PaymentFormProps) {
               placeholder="Es: RIBA 30gg, Bonifico anticipato"
               value={paymentInfo.condizioniPagamento}
               onChange={(e) => onChange({ ...paymentInfo, condizioniPagamento: e.target.value })}
+              className="glass-input"
             />
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="validitaOfferta" className="flex items-center gap-2">
+            <Label htmlFor="validitaOfferta" className="flex items-center gap-2 text-foreground/80">
               <Clock className="w-3 h-3" />
               Validità Offerta
             </Label>
@@ -42,12 +43,13 @@ export function PaymentForm({ paymentInfo, onChange }: PaymentFormProps) {
               placeholder="Es: 30 giorni dalla data"
               value={paymentInfo.validitaOfferta}
               onChange={(e) => onChange({ ...paymentInfo, validitaOfferta: e.target.value })}
+              className="glass-input"
             />
           </div>
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="condizioniFornitura" className="flex items-center gap-2">
+          <Label htmlFor="condizioniFornitura" className="flex items-center gap-2 text-foreground/80">
             <FileText className="w-3 h-3" />
             Condizioni di Fornitura
           </Label>
@@ -57,7 +59,7 @@ export function PaymentForm({ paymentInfo, onChange }: PaymentFormProps) {
             value={paymentInfo.condizioniFornitura}
             onChange={(e) => onChange({ ...paymentInfo, condizioniFornitura: e.target.value })}
             rows={4}
-            className="resize-none"
+            className="resize-none glass-input"
           />
         </div>
       </div>
