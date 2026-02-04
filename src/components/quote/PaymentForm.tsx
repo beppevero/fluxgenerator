@@ -32,7 +32,7 @@ export function PaymentForm({ paymentInfo, onChange }: PaymentFormProps) {
               <SelectTrigger className="glass-input">
                 <SelectValue placeholder="Seleziona durata" />
               </SelectTrigger>
-              <SelectContent className="bg-slate-900 border-white/20">
+              <SelectContent className="bg-white border-border">
                 <SelectItem value="12">12 mesi</SelectItem>
                 <SelectItem value="24">24 mesi</SelectItem>
                 <SelectItem value="36">36 mesi</SelectItem>

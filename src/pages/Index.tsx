@@ -137,9 +137,9 @@ const Index = () => {
         </div>
       </main>
 
-      {/* Footer */}
+      {/* Footer - Solo UI, non nel PDF */}
       <footer className="fixed bottom-0 left-0 right-0 py-3 text-center">
-        <p className="text-xs text-white/30">Credit to Beppe Vero</p>
+        <p className="text-xs text-foreground/30">Credit to Beppe Vero</p>
       </footer>
     </div>
   );
