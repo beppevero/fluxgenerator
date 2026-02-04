@@ -415,7 +415,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
             {/* FOOTER AZIENDALE - Ultima pagina */}
             <div className="mt-8 pt-4 border-t-2 border-[#0066b3]/20">
               <div className="flex items-center justify-center gap-4 mb-3">
-                <img src={macnilLogo} alt="MACNIL" className="h-8 w-auto opacity-80" />
+                <div className="bg-white p-2 rounded">
+                  <img src={macnilLogo} alt="MACNIL" className="h-8 w-auto" />
+                </div>
               </div>
               <div className="text-center space-y-1">
                 <p className="text-[10px] font-medium text-gray-700">

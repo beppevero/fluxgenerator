@@ -44,10 +44,22 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
     }
   };
 
-  const updateQuantita = (serviceId: string, quantita: number) => {
+  const updateQuantita = (serviceId: string, value: string) => {
+    // Allow empty string for full keyboard editing, default to 1 on blur if empty
+    const quantita = value === '' ? 0 : parseInt(value, 10);
     onChange(selectedServices.map(s => 
-      s.id === serviceId ? { ...s, quantita: Math.max(1, quantita) } : s
+      s.id === serviceId ? { ...s, quantita: isNaN(quantita) ? 1 : quantita } : s
     ));
+  };
+
+  const handleQuantitaBlur = (serviceId: string, value: string) => {
+    // Ensure minimum of 1 when field loses focus
+    const quantita = parseInt(value, 10);
+    if (isNaN(quantita) || quantita < 1) {
+      onChange(selectedServices.map(s => 
+        s.id === serviceId ? { ...s, quantita: 1 } : s
+      ));
+    }
   };
 
   const updatePrezzoUnitario = (serviceId: string, prezzo: number) => {
@@ -94,7 +106,7 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
       <div className="space-y-5">
         {Object.entries(groupedServices).map(([categoria, services]) => (
           <div key={categoria} className="space-y-2">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-accent/80 border-b border-white/10 pb-1">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-accent border-b border-border/30 pb-1">
               {categorieLabels[categoria]}
             </h4>
             
@@ -109,7 +121,7 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
                     className={`p-3 rounded-lg border transition-all backdrop-blur-sm ${
                       isChecked
                         ? 'border-accent/50 bg-accent/10'
-                        : 'border-white/10 bg-white/5 hover:border-accent/30'
+                        : 'border-border/30 bg-white/30 hover:border-accent/30'
                     }`}
                   >
                     <div 
@@ -159,14 +171,16 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
                     
                     {/* Campi editabili quando selezionato */}
                     {isChecked && selected && (
-                      <div className="mt-3 pt-3 border-t border-white/10 grid grid-cols-3 gap-3">
+                      <div className="mt-3 pt-3 border-t border-border/20 grid grid-cols-3 gap-3">
                         <div className="space-y-1">
                           <Label className="text-xs text-muted-foreground">N° Servizi</Label>
                           <Input
-                            type="number"
-                            min={1}
-                            value={selected.quantita}
-                            onChange={(e) => updateQuantita(service.id, parseInt(e.target.value) || 1)}
+                            type="text"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            value={selected.quantita === 0 ? '' : selected.quantita}
+                            onChange={(e) => updateQuantita(service.id, e.target.value)}
+                            onBlur={(e) => handleQuantitaBlur(service.id, e.target.value)}
                             onClick={(e) => e.stopPropagation()}
                             className="h-8 text-sm glass-input"
                           />
