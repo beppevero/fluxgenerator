@@ -18,18 +18,19 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
       
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="ragioneSociale">Ragione Sociale *</Label>
+          <Label htmlFor="ragioneSociale" className="text-foreground/80">Ragione Sociale *</Label>
           <Input
             id="ragioneSociale"
             placeholder="Inserisci ragione sociale"
             value={clientData.ragioneSociale}
             onChange={(e) => onChange({ ...clientData, ragioneSociale: e.target.value })}
+            className="glass-input"
             required
           />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="partitaIva" className="flex items-center gap-2">
+          <Label htmlFor="partitaIva" className="flex items-center gap-2 text-foreground/80">
             <FileText className="w-3 h-3" />
             Partita IVA *
           </Label>
@@ -38,6 +39,7 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
             placeholder="Es: IT12345678901"
             value={clientData.partitaIva}
             onChange={(e) => onChange({ ...clientData, partitaIva: e.target.value })}
+            className="glass-input"
             required
           />
         </div>

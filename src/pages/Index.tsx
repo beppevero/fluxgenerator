@@ -1,7 +1,6 @@
 import { useState, useRef, useCallback, useMemo } from "react";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileDown, Zap } from "lucide-react";
+import { FileText } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
@@ -10,6 +9,7 @@ import { TotalsSummary } from "@/components/quote/TotalsSummary";
 import { ClientData, PaymentInfo, SelectedService, QuoteData } from "@/types/quote";
 import { MEZZI_PER_CARTA } from "@/data/services";
 import html2pdf from "html2pdf.js";
+import fluxLogo from "@/assets/flux-logo.png";
 
 const Index = () => {
   const previewRef = useRef<HTMLDivElement>(null);
@@ -29,22 +29,18 @@ const Index = () => {
 
   // Calculate totals
   const totals = useMemo(() => {
-    // Monthly services
     const mensile = selectedServices
       .filter((s) => s.periodo === "MENSILE")
       .reduce((sum, s) => sum + s.prezzoUnitario * s.quantita, 0);
 
-    // Annual services
     const annuale = selectedServices
       .filter((s) => s.periodo === "ANNUALE")
       .reduce((sum, s) => sum + s.prezzoUnitario * s.quantita, 0);
 
-    // One-time services
     const unaTantum = selectedServices
       .filter((s) => s.periodo === "U.T.")
       .reduce((sum, s) => sum + s.prezzoUnitario * s.quantita, 0);
 
-    // Carte Azienda suggerite (1 per 25 mezzi totali se Crono service selezionato)
     const hasCronoService = selectedServices.some((s) => s.isCrono);
     const totaleMezzi = selectedServices.reduce((sum, s) => sum + s.quantita, 0);
     const carteAziendaSuggerite = hasCronoService
@@ -90,23 +86,21 @@ const Index = () => {
   }, [clientData.ragioneSociale]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-card border-b border-border shadow-sm">
+      <header className="sticky top-0 z-50 glass-card-intense border-b border-white/10">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-              <Zap className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-foreground">Flux</h1>
-              <p className="text-xs text-muted-foreground">Fleet Management Quoter</p>
-            </div>
+            <img 
+              src={fluxLogo} 
+              alt="Flux Logo" 
+              className="h-10 w-auto"
+            />
           </div>
-          <Button onClick={handleExportPDF} className="gap-2">
-            <FileDown className="w-4 h-4" />
-            Scarica PDF
-          </Button>
+          <button onClick={handleExportPDF} className="btn-adobe-pdf">
+            <FileText className="w-5 h-5" />
+            Esporta PDF
+          </button>
         </div>
       </header>
 
@@ -130,8 +124,8 @@ const Index = () => {
           </div>
 
           {/* Right Panel - Preview */}
-          <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
-            <div className="bg-muted/50 px-4 py-3 border-b border-border flex items-center justify-between">
+          <div className="glass-card overflow-hidden">
+            <div className="bg-white/5 px-4 py-3 border-b border-white/10 flex items-center justify-between">
               <span className="text-sm font-medium text-foreground">Anteprima Preventivo</span>
               <span className="text-xs text-muted-foreground">Aggiornamento live</span>
             </div>
@@ -141,6 +135,11 @@ const Index = () => {
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="fixed bottom-0 left-0 right-0 py-3 text-center">
+        <p className="text-xs text-white/30">Credit to Beppe Vero</p>
+      </footer>
     </div>
   );
 };

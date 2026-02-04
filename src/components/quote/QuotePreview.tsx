@@ -1,5 +1,6 @@
 import { forwardRef } from "react";
 import { QuoteData } from "@/types/quote";
+import fluxLogo from "@/assets/flux-logo.png";
 
 interface QuotePreviewProps {
   quoteData: QuoteData;
@@ -20,11 +21,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
       }).format(new Date());
     };
 
-    const formatDateShort = () => {
-      const d = new Date();
-      return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
-    };
-
     const serviziMensili = selectedServices.filter(s => s.periodo === 'MENSILE');
     const serviziAnnuali = selectedServices.filter(s => s.periodo === 'ANNUALE');
     const serviziUnaTantum = selectedServices.filter(s => s.periodo === 'U.T.');
@@ -43,23 +39,23 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
     return (
       <div 
         ref={ref} 
-        className="bg-white text-quote-text p-8 min-h-full"
-        style={{ fontFamily: 'Inter, sans-serif' }}
+        className="bg-white text-gray-900 p-8 min-h-full"
+        style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}
       >
         {/* Header */}
-        <div className="border-b-4 border-primary pb-6 mb-6">
+        <div className="border-b-4 border-[#0ea5e9] pb-6 mb-6">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-2xl font-bold text-primary tracking-tight">
+              <h1 className="text-2xl font-bold text-[#0ea5e9] tracking-tight">
                 PROPOSTA COMMERCIALE
               </h1>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-sm text-gray-500 mt-1">
                 Servizi Fleet Management
               </p>
             </div>
             <div className="text-right">
-              <div className="text-2xl font-bold text-primary tracking-tight">Flux</div>
-              <p className="text-sm text-muted-foreground mt-1">
+              <img src={fluxLogo} alt="Flux" className="h-12 w-auto ml-auto mb-2" />
+              <p className="text-sm text-gray-500">
                 Data: {formatDate()}
               </p>
             </div>
@@ -67,21 +63,21 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
         </div>
 
         {/* Client Info */}
-        <div className="bg-muted/50 rounded-lg p-4 mb-6">
-          <h3 className="quote-section-title">Dati Cliente</h3>
+        <div className="bg-gray-50 rounded-lg p-4 mb-6">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-[#0ea5e9] mb-2">Dati Cliente</h3>
           <div className="grid grid-cols-2 gap-4 text-sm">
-            <p><span className="font-medium">Ragione Sociale:</span> {clientData.ragioneSociale || '—'}</p>
-            <p><span className="font-medium">Partita IVA:</span> {clientData.partitaIva || '—'}</p>
+            <p><span className="font-medium text-gray-700">Ragione Sociale:</span> {clientData.ragioneSociale || '—'}</p>
+            <p><span className="font-medium text-gray-700">Partita IVA:</span> {clientData.partitaIva || '—'}</p>
           </div>
         </div>
 
         {/* Services Table */}
         {selectedServices.length > 0 && (
           <div className="mb-6">
-            <h3 className="quote-section-title">Dettaglio Servizi</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-[#0ea5e9] mb-2">Dettaglio Servizi</h3>
             <table className="w-full text-sm">
               <thead>
-                <tr className="quote-table-header">
+                <tr className="bg-[#0ea5e9] text-white text-xs font-semibold uppercase">
                   <th className="text-left p-3 rounded-tl-md">Servizio</th>
                   <th className="text-left p-3">Descrizione</th>
                   <th className="text-right p-3">Listino</th>
@@ -94,23 +90,23 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
               </thead>
               <tbody>
                 {selectedServices.map((service) => (
-                  <tr key={service.id} className="quote-table-row">
-                    <td className="p-3 font-medium">{service.nome}</td>
-                    <td className="p-3 text-xs text-muted-foreground max-w-[150px]">
+                  <tr key={service.id} className="border-b border-gray-200">
+                    <td className="p-3 font-medium text-gray-900">{service.nome}</td>
+                    <td className="p-3 text-xs text-gray-500 max-w-[150px]">
                       {service.descrizione.length > 50 
                         ? service.descrizione.substring(0, 50) + '...'
                         : service.descrizione}
                     </td>
-                    <td className="text-right p-3 text-muted-foreground line-through text-xs">
+                    <td className="text-right p-3 text-gray-400 line-through text-xs">
                       {formatPrice(service.prezzoListino)}
                     </td>
-                    <td className="text-right p-3 text-muted-foreground line-through text-xs">
+                    <td className="text-right p-3 text-gray-400 line-through text-xs">
                       {formatPrice(service.prezzoScontato)}
                     </td>
-                    <td className="text-right p-3 font-medium">
+                    <td className="text-right p-3 font-medium text-gray-900">
                       {formatPrice(service.prezzoUnitario)}
                     </td>
-                    <td className="text-center p-3 font-medium">
+                    <td className="text-center p-3 font-medium text-gray-900">
                       {service.quantita}
                     </td>
                     <td className="text-center p-3">
@@ -122,7 +118,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
                         {getPeriodoLabel(service.periodo)}
                       </span>
                     </td>
-                    <td className="text-right p-3 font-semibold text-accent">
+                    <td className="text-right p-3 font-semibold text-[#0ea5e9]">
                       {formatPrice(service.prezzoUnitario * service.quantita)}
                     </td>
                   </tr>
@@ -133,8 +129,8 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
         )}
 
         {/* Installation Note */}
-        <div className="mb-6 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-sm text-yellow-800">
+        <div className="mb-6 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+          <p className="text-sm text-amber-800">
             <strong>Nota:</strong> L'installazione dei dispositivi è a carico del cliente.
           </p>
         </div>
@@ -171,7 +167,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
 
         {/* Empty State */}
         {selectedServices.length === 0 && (
-          <div className="text-center py-12 text-muted-foreground">
+          <div className="text-center py-12 text-gray-400">
             <p>Seleziona i servizi dal form per visualizzare il preventivo</p>
           </div>
         )}
@@ -180,23 +176,23 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
         {(paymentInfo.condizioniPagamento || paymentInfo.validitaOfferta || paymentInfo.condizioniFornitura) && (
           <div className="space-y-4 mb-6">
             {(paymentInfo.condizioniPagamento || paymentInfo.validitaOfferta) && (
-              <div className="bg-muted/50 rounded-lg p-4">
-                <h3 className="quote-section-title">Condizioni di Pagamento</h3>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-[#0ea5e9] mb-2">Condizioni di Pagamento</h3>
                 <div className="space-y-1 text-sm">
                   {paymentInfo.condizioniPagamento && (
-                    <p><span className="font-medium">Modalità:</span> {paymentInfo.condizioniPagamento}</p>
+                    <p><span className="font-medium text-gray-700">Modalità:</span> {paymentInfo.condizioniPagamento}</p>
                   )}
                   {paymentInfo.validitaOfferta && (
-                    <p><span className="font-medium">Validità Offerta:</span> {paymentInfo.validitaOfferta}</p>
+                    <p><span className="font-medium text-gray-700">Validità Offerta:</span> {paymentInfo.validitaOfferta}</p>
                   )}
                 </div>
               </div>
             )}
             
             {paymentInfo.condizioniFornitura && (
-              <div className="bg-muted/50 rounded-lg p-4">
-                <h3 className="quote-section-title">Condizioni di Fornitura</h3>
-                <p className="text-sm whitespace-pre-wrap">{paymentInfo.condizioniFornitura}</p>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-[#0ea5e9] mb-2">Condizioni di Fornitura</h3>
+                <p className="text-sm whitespace-pre-wrap text-gray-700">{paymentInfo.condizioniFornitura}</p>
               </div>
             )}
           </div>
@@ -204,7 +200,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
 
         {/* Grand Total */}
         {selectedServices.length > 0 && (
-          <div className="bg-primary text-primary-foreground rounded-lg p-5">
+          <div className="bg-[#0ea5e9] text-white rounded-lg p-5">
             <div className="flex justify-between items-center">
               <div>
                 <h3 className="font-semibold text-lg">Riepilogo Offerta</h3>
@@ -235,8 +231,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
         )}
 
         {/* Footer */}
-        <div className="mt-8 pt-6 border-t border-quote-border text-center text-xs text-muted-foreground">
+        <div className="mt-8 pt-6 border-t border-gray-200 text-center text-xs text-gray-400">
           <p>Documento generato automaticamente • I prezzi si intendono IVA esclusa</p>
+          <p className="mt-2 text-gray-300">Credit to Beppe Vero</p>
         </div>
       </div>
     );

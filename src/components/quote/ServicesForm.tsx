@@ -83,10 +83,10 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
 
       {/* Suggerimento Carte Azienda */}
       {hasCronoService && carteAziendaSuggerite > 0 && (
-        <div className="mb-4 p-3 bg-accent/10 border border-accent/30 rounded-lg flex items-start gap-2">
+        <div className="mb-4 p-3 bg-accent/10 border border-accent/30 rounded-lg flex items-start gap-2 backdrop-blur-sm">
           <AlertCircle className="w-4 h-4 text-accent mt-0.5 shrink-0" />
           <div className="text-sm">
-            <span className="font-medium">Suggerimento:</span> Con i servizi Crono selezionati, si consiglia l'aggiunta di <strong>{carteAziendaSuggerite}</strong> Carta/e Aziendale/i (1 ogni {MEZZI_PER_CARTA} mezzi totali).
+            <span className="font-medium">Suggerimento:</span> Con i servizi Crono selezionati, si consiglia l'aggiunta di <strong>{carteAziendaSuggerite}</strong> Carta/e Aziendale/i (€50 U.T. ogni {MEZZI_PER_CARTA} mezzi totali).
           </div>
         </div>
       )}
@@ -94,7 +94,7 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
       <div className="space-y-5">
         {Object.entries(groupedServices).map(([categoria, services]) => (
           <div key={categoria} className="space-y-2">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border pb-1">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-accent/80 border-b border-white/10 pb-1">
               {categorieLabels[categoria]}
             </h4>
             
@@ -106,10 +106,10 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
                 return (
                   <div
                     key={service.id}
-                    className={`p-3 rounded-md border transition-all ${
+                    className={`p-3 rounded-lg border transition-all backdrop-blur-sm ${
                       isChecked
-                        ? 'border-accent bg-accent/5'
-                        : 'border-border hover:border-accent/30'
+                        ? 'border-accent/50 bg-accent/10'
+                        : 'border-white/10 bg-white/5 hover:border-accent/30'
                     }`}
                   >
                     <div 
@@ -119,23 +119,23 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
                       <Checkbox
                         id={service.id}
                         checked={isChecked}
-                        className="mt-0.5"
+                        className="mt-0.5 border-white/30 data-[state=checked]:bg-accent data-[state=checked]:border-accent"
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <Label htmlFor={service.id} className="cursor-pointer text-sm font-medium block">
+                          <Label htmlFor={service.id} className="cursor-pointer text-sm font-medium block text-foreground">
                             {service.nome}
                           </Label>
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Info className="w-3.5 h-3.5 text-muted-foreground cursor-help" />
                             </TooltipTrigger>
-                            <TooltipContent side="right" className="max-w-xs">
+                            <TooltipContent side="right" className="max-w-xs glass-card-intense">
                               <p className="text-xs">{service.descrizione}</p>
                             </TooltipContent>
                           </Tooltip>
                           {service.isCrono && (
-                            <Badge className="bg-primary text-primary-foreground text-xs">
+                            <Badge className="bg-accent/20 text-accent border-accent/30 text-xs">
                               Crono
                             </Badge>
                           )}
@@ -150,7 +150,7 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
                           <span className="text-xs font-medium text-accent">
                             Riservato: {formatPrice(service.prezzoRiservato)}
                           </span>
-                          <Badge variant="secondary" className="text-xs">
+                          <Badge variant="secondary" className="text-xs bg-white/10 border-white/20">
                             {getPeriodoLabel(service.periodo)}
                           </Badge>
                         </div>
@@ -159,7 +159,7 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
                     
                     {/* Campi editabili quando selezionato */}
                     {isChecked && selected && (
-                      <div className="mt-3 pt-3 border-t border-border grid grid-cols-3 gap-3">
+                      <div className="mt-3 pt-3 border-t border-white/10 grid grid-cols-3 gap-3">
                         <div className="space-y-1">
                           <Label className="text-xs text-muted-foreground">N° Servizi</Label>
                           <Input
@@ -168,7 +168,7 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
                             value={selected.quantita}
                             onChange={(e) => updateQuantita(service.id, parseInt(e.target.value) || 1)}
                             onClick={(e) => e.stopPropagation()}
-                            className="h-8 text-sm"
+                            className="h-8 text-sm glass-input"
                           />
                         </div>
                         <div className="space-y-1">
@@ -180,7 +180,7 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
                             value={selected.prezzoUnitario}
                             onChange={(e) => updatePrezzoUnitario(service.id, parseFloat(e.target.value) || 0)}
                             onClick={(e) => e.stopPropagation()}
-                            className="h-8 text-sm"
+                            className="h-8 text-sm glass-input"
                           />
                         </div>
                         <div className="space-y-1">
