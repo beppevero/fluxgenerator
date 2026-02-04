@@ -3,71 +3,66 @@ import { QuoteData } from "@/types/quote";
 import fluxLogo from "@/assets/flux-logo.png";
 import gtFleet365Logo from "@/assets/gt-fleet-365-logo.png";
 import macnilLogo from "@/assets/macnil-logo.png";
-
 interface QuotePreviewProps {
   quoteData: QuoteData;
 }
+export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
+  quoteData
+}, ref) => {
+  const {
+    clientData,
+    paymentInfo,
+    selectedServices,
+    totals
+  } = quoteData;
+  const formatPrice = (price: number) => new Intl.NumberFormat("it-IT", {
+    style: "currency",
+    currency: "EUR"
+  }).format(price);
+  const formatDateFull = () => {
+    const d = new Date();
+    return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
+  };
+  const formatDateLong = () => {
+    return new Intl.DateTimeFormat("it-IT", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric"
+    }).format(new Date());
+  };
 
-export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
-  ({ quoteData }, ref) => {
-    const { clientData, paymentInfo, selectedServices, totals } = quoteData;
+  // Calcoli per la tabella
+  const totaleCanoneMensile = selectedServices.filter(s => s.periodo === 'MENSILE').reduce((sum, s) => sum + s.prezzoUnitario * s.quantita, 0);
+  const totaleCanoneAnnuale = selectedServices.filter(s => s.periodo === 'ANNUALE').reduce((sum, s) => sum + s.prezzoUnitario * s.quantita, 0);
+  const totaleUnaTantum = selectedServices.filter(s => s.periodo === 'U.T.').reduce((sum, s) => sum + s.prezzoUnitario * s.quantita, 0);
+  const ragioneSociale = clientData.ragioneSociale || "RAGIONE SOCIALE AZIENDA";
+  const redattoDa = clientData.redattoDa || "Nome Commerciale";
 
-    const formatPrice = (price: number) =>
-      new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(price);
+  // Stili comuni
+  const headerStyle = "flex justify-between items-start border-b border-gray-200 pb-3 mb-4";
+  const sectionTitleStyle = "text-sm font-bold text-[#0066b3] mb-3 flex items-center gap-2";
+  const sectionNumberStyle = "bg-[#0066b3] text-white w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0";
+  const legalTextStyle = "text-[10px] text-gray-600 leading-relaxed";
 
-    const formatDateFull = () => {
-      const d = new Date();
-      return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
-    };
-
-    const formatDateLong = () => {
-      return new Intl.DateTimeFormat("it-IT", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      }).format(new Date());
-    };
-
-    // Calcoli per la tabella
-    const totaleCanoneMensile = selectedServices
-      .filter(s => s.periodo === 'MENSILE')
-      .reduce((sum, s) => sum + (s.prezzoUnitario * s.quantita), 0);
-
-    const totaleCanoneAnnuale = selectedServices
-      .filter(s => s.periodo === 'ANNUALE')
-      .reduce((sum, s) => sum + (s.prezzoUnitario * s.quantita), 0);
-
-    const totaleUnaTantum = selectedServices
-      .filter(s => s.periodo === 'U.T.')
-      .reduce((sum, s) => sum + (s.prezzoUnitario * s.quantita), 0);
-
-    const ragioneSociale = clientData.ragioneSociale || "RAGIONE SOCIALE AZIENDA";
-    const redattoDa = clientData.redattoDa || "Nome Commerciale";
-
-    // Stili comuni
-    const headerStyle = "flex justify-between items-start border-b border-gray-200 pb-3 mb-4";
-    const sectionTitleStyle = "text-sm font-bold text-[#0066b3] mb-3 flex items-center gap-2";
-    const sectionNumberStyle = "bg-[#0066b3] text-white w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0";
-    const legalTextStyle = "text-[10px] text-gray-600 leading-relaxed";
-    
-    // Stile per page break A4
-    const pageBreakStyle = { pageBreakBefore: 'always' as const };
-
-    return (
-      <div 
-        ref={ref} 
-        className="bg-white text-gray-900 min-h-full"
-        style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontSize: '11px' }}
-      >
+  // Stile per page break A4
+  const pageBreakStyle = {
+    pageBreakBefore: 'always' as const
+  };
+  return <div ref={ref} className="bg-white text-gray-900 min-h-full" style={{
+    fontFamily: 'Arial, Helvetica, sans-serif',
+    fontSize: '11px'
+  }}>
         {/* ============ PAGINA 1 - FRONTESPIZIO ============ */}
-        <div className="p-6 min-h-[600px] flex flex-col" style={{ pageBreakAfter: 'always' }}>
+        <div className="p-6 min-h-[600px] flex flex-col" style={{
+      pageBreakAfter: 'always'
+    }}>
           {/* Header con logo */}
           <div className={headerStyle}>
             <div className="text-[9px] text-gray-500 leading-tight">
               Piattaforma Software Avanzata | Mobilità, Gestione,<br />
               Controllo e Sicurezza, Telematica di Mezzi Aziendali e Asset
             </div>
-            <img src={fluxLogo} alt="Flux" className="h-10 w-auto" />
+            
           </div>
 
           {/* Contenuto centrale */}
@@ -86,7 +81,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
               Proposta Commerciale
             </h1>
             
-            <div className="bg-gray-50 border-l-4 border-[#0066b3] px-6 py-4">
+            <div className="border-l-4 px-6 py-4 bg-primary-foreground border-primary-foreground">
               <p className="text-xl font-bold text-gray-900 uppercase tracking-wide">
                 {ragioneSociale}
               </p>
@@ -122,8 +117,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
               VALORIZZAZIONE ECONOMICA DELLA FORNITURA GT FLEET 365
             </h3>
 
-            {selectedServices.length > 0 ? (
-              <>
+            {selectedServices.length > 0 ? <>
                 <table className="w-full text-[10px] border-collapse mb-3">
                   <thead>
                     <tr className="bg-[#0066b3] text-white text-[9px] font-semibold uppercase">
@@ -136,11 +130,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
                   </thead>
                   <tbody>
                     {selectedServices.map((service, idx) => {
-                      const isUnaTantum = service.periodo === 'U.T.';
-                      const totaleRiga = service.prezzoUnitario * service.quantita;
-                      
-                      return (
-                        <tr key={service.id} className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                const isUnaTantum = service.periodo === 'U.T.';
+                const totaleRiga = service.prezzoUnitario * service.quantita;
+                return <tr key={service.id} className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
                           <td className="p-2 border border-gray-200">
                             <div className="font-medium text-gray-900">{service.nome}</div>
                             <div className="text-[8px] text-gray-500">
@@ -161,9 +153,8 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
                           <td className="p-2 border border-gray-200 text-right font-semibold text-[#0066b3]">
                             {formatPrice(totaleRiga)}
                           </td>
-                        </tr>
-                      );
-                    })}
+                        </tr>;
+              })}
                   </tbody>
                   <tfoot>
                     <tr className="bg-gray-100 font-semibold text-[10px]">
@@ -185,12 +176,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
                 <div className="p-2 bg-amber-50 border border-amber-200 rounded text-[10px] text-amber-800">
                   <strong>Nota:</strong> L'installazione dei dispositivi è a carico del cliente.
                 </div>
-              </>
-            ) : (
-              <div className="text-center py-8 text-gray-400 border-2 border-dashed border-gray-200 rounded">
+              </> : <div className="text-center py-8 text-gray-400 border-2 border-dashed border-gray-200 rounded">
                 <p>Seleziona i servizi dal form per visualizzare la tabella</p>
-              </div>
-            )}
+              </div>}
           </div>
 
           {/* SEZIONE 2: CONDIZIONI DI FORNITURA */}
@@ -201,40 +189,28 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
             </h3>
 
             <div className="border border-gray-200 rounded p-3 min-h-[80px]">
-              {paymentInfo.condizioniPagamento || paymentInfo.validitaOfferta || paymentInfo.condizioniFornitura || paymentInfo.durataContrattuale ? (
-                <div className="space-y-2 text-[10px]">
+              {paymentInfo.condizioniPagamento || paymentInfo.validitaOfferta || paymentInfo.condizioniFornitura || paymentInfo.durataContrattuale ? <div className="space-y-2 text-[10px]">
                   <div className="grid grid-cols-3 gap-3 pb-2 border-b border-gray-100">
-                    {paymentInfo.durataContrattuale && (
-                      <div>
+                    {paymentInfo.durataContrattuale && <div>
                         <span className="text-[9px] text-gray-500 uppercase font-semibold">Durata Contrattuale:</span>
                         <p className="font-medium text-gray-900">{paymentInfo.durataContrattuale} mesi</p>
-                      </div>
-                    )}
-                    {paymentInfo.condizioniPagamento && (
-                      <div>
+                      </div>}
+                    {paymentInfo.condizioniPagamento && <div>
                         <span className="text-[9px] text-gray-500 uppercase font-semibold">Condizioni di Pagamento:</span>
                         <p className="font-medium text-gray-900">{paymentInfo.condizioniPagamento}</p>
-                      </div>
-                    )}
-                    {paymentInfo.validitaOfferta && (
-                      <div>
+                      </div>}
+                    {paymentInfo.validitaOfferta && <div>
                         <span className="text-[9px] text-gray-500 uppercase font-semibold">Validità Offerta:</span>
                         <p className="font-medium text-gray-900">{paymentInfo.validitaOfferta}</p>
-                      </div>
-                    )}
+                      </div>}
                   </div>
-                  {paymentInfo.condizioniFornitura && (
-                    <div>
+                  {paymentInfo.condizioniFornitura && <div>
                       <span className="text-[9px] text-gray-500 uppercase font-semibold">Note:</span>
                       <p className="text-gray-700 whitespace-pre-wrap">{paymentInfo.condizioniFornitura}</p>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <p className="text-gray-400 text-[10px] text-center py-2">
+                    </div>}
+                </div> : <p className="text-gray-400 text-[10px] text-center py-2">
                   Inserisci le condizioni di fornitura nel form
-                </p>
-              )}
+                </p>}
             </div>
           </div>
 
@@ -388,7 +364,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
               </div>
 
               {/* Clausola vessatoria */}
-              <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded text-[9px] text-gray-600">
+              <div className="mt-4 p-3 border border-gray-200 rounded text-[9px] text-gray-600 bg-inherit">
                 <p className="mb-3">
                   Ai sensi e per gli effetti di cui agli art. 1341, comma 2°, e 1342, c.c. si approvano specificamente i seguenti articoli: <strong>Articoli 3 e 4</strong>.
                 </p>
@@ -416,7 +392,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
             <div className="mt-8 pt-4 border-t-2 border-[#0066b3]/20">
               <div className="flex items-center justify-center gap-4 mb-3">
                 <div className="bg-white p-2 rounded">
-                  <img src={macnilLogo} alt="MACNIL" className="h-8 w-auto" />
+                  <img alt="MACNIL" className="h-8 w-auto" src="/lovable-uploads/e90623ee-efb8-4b1d-880f-4d111991019a.png" />
                 </div>
               </div>
               <div className="text-center space-y-1">
@@ -430,9 +406,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
-);
-
+      </div>;
+});
 QuotePreview.displayName = "QuotePreview";
