@@ -16,7 +16,7 @@ const Index = () => {
 
   const [clientData, setClientData] = useState<ClientData>({
     ragioneSociale: "",
-    partitaIva: "",
+    redattoDa: "",
   });
 
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({

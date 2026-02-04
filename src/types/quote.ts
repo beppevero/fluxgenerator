@@ -1,6 +1,6 @@
 export interface ClientData {
   ragioneSociale: string;
-  partitaIva: string;
+  redattoDa: string;
 }
 
 export interface PaymentInfo {
