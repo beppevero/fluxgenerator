@@ -4,7 +4,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* Corporate Quote Generator Design System - Blue/Grey Professional */
+/* Flux - Fleet Management Quoter Design System - Corporate Blue / Anthracite Grey */
 
 @layer base {
   :root {
@@ -17,7 +17,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 215 25% 15%;
 
-    --primary: 213 50% 25%;
+    --primary: 210 65% 20%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 210 15% 93%;
@@ -38,9 +38,9 @@
 
     --radius: 0.5rem;
 
-    /* Custom corporate tokens */
-    --corporate-navy: 213 50% 25%;
-    --corporate-navy-light: 213 45% 35%;
+    /* Custom Flux corporate tokens */
+    --corporate-navy: 210 65% 20%;
+    --corporate-navy-light: 210 55% 30%;
     --corporate-blue: 207 90% 54%;
     --corporate-grey: 210 15% 60%;
     --corporate-grey-light: 210 15% 93%;

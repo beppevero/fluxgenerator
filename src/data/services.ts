@@ -11,7 +11,6 @@ export const servicesList: Service[] = [
     prezzoScontato: 190.00,
     prezzoRiservato: 150.00,
     periodo: 'U.T.',
-    applicaA: 'entrambi'
   },
   {
     id: 'dispositivo-rimorchio',
@@ -22,7 +21,6 @@ export const servicesList: Service[] = [
     prezzoScontato: 180.00,
     prezzoRiservato: 162.00,
     periodo: 'U.T.',
-    applicaA: 'truck'
   },
 
   // GT FLEET 365 BASE
@@ -35,7 +33,6 @@ export const servicesList: Service[] = [
     prezzoScontato: 150.00,
     prezzoRiservato: 120.00,
     periodo: 'ANNUALE',
-    applicaA: 'entrambi'
   },
   {
     id: 'fleet-base-mensile',
@@ -46,29 +43,28 @@ export const servicesList: Service[] = [
     prezzoScontato: 16.00,
     prezzoRiservato: 12.00,
     periodo: 'MENSILE',
-    applicaA: 'entrambi'
   },
+
+  // GT FLEET 365 GOLD (separato)
   {
     id: 'fleet-gold-annuale',
     nome: 'GT FLEET 365 GOLD',
     descrizione: 'Mezzi Aziendali, Mezzi Pesanti (dispositivo in comodato d\'uso) - Include funzionalità BASE + Avvisi Scadenze, Manutenzioni, Referenti Notifiche',
-    categoria: 'fleet_base',
+    categoria: 'fleet_gold',
     prezzoListino: 275.00,
     prezzoScontato: 245.00,
     prezzoRiservato: 170.00,
     periodo: 'ANNUALE',
-    applicaA: 'entrambi'
   },
   {
     id: 'fleet-gold-mensile',
     nome: 'GT FLEET 365 GOLD',
     descrizione: 'Mezzi Aziendali, Mezzi Pesanti (dispositivo in comodato d\'uso) - Include funzionalità BASE + Avvisi Scadenze, Manutenzioni, Referenti Notifiche',
-    categoria: 'fleet_base',
+    categoria: 'fleet_gold',
     prezzoListino: 25.00,
     prezzoScontato: 22.00,
     prezzoRiservato: 17.00,
     periodo: 'MENSILE',
-    applicaA: 'entrambi'
   },
 
   // GT FLEET 365 PLUS
@@ -81,7 +77,6 @@ export const servicesList: Service[] = [
     prezzoScontato: 220.00,
     prezzoRiservato: 190.00,
     periodo: 'ANNUALE',
-    applicaA: 'entrambi'
   },
   {
     id: 'fleet-plus-mensile',
@@ -92,7 +87,6 @@ export const servicesList: Service[] = [
     prezzoScontato: 21.00,
     prezzoRiservato: 19.00,
     periodo: 'MENSILE',
-    applicaA: 'entrambi'
   },
 
   // GT FLEET 365 PREMIUM
@@ -105,7 +99,6 @@ export const servicesList: Service[] = [
     prezzoScontato: 267.00,
     prezzoRiservato: 240.30,
     periodo: 'ANNUALE',
-    applicaA: 'entrambi'
   },
   {
     id: 'fleet-premium-mensile',
@@ -116,7 +109,6 @@ export const servicesList: Service[] = [
     prezzoScontato: 24.00,
     prezzoRiservato: 21.60,
     periodo: 'MENSILE',
-    applicaA: 'entrambi'
   },
 
   // GT FLEET 365 TRUCK CRONO
@@ -130,7 +122,6 @@ export const servicesList: Service[] = [
     prezzoRiservato: 284.40,
     periodo: 'ANNUALE',
     isCrono: true,
-    applicaA: 'truck'
   },
   {
     id: 'crono-base-mensile',
@@ -142,10 +133,9 @@ export const servicesList: Service[] = [
     prezzoRiservato: 25.20,
     periodo: 'MENSILE',
     isCrono: true,
-    applicaA: 'truck'
   },
 
-  // GT FLEET 365 TRUCK CRONO TELEMATICA
+  // GT FLEET 365 TRUCK CRONO TELEMATICA (separato)
   {
     id: 'crono-telematica-annuale',
     nome: 'GT FLEET 365 TRUCK CRONO TELEMATICA',
@@ -156,7 +146,6 @@ export const servicesList: Service[] = [
     prezzoRiservato: 342.00,
     periodo: 'ANNUALE',
     isCrono: true,
-    applicaA: 'truck'
   },
   {
     id: 'crono-telematica-mensile',
@@ -168,33 +157,30 @@ export const servicesList: Service[] = [
     prezzoRiservato: 31.50,
     periodo: 'MENSILE',
     isCrono: true,
-    applicaA: 'truck'
   },
 
-  // GT FLEET 365 TRUCK CRONO PREMIUM
+  // GT FLEET 365 TRUCK CRONO PREMIUM (separato)
   {
     id: 'crono-premium-annuale',
     nome: 'GT FLEET 365 TRUCK CRONO PREMIUM',
     descrizione: 'Mezzi Pesanti - Blocco Avviamento, Parking Protection, Allarmi, Tasto SOS, Telematica completa, Cronotachigrafo',
-    categoria: 'crono_telematica',
+    categoria: 'crono_premium',
     prezzoListino: 430.00,
     prezzoScontato: 380.00,
     prezzoRiservato: 342.00,
     periodo: 'ANNUALE',
     isCrono: true,
-    applicaA: 'truck'
   },
   {
     id: 'crono-premium-mensile',
     nome: 'GT FLEET 365 TRUCK CRONO PREMIUM',
     descrizione: 'Mezzi Pesanti - Blocco Avviamento, Parking Protection, Allarmi, Tasto SOS, Telematica completa, Cronotachigrafo',
-    categoria: 'crono_telematica',
+    categoria: 'crono_premium',
     prezzoListino: 39.00,
     prezzoScontato: 35.00,
     prezzoRiservato: 31.50,
     periodo: 'MENSILE',
     isCrono: true,
-    applicaA: 'truck'
   },
 
   // PIATTAFORME CRONO
@@ -208,7 +194,6 @@ export const servicesList: Service[] = [
     prezzoRiservato: 600.00,
     periodo: 'ANNUALE',
     isCrono: true,
-    applicaA: 'truck'
   },
   {
     id: 'crono-gold',
@@ -220,7 +205,6 @@ export const servicesList: Service[] = [
     prezzoRiservato: 1200.00,
     periodo: 'ANNUALE',
     isCrono: true,
-    applicaA: 'truck'
   },
 
   // CARTA AZIENDALE CRONO
@@ -234,7 +218,6 @@ export const servicesList: Service[] = [
     prezzoRiservato: 120.00,
     periodo: 'ANNUALE',
     isCrono: true,
-    applicaA: 'truck'
   },
 
   // PIANI DI VIAGGIO
@@ -247,7 +230,6 @@ export const servicesList: Service[] = [
     prezzoScontato: 240.00,
     prezzoRiservato: 240.00,
     periodo: 'ANNUALE',
-    applicaA: 'entrambi'
   },
   {
     id: 'piani-viaggio-mensile',
@@ -258,7 +240,6 @@ export const servicesList: Service[] = [
     prezzoScontato: 30.00,
     prezzoRiservato: 30.00,
     periodo: 'MENSILE',
-    applicaA: 'entrambi'
   },
 
   // SERVIZIO RIMORCHI
@@ -271,7 +252,6 @@ export const servicesList: Service[] = [
     prezzoScontato: 100.00,
     prezzoRiservato: 90.00,
     periodo: 'ANNUALE',
-    applicaA: 'truck'
   }
 ];
 
@@ -280,23 +260,13 @@ export const MEZZI_PER_CARTA = 25; // 1 carta ogni 25 mezzi
 
 export const categorieLabels: Record<string, string> = {
   dispositivi: 'Dispositivi',
-  fleet_base: 'GT Fleet 365 Base/Gold',
+  fleet_base: 'GT Fleet 365 Base',
+  fleet_gold: 'GT Fleet 365 Gold',
   fleet_plus: 'GT Fleet 365 Plus',
   fleet_premium: 'GT Fleet 365 Premium',
   crono: 'GT Fleet 365 Truck Crono',
-  crono_telematica: 'GT Fleet 365 Truck Crono Telematica/Premium',
+  crono_telematica: 'GT Fleet 365 Truck Crono Telematica',
+  crono_premium: 'GT Fleet 365 Truck Crono Premium',
   piattaforme: 'Piattaforme Crono',
   accessori: 'Accessori & Servizi'
 };
-
-export const durateContratto = [
-  { value: 12, label: '12 mesi' },
-  { value: 24, label: '24 mesi' },
-  { value: 36, label: '36 mesi' },
-  { value: 60, label: '60 mesi' }
-];
-
-export const tipiVeicolo = [
-  { value: 'truck', label: 'Truck (> 35 q.li)' },
-  { value: 'light', label: 'Veicoli Leggeri (< 35 q.li)' }
-];
