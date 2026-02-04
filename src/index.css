@@ -76,11 +76,23 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    min-height: 100vh;
+    position: relative;
+  }
+  
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-image: url('/images/app-background.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    min-height: 100vh;
+    filter: blur(3px);
+    z-index: -1;
   }
 }
 

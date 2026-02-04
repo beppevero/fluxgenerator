@@ -123,12 +123,12 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                 <table className="w-full text-[10px] border-collapse mb-3">
                   <thead>
                     <tr className="bg-[#0066b3] text-white text-[9px] font-semibold uppercase">
-                      <th className="text-left p-2 border border-[#0066b3] w-[22%]">Servizio</th>
-                      <th className="text-left p-2 border border-[#0066b3] w-[30%]">Descrizione</th>
-                      <th className="text-center p-2 border border-[#0066b3] w-[10%]">N° Servizi</th>
-                      <th className="text-center p-2 border border-[#0066b3] w-[10%]">Durata</th>
-                      <th className="text-right p-2 border border-[#0066b3] w-[14%]">Canone Unitario</th>
-                      <th className="text-right p-2 border border-[#0066b3] w-[14%]">Una Tantum</th>
+                      <th className="text-left p-2 border border-[#0066b3]" style={{ width: '18%' }}>Servizio</th>
+                      <th className="text-left p-2 border border-[#0066b3]" style={{ width: '38%' }}>Descrizione</th>
+                      <th className="text-center p-2 border border-[#0066b3]" style={{ width: '8%' }}>N° Servizi</th>
+                      <th className="text-center p-2 border border-[#0066b3]" style={{ width: '10%' }}>Durata</th>
+                      <th className="text-right p-2 border border-[#0066b3]" style={{ width: '13%' }}>Canone Unitario</th>
+                      <th className="text-right p-2 border border-[#0066b3]" style={{ width: '13%' }}>Una Tantum</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -136,7 +136,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                 const isUnaTantum = service.periodo === 'U.T.';
                 const durataLabel = paymentInfo.durataContrattuale ? `${paymentInfo.durataContrattuale} mesi` : '—';
                 return <tr key={service.id} className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                          <td className="p-2 border border-gray-200">
+                          <td className="p-2 border border-gray-200 align-top">
                             <div className="font-medium text-gray-900 text-[9px]">{service.nome}</div>
                             <div className="text-[7px] text-gray-500">
                               {service.periodo === 'MENSILE' && '(Mensile)'}
@@ -144,19 +144,19 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                               {service.periodo === 'U.T.' && '(Una Tantum)'}
                             </div>
                           </td>
-                          <td className="p-2 border border-gray-200 text-[8px] text-gray-600">
+                          <td className="p-2 border border-gray-200 text-[8px] text-gray-600 align-top leading-snug">
                             {service.descrizione}
                           </td>
-                          <td className="p-2 border border-gray-200 text-center font-medium">
+                          <td className="p-2 border border-gray-200 text-center font-medium align-top">
                             {service.quantita}
                           </td>
-                          <td className="p-2 border border-gray-200 text-center">
+                          <td className="p-2 border border-gray-200 text-center align-top">
                             {!isUnaTantum ? durataLabel : '—'}
                           </td>
-                          <td className="p-2 border border-gray-200 text-right">
+                          <td className="p-2 border border-gray-200 text-right align-top">
                             {!isUnaTantum ? formatPrice(service.prezzoUnitario) : '—'}
                           </td>
-                          <td className="p-2 border border-gray-200 text-right">
+                          <td className="p-2 border border-gray-200 text-right align-top">
                             {isUnaTantum ? formatPrice(service.prezzoUnitario) : '—'}
                           </td>
                         </tr>;
