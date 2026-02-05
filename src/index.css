@@ -99,22 +99,24 @@
 @layer components {
   /* Glassmorphism card - Light theme */
   .glass-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border: 1px solid var(--glass-border);
-    border-radius: 1rem;
+    border-radius: 1.5rem;
+    overflow: hidden;
     box-shadow: 
       0 8px 32px var(--glass-shadow),
       inset 0 1px 0 var(--glass-highlight);
   }
   
   .glass-card-intense {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border: 1px solid rgba(255, 255, 255, 0.9);
-    border-radius: 1rem;
+    border-radius: 1.5rem;
+    overflow: hidden;
     box-shadow: 
       0 8px 32px var(--glass-shadow),
       inset 0 1px 0 rgba(255, 255, 255, 1);
@@ -152,7 +154,7 @@
   }
   
   .form-section {
-    @apply glass-card p-5;
+    @apply glass-card p-6;
   }
   
   .form-section-title {
