@@ -10,6 +10,15 @@ interface PaymentFormProps {
   onChange: (info: PaymentInfo) => void;
 }
 
+const validitaOptions = [
+  { value: "1 giorno", label: "1 giorno (Last Minute)" },
+  { value: "3 giorni", label: "3 giorni" },
+  { value: "7 giorni", label: "7 giorni" },
+  { value: "10 giorni", label: "10 giorni" },
+  { value: "15 giorni", label: "15 giorni" },
+  { value: "30 giorni", label: "30 giorni" },
+];
+
 export function PaymentForm({ paymentInfo, onChange }: PaymentFormProps) {
   return (
     <div className="form-section">
@@ -32,7 +41,7 @@ export function PaymentForm({ paymentInfo, onChange }: PaymentFormProps) {
               <SelectTrigger className="glass-input">
                 <SelectValue placeholder="Mesi" />
               </SelectTrigger>
-              <SelectContent className="bg-white border-border">
+              <SelectContent className="bg-white border-border z-50">
                 <SelectItem value="12">12 mesi</SelectItem>
                 <SelectItem value="24">24 mesi</SelectItem>
                 <SelectItem value="36">36 mesi</SelectItem>
@@ -60,13 +69,21 @@ export function PaymentForm({ paymentInfo, onChange }: PaymentFormProps) {
               <Clock className="w-3 h-3" />
               Validità Offerta
             </Label>
-            <Input
-              id="validitaOfferta"
-              placeholder="Es: 30 giorni"
+            <Select
               value={paymentInfo.validitaOfferta}
-              onChange={(e) => onChange({ ...paymentInfo, validitaOfferta: e.target.value })}
-              className="glass-input"
-            />
+              onValueChange={(value) => onChange({ ...paymentInfo, validitaOfferta: value })}
+            >
+              <SelectTrigger className="glass-input">
+                <SelectValue placeholder="Seleziona..." />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-border z-50">
+                {validitaOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
         

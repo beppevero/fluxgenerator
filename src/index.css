@@ -99,11 +99,11 @@
 @layer components {
   /* Glassmorphism card - Light theme */
   .glass-card {
-    background: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
-    border-radius: 1.5rem;
+    border-radius: 24px;
     overflow: hidden;
     box-shadow: 
       0 8px 32px var(--glass-shadow),
@@ -111,11 +111,11 @@
   }
   
   .glass-card-intense {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.9);
-    border-radius: 1.5rem;
+    border-radius: 24px;
     overflow: hidden;
     box-shadow: 
       0 8px 32px var(--glass-shadow),
