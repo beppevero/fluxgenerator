@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useMemo } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, Brush } from "lucide-react";
+import { FileText, Brush, AlertCircle } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
@@ -10,6 +10,7 @@ import { ClientData, PaymentInfo, SelectedService, QuoteData } from "@/types/quo
 import { MEZZI_PER_CARTA } from "@/data/services";
 import html2pdf from "html2pdf.js";
 import fluxLogo from "@/assets/flux-logo.png";
+
 const Index = () => {
   const previewRef = useRef<HTMLDivElement>(null);
   const [clientData, setClientData] = useState<ClientData>({
@@ -19,8 +20,8 @@ const Index = () => {
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
     condizioniPagamento: "",
     condizioniFornitura: "",
-    validitaOfferta: "30 giorni dalla data di emissione",
-    durataContrattuale: "36"
+    validitaOfferta: "30 giorni",
+    durataContrattuale: "24" // Default changed to 24 months
   });
   const [selectedServices, setSelectedServices] = useState<SelectedService[]>([]);
 
@@ -39,18 +40,24 @@ const Index = () => {
       carteAziendaSuggerite
     };
   }, [selectedServices]);
+
   const quoteData: QuoteData = {
     clientData,
     paymentInfo,
     selectedServices,
     totals
   };
+
+  // Validation for export button
+  const canExport = clientData.ragioneSociale.trim().length > 0 && selectedServices.length > 0;
+
   const formatDateForFilename = () => {
     const d = new Date();
     return `${String(d.getDate()).padStart(2, '0')}${String(d.getMonth() + 1).padStart(2, '0')}${d.getFullYear()}`;
   };
+
   const handleExportPDF = useCallback(() => {
-    if (!previewRef.current) return;
+    if (!previewRef.current || !canExport) return;
     const element = previewRef.current;
     const nomeAzienda = clientData.ragioneSociale.trim() || "Cliente";
     const filename = `Proposta Commerciale_${nomeAzienda}_${formatDateForFilename()}.pdf`;
@@ -72,13 +79,25 @@ const Index = () => {
       }
     };
     html2pdf().set(opt).from(element).save();
-  }, [clientData.ragioneSociale]);
+  }, [clientData.ragioneSociale, canExport]);
 
-  const handleClearSelection = useCallback(() => {
+  // Reset ALL states
+  const handleClearAll = useCallback(() => {
+    setClientData({
+      ragioneSociale: "",
+      redattoDa: ""
+    });
+    setPaymentInfo({
+      condizioniPagamento: "",
+      condizioniFornitura: "",
+      validitaOfferta: "30 giorni",
+      durataContrattuale: "24"
+    });
     setSelectedServices([]);
   }, []);
 
-  return <div className="min-h-screen">
+  return (
+    <div className="min-h-screen">
       {/* Header */}
       <header className="sticky top-0 z-50 pt-4 px-4 flex items-center justify-between">
         {/* Left - Logo & Title */}
@@ -90,15 +109,27 @@ const Index = () => {
           </div>
         </div>
         {/* Right - Action Buttons */}
-        <div className="flex items-center gap-2">
-          <button onClick={handleClearSelection} className="btn-action-secondary-sm">
-            <Brush className="w-4 h-4" />
-            Pulisci
-          </button>
-          <button onClick={handleExportPDF} className="btn-action-primary-sm">
-            <FileText className="w-4 h-4" />
-            Esporta PDF
-          </button>
+        <div className="flex flex-col items-end gap-1">
+          <div className="flex items-center gap-2">
+            <button onClick={handleClearAll} className="btn-action-secondary-sm">
+              <Brush className="w-4 h-4" />
+              Pulisci
+            </button>
+            <button 
+              onClick={handleExportPDF} 
+              disabled={!canExport}
+              className={`btn-action-primary-sm ${!canExport ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              <FileText className="w-4 h-4" />
+              Esporta PDF
+            </button>
+          </div>
+          {!canExport && (
+            <div className="flex items-center gap-1 text-[10px] text-amber-600">
+              <AlertCircle className="w-3 h-3" />
+              <span>Compila Ragione Sociale e seleziona almeno un servizio</span>
+            </div>
+          )}
         </div>
       </header>
 
@@ -134,6 +165,8 @@ const Index = () => {
       <footer className="fixed bottom-0 left-0 right-0 py-3 text-center">
         <p className="text-xs text-foreground/30">Credit to Beppe Vero</p>
       </footer>
-    </div>;
+    </div>
+  );
 };
+
 export default Index;
