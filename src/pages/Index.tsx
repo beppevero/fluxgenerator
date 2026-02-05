@@ -80,25 +80,25 @@ const Index = () => {
 
   return <div className="min-h-screen">
       {/* Header */}
-      <header className="sticky top-0 z-50 pt-4 px-4 flex justify-center">
-        <div className="inline-flex items-center justify-between gap-6 glass-card-intense px-4 py-2 rounded-full">
-          <div className="flex items-center gap-3">
-            <img src={fluxLogo} alt="Flux Logo" className="h-7 w-auto" />
-            <div className="flex flex-col">
-              <span className="text-sm font-bold text-foreground tracking-tight leading-none">FLUX</span>
-              <span className="text-[10px] text-muted-foreground leading-none">Fleet Quotes Generator</span>
-            </div>
+      <header className="sticky top-0 z-50 pt-4 px-4 flex items-center justify-between">
+        {/* Left - Logo & Title */}
+        <div className="inline-flex items-center gap-3 glass-card-intense px-4 py-2 rounded-full">
+          <img src={fluxLogo} alt="Flux Logo" className="h-7 w-auto" />
+          <div className="flex flex-col">
+            <span className="text-sm font-bold text-foreground tracking-tight leading-none">FLUX</span>
+            <span className="text-[10px] text-muted-foreground leading-none">Fleet Quotes Generator</span>
           </div>
-          <div className="flex items-center gap-2">
-            <button onClick={handleClearSelection} className="btn-action-secondary-sm">
-              <Brush className="w-4 h-4" />
-              Pulisci
-            </button>
-            <button onClick={handleExportPDF} className="btn-action-primary-sm">
-              <FileText className="w-4 h-4" />
-              Esporta PDF
-            </button>
-          </div>
+        </div>
+        {/* Right - Action Buttons */}
+        <div className="flex items-center gap-2">
+          <button onClick={handleClearSelection} className="btn-action-secondary-sm">
+            <Brush className="w-4 h-4" />
+            Pulisci
+          </button>
+          <button onClick={handleExportPDF} className="btn-action-primary-sm">
+            <FileText className="w-4 h-4" />
+            Esporta PDF
+          </button>
         </div>
       </header>
 
@@ -107,7 +107,7 @@ const Index = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Panel - Form */}
           <div className="space-y-4">
-            <ScrollArea className="h-[calc(100vh-140px)]">
+            <ScrollArea className="h-[calc(100vh-140px)] pr-2">
               <div className="space-y-4 pr-4">
                 <ClientDataForm clientData={clientData} onChange={setClientData} />
                 <ServicesForm selectedServices={selectedServices} onChange={setSelectedServices} carteAziendaSuggerite={totals.carteAziendaSuggerite} />
