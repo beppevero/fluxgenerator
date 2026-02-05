@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useMemo } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, RotateCcw } from "lucide-react";
+import { FileText, Brush } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
@@ -80,24 +80,12 @@ const Index = () => {
 
   return <div className="min-h-screen">
       {/* Header */}
-      <header className="sticky top-0 z-50 glass-card-intense border-b border-white/10">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between text-inherit">
-          <div className="flex items-center gap-3">
-            <img src={fluxLogo} alt="Flux Logo" className="h-10 w-auto" />
-            <div className="flex flex-col">
-              <span className="text-lg font-bold text-foreground tracking-tight">FLUX</span>
-              <span className="text-xs text-muted-foreground">Fleet Quotes Generator</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <button onClick={handleClearSelection} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold text-sm bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-all">
-              <RotateCcw className="w-4 h-4" />
-              Pulisci
-            </button>
-            <button onClick={handleExportPDF} className="btn-adobe-pdf">
-              <FileText className="w-5 h-5" />
-              Esporta PDF
-            </button>
+      <header className="sticky top-0 z-50 pt-4 px-4">
+        <div className="inline-flex items-center gap-3 glass-card-intense px-4 py-2 rounded-full">
+          <img src={fluxLogo} alt="Flux Logo" className="h-7 w-auto" />
+          <div className="flex flex-col">
+            <span className="text-sm font-bold text-foreground tracking-tight leading-none">FLUX</span>
+            <span className="text-[10px] text-muted-foreground leading-none">Fleet Quotes Generator</span>
           </div>
         </div>
       </header>
@@ -107,7 +95,7 @@ const Index = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Panel - Form */}
           <div className="space-y-4">
-            <ScrollArea className="h-[calc(100vh-160px)]">
+            <ScrollArea className="h-[calc(100vh-140px)]">
               <div className="space-y-4 pr-4">
                 <ClientDataForm clientData={clientData} onChange={setClientData} />
                 <ServicesForm selectedServices={selectedServices} onChange={setSelectedServices} carteAziendaSuggerite={totals.carteAziendaSuggerite} />
@@ -118,14 +106,25 @@ const Index = () => {
           </div>
 
           {/* Right Panel - Preview */}
-          <div className="glass-card overflow-hidden">
+          <div className="flex flex-col glass-card overflow-hidden">
             <div className="bg-white/5 px-4 py-3 border-b border-white/10 flex items-center justify-between">
               <span className="text-sm font-medium text-foreground">Anteprima Preventivo</span>
               <span className="text-xs text-muted-foreground">Aggiornamento live</span>
             </div>
-            <ScrollArea className="h-[calc(100vh-220px)]">
+            <ScrollArea className="flex-1 h-[calc(100vh-280px)]">
               <QuotePreview ref={previewRef} quoteData={quoteData} />
             </ScrollArea>
+            {/* Action Buttons */}
+            <div className="p-4 border-t border-white/10 flex items-center justify-center gap-3">
+              <button onClick={handleClearSelection} className="btn-action-secondary">
+                <Brush className="w-4 h-4" />
+                Pulisci
+              </button>
+              <button onClick={handleExportPDF} className="btn-action-primary">
+                <FileText className="w-4 h-4" />
+                Esporta PDF
+              </button>
+            </div>
           </div>
         </div>
       </main>
