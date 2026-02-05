@@ -106,9 +106,9 @@ const Index = () => {
       <main className="container mx-auto px-4 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Panel - Form */}
-          <div className="space-y-4">
-            <ScrollArea className="h-[calc(100vh-140px)] pr-2">
-              <div className="space-y-4 pr-4">
+          <div className="glass-card p-4">
+            <ScrollArea className="h-[calc(100vh-160px)]">
+              <div className="space-y-4 pr-3">
                 <ClientDataForm clientData={clientData} onChange={setClientData} />
                 <ServicesForm selectedServices={selectedServices} onChange={setSelectedServices} carteAziendaSuggerite={totals.carteAziendaSuggerite} />
                 <PaymentForm paymentInfo={paymentInfo} onChange={setPaymentInfo} />
