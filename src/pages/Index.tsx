@@ -80,12 +80,24 @@ const Index = () => {
 
   return <div className="min-h-screen">
       {/* Header */}
-      <header className="sticky top-0 z-50 pt-4 px-4">
-        <div className="inline-flex items-center gap-3 glass-card-intense px-4 py-2 rounded-full">
-          <img src={fluxLogo} alt="Flux Logo" className="h-7 w-auto" />
-          <div className="flex flex-col">
-            <span className="text-sm font-bold text-foreground tracking-tight leading-none">FLUX</span>
-            <span className="text-[10px] text-muted-foreground leading-none">Fleet Quotes Generator</span>
+      <header className="sticky top-0 z-50 pt-4 px-4 flex justify-center">
+        <div className="inline-flex items-center justify-between gap-6 glass-card-intense px-4 py-2 rounded-full">
+          <div className="flex items-center gap-3">
+            <img src={fluxLogo} alt="Flux Logo" className="h-7 w-auto" />
+            <div className="flex flex-col">
+              <span className="text-sm font-bold text-foreground tracking-tight leading-none">FLUX</span>
+              <span className="text-[10px] text-muted-foreground leading-none">Fleet Quotes Generator</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={handleClearSelection} className="btn-action-secondary-sm">
+              <Brush className="w-4 h-4" />
+              Pulisci
+            </button>
+            <button onClick={handleExportPDF} className="btn-action-primary-sm">
+              <FileText className="w-4 h-4" />
+              Esporta PDF
+            </button>
           </div>
         </div>
       </header>
@@ -106,25 +118,14 @@ const Index = () => {
           </div>
 
           {/* Right Panel - Preview */}
-          <div className="flex flex-col glass-card overflow-hidden">
+          <div className="glass-card overflow-hidden">
             <div className="bg-white/5 px-4 py-3 border-b border-white/10 flex items-center justify-between">
               <span className="text-sm font-medium text-foreground">Anteprima Preventivo</span>
               <span className="text-xs text-muted-foreground">Aggiornamento live</span>
             </div>
-            <ScrollArea className="flex-1 h-[calc(100vh-280px)]">
+            <ScrollArea className="h-[calc(100vh-200px)]">
               <QuotePreview ref={previewRef} quoteData={quoteData} />
             </ScrollArea>
-            {/* Action Buttons */}
-            <div className="p-4 border-t border-white/10 flex items-center justify-center gap-3">
-              <button onClick={handleClearSelection} className="btn-action-secondary">
-                <Brush className="w-4 h-4" />
-                Pulisci
-              </button>
-              <button onClick={handleExportPDF} className="btn-action-primary">
-                <FileText className="w-4 h-4" />
-                Esporta PDF
-              </button>
-            </div>
           </div>
         </div>
       </main>
