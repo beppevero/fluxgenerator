@@ -69,58 +69,64 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
       fontSize: '11px'
     }}>
       {/* ============ PAGINA 1 - FRONTESPIZIO ============ */}
-      <div className="p-6 flex flex-col" style={{
-        minHeight: '297mm',
-        position: 'relative'
+      <div style={{
+        height: '297mm',
+        width: '100%',
+        position: 'relative',
+        boxSizing: 'border-box',
+        overflow: 'hidden'
       }}>
-        {/* Header con logo */}
-        <div className="text-center pb-3 mb-4 border-b border-gray-200">
-          <div className="text-[9px] text-gray-500 leading-tight">
-            Piattaforma Software Avanzata | Mobilità, Gestione, Controllo e Sicurezza, Telematica di Mezzi Aziendali e Asset
+        <div className="p-6 flex flex-col h-full">
+          {/* Header con logo */}
+          <div className="text-center pb-3 mb-4 border-b border-gray-200">
+            <div className="text-[9px] text-gray-500 leading-tight">
+              Piattaforma Software Avanzata | Mobilità, Gestione, Controllo e Sicurezza, Telematica di Mezzi Aziendali e Asset
+            </div>
+          </div>
+
+          {/* Contenuto centrale */}
+          <div className="flex-1 flex flex-col justify-center items-center text-center py-8">
+            {/* Logo GT Fleet 365 sopra il titolo */}
+            <img src={gtFleet365Logo} alt="GT Fleet 365" className="h-12 w-auto mb-4" />
+            
+            <h2 className="text-base text-gray-600 font-medium mb-1">
+              Progetto per la DIGITAL TRANSFORMATION
+            </h2>
+            <h3 className="text-sm text-gray-500 mb-6">
+              nella Gestione dei Mezzi Aziendali
+            </h3>
+            
+            <h1 className="text-2xl font-bold text-[#0066b3] tracking-tight mb-6">
+              Proposta Commerciale
+            </h1>
+            
+            <div className="border-l-4 px-6 py-4 bg-primary-foreground border-primary-foreground">
+              <p className="text-xl font-bold text-gray-900 uppercase tracking-wide">
+                {ragioneSociale}
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Contenuto centrale */}
-        <div className="flex-1 flex flex-col justify-center items-center text-center py-8">
-          {/* Logo GT Fleet 365 sopra il titolo */}
-          <img src={gtFleet365Logo} alt="GT Fleet 365" className="h-12 w-auto mb-4" />
-          
-          <h2 className="text-base text-gray-600 font-medium mb-1">
-            Progetto per la DIGITAL TRANSFORMATION
-          </h2>
-          <h3 className="text-sm text-gray-500 mb-6">
-            nella Gestione dei Mezzi Aziendali
-          </h3>
-          
-          <h1 className="text-2xl font-bold text-[#0066b3] tracking-tight mb-6">
-            Proposta Commerciale
-          </h1>
-          
-          <div className="border-l-4 px-6 py-4 bg-primary-foreground border-primary-foreground">
-            <p className="text-xl font-bold text-gray-900 uppercase tracking-wide">
-              {ragioneSociale}
-            </p>
-          </div>
-        </div>
-
-        {/* Footer pagina 1 - Posizionato in basso assoluto */}
+        {/* Footer pagina 1 - Posizionato in basso assoluto dentro contenitore 297mm */}
         <div style={{
           position: 'absolute',
-          bottom: '10mm',
+          bottom: '20mm',
           left: 0,
           width: '100%',
-          padding: '0 24px'
+          padding: '0 24px',
+          boxSizing: 'border-box'
         }} className="pt-3 border-t border-gray-200 text-[9px] text-gray-400 flex justify-between items-center">
           <span>Data emissione: {formatDateFull()}</span>
           <span>Redatto da: <strong className="text-gray-600">{redattoDa}</strong></span>
         </div>
       </div>
 
-      {/* Page break dopo copertina */}
+      {/* Page break forzato dopo copertina */}
       <div className="html2pdf__page-break" />
 
       {/* ============ PAGINA 2+ - CONTENUTO ============ */}
-      <div className="p-6">
+      <div className="p-6" style={{ marginTop: 0, paddingTop: '6mm' }}>
         {/* SEZIONE 1: VALORIZZAZIONE ECONOMICA */}
         <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
           <h3 className={sectionTitleStyle}>
