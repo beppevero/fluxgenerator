@@ -276,3 +276,21 @@
     transform: translateY(-1px);
   }
 }
+
+/* PDF Typography & Pagination Control */
+.pdf-text-flow p,
+.pdf-text-flow li {
+  orphans: 2;
+  widows: 2;
+  page-break-inside: avoid;
+}
+
+/* Table rows: prevent single row from splitting */
+table tr {
+  page-break-inside: avoid;
+}
+
+/* Table header repeats on new pages */
+thead {
+  display: table-header-group;
+}
