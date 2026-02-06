@@ -92,7 +92,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           fontStyle: 'italic',
           letterSpacing: '0.3px',
         }}>
-          Progetto per la DIGITAL TRANSFORMATION nella Gestione dei Mezzi Aziendali
+          Progetto per la<br />DIGITAL TRANSFORMATION<br />nella Gestione dei Mezzi Aziendali
         </p>
 
         {/* Sottotitolo */}
