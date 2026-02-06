@@ -142,16 +142,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           {ragioneSociale}
         </p>
 
-        {/* Logo MACNIL - in basso a destra (posizione fissa) */}
-        <div style={{
-          position: 'absolute',
-          bottom: '15mm',
-          right: '20mm',
-        }}>
-          <div style={{ backgroundColor: '#fff', padding: '4px', borderRadius: '4px' }}>
-            <img alt="MACNIL" style={{ height: '35px', width: 'auto' }} src="/lovable-uploads/e90623ee-efb8-4b1d-880f-4d111991019a.png" />
-          </div>
-        </div>
       </div>
 
       {/* Salto pagina forzato singolo */}
