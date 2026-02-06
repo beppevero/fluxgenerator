@@ -68,56 +68,90 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
       fontFamily: 'Arial, Helvetica, sans-serif',
       fontSize: '11px'
     }}>
-      {/* ============ PAGINA 1 - FRONTESPIZIO ============ */}
+      {/* ============ PAGINA 1 - FRONTESPIZIO (COPERTINA FISSA) ============ */}
       <div style={{
         height: '297mm',
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center',
         boxSizing: 'border-box',
-        padding: '20mm',
+        padding: '20mm 20mm 15mm 20mm',
         marginBottom: 0,
+        position: 'relative',
       }}>
-        {/* Logo Aziendale */}
-        <img src={gtFleet365Logo} alt="GT Fleet 365" style={{ height: '65px', marginBottom: '40px' }} />
+        {/* Logo GT FLEET 365 - in alto */}
+        <div style={{ marginTop: '30mm', marginBottom: '50px' }}>
+          <img src={gtFleet365Logo} alt="GT Fleet 365" style={{ height: '55px' }} />
+        </div>
 
-        {/* Testo fisso */}
-        <p style={{
-          fontSize: '13px',
-          color: '#555',
+        {/* Titolo Progetto - fisso */}
+        <div style={{
           textAlign: 'center',
-          marginBottom: '8px',
-          fontStyle: 'italic',
-          letterSpacing: '0.3px',
+          marginBottom: '80px',
+          lineHeight: '1.6',
         }}>
-          Progetto per la<br />DIGITAL TRANSFORMATION<br />nella Gestione dei Mezzi Aziendali
-        </p>
+          <span style={{
+            fontSize: '14px',
+            color: '#333',
+            fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+          }}>
+            Progetto per la
+          </span>
+          <br />
+          <span style={{
+            fontSize: '16px',
+            fontWeight: 700,
+            color: '#222',
+            fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+          }}>
+            DIGITAL TRANSFORMATION
+          </span>
+          <br />
+          <span style={{
+            fontSize: '14px',
+            color: '#333',
+            fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+          }}>
+            nella Gestione dei Mezzi Aziendali
+          </span>
+        </div>
 
-        {/* Sottotitolo */}
+        {/* Sottotitolo PROPOSTA COMMERCIALE - fisso */}
         <h1 style={{
-          marginTop: '20px',
-          fontSize: '26px',
+          fontSize: '18px',
           fontWeight: 700,
           color: '#0066b3',
           textAlign: 'center',
-          letterSpacing: '1px',
-          marginBottom: '50px',
+          letterSpacing: '2px',
+          textTransform: 'uppercase',
+          marginBottom: '25px',
+          fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
         }}>
-          Proposta Commerciale
+          PROPOSTA COMMERCIALE
         </h1>
 
-        {/* Ragione Sociale dinamica */}
+        {/* Ragione Sociale - DINAMICA (unico elemento variabile) */}
         <p style={{
-          fontSize: '22px',
+          fontSize: '18pt',
           fontWeight: 700,
-          color: '#1a1a1a',
+          color: '#000',
           textAlign: 'center',
-          letterSpacing: '1px',
+          fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
         }}>
           {ragioneSociale}
         </p>
+
+        {/* Logo MACNIL - in basso a destra (posizione fissa) */}
+        <div style={{
+          position: 'absolute',
+          bottom: '15mm',
+          right: '20mm',
+        }}>
+          <div style={{ backgroundColor: '#fff', padding: '4px', borderRadius: '4px' }}>
+            <img alt="MACNIL" style={{ height: '35px', width: 'auto' }} src="/lovable-uploads/e90623ee-efb8-4b1d-880f-4d111991019a.png" />
+          </div>
+        </div>
       </div>
 
       {/* Salto pagina forzato singolo */}
