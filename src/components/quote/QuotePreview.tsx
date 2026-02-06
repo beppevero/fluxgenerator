@@ -115,8 +115,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           color: '#1a1a1a',
           textAlign: 'center',
           letterSpacing: '1px',
-          borderBottom: '3px solid #0066b3',
-          paddingBottom: '12px',
         }}>
           {ragioneSociale}
         </p>
