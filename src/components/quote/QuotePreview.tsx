@@ -110,12 +110,11 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
 
         {/* Ragione Sociale dinamica */}
         <p style={{
-          fontSize: '28px',
+          fontSize: '22px',
           fontWeight: 700,
           color: '#1a1a1a',
           textAlign: 'center',
-          textTransform: 'uppercase',
-          letterSpacing: '1.5px',
+          letterSpacing: '1px',
           borderBottom: '3px solid #0066b3',
           paddingBottom: '12px',
         }}>
