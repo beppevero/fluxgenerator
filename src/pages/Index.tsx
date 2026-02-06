@@ -63,6 +63,11 @@ const Index = () => {
     const element = previewRef.current;
     const nomeAzienda = clientData.ragioneSociale.trim() || "Cliente";
     const filename = `Proposta Commerciale_${nomeAzienda}_${formatDateForFilename()}.pdf`;
+
+    // Nascondi gli indicatori di anteprima prima della generazione PDF
+    const previewOnlyElements = element.querySelectorAll('.pdf-preview-only');
+    previewOnlyElements.forEach(el => (el as HTMLElement).style.display = 'none');
+
     const opt = {
       margin: [20, 20, 20, 20] as [number, number, number, number],
       filename,
@@ -84,7 +89,10 @@ const Index = () => {
         before: '.html2pdf__page-break'
       }
     };
-    html2pdf().set(opt).from(element).save();
+    html2pdf().set(opt).from(element).save().then(() => {
+      // Ripristina gli indicatori di anteprima dopo la generazione
+      previewOnlyElements.forEach(el => (el as HTMLElement).style.display = '');
+    });
   }, [clientData.ragioneSociale, canExport]);
 
   // Reset ALL states
