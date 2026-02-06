@@ -70,7 +70,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
     }}>
       {/* ============ PAGINA 1 - FRONTESPIZIO (COPERTINA FISSA) ============ */}
       <div style={{
-        height: '297mm',
+        height: '277mm',
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
