@@ -3,11 +3,9 @@ import { QuoteData } from "@/types/quote";
 import fluxLogo from "@/assets/flux-logo.png";
 import gtFleet365Logo from "@/assets/gt-fleet-365-logo.png";
 import macnilLogo from "@/assets/macnil-logo.png";
-
 interface QuotePreviewProps {
   quoteData: QuoteData;
 }
-
 export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
   quoteData
 }, ref) => {
@@ -17,17 +15,14 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
     selectedServices,
     totals
   } = quoteData;
-
   const formatPrice = (price: number) => new Intl.NumberFormat("it-IT", {
     style: "currency",
     currency: "EUR"
   }).format(price);
-
   const formatDateFull = () => {
     const d = new Date();
     return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
   };
-
   const formatDateLong = () => {
     return new Intl.DateTimeFormat("it-IT", {
       day: "2-digit",
@@ -40,15 +35,13 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
   const calculateExpiryDate = () => {
     const validita = paymentInfo.validitaOfferta;
     if (!validita) return "";
-    
+
     // Estrai il numero di giorni dalla stringa
     const daysMatch = validita.match(/^(\d+)/);
     if (!daysMatch) return validita;
-    
     const days = parseInt(daysMatch[1], 10);
     const expiryDate = new Date();
     expiryDate.setDate(expiryDate.getDate() + days);
-    
     return `${String(expiryDate.getDate()).padStart(2, '0')}.${String(expiryDate.getMonth() + 1).padStart(2, '0')}.${expiryDate.getFullYear()}`;
   };
 
@@ -62,60 +55,63 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
   // Stili comuni
   const sectionTitleStyle = "text-sm font-bold text-[#0066b3] mb-3";
   const legalTextStyle = "text-[10px] text-gray-600 leading-relaxed";
-
-  return (
-    <div ref={ref} className="bg-white text-gray-900 min-h-full" style={{
-      fontFamily: 'Arial, Helvetica, sans-serif',
-      fontSize: '11px'
-    }}>
+  return <div ref={ref} className="bg-white text-gray-900 min-h-full" style={{
+    fontFamily: 'Arial, Helvetica, sans-serif',
+    fontSize: '11px'
+  }}>
       {/* ============ PAGINA 1 - FRONTESPIZIO ============ */}
       <div style={{
-        height: '297mm',
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        boxSizing: 'border-box',
-        padding: '20mm',
-        marginBottom: 0,
-      }}>
+      height: '297mm',
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      boxSizing: 'border-box',
+      padding: '20mm',
+      marginBottom: 0
+    }}>
         {/* Logo Aziendale */}
-        <img src={gtFleet365Logo} alt="GT Fleet 365" style={{ height: '65px', marginBottom: '40px' }} />
+        <img src={gtFleet365Logo} alt="GT Fleet 365" style={{
+        height: '50px',
+        marginBottom: '40px'
+      }} />
 
         {/* Testo fisso */}
         <p style={{
-          fontSize: '13px',
-          color: '#555',
-          textAlign: 'center',
-          marginBottom: '8px',
-          fontStyle: 'italic',
-          letterSpacing: '0.3px',
-        }}>
-          Progetto per la<br />DIGITAL TRANSFORMATION<br />nella Gestione dei Mezzi Aziendali
+        fontSize: '13px',
+        color: '#555',
+        textAlign: 'center',
+        marginBottom: '8px',
+        fontStyle: 'italic',
+        letterSpacing: '0.3px'
+      }}>
+          Progetto per la DIGITAL TRANSFORMATION nella Gestione dei Mezzi Aziendali
         </p>
 
         {/* Sottotitolo */}
         <h1 style={{
-          marginTop: '20px',
-          fontSize: '26px',
-          fontWeight: 700,
-          color: '#0066b3',
-          textAlign: 'center',
-          letterSpacing: '1px',
-          marginBottom: '50px',
-        }}>
+        fontSize: '26px',
+        fontWeight: 700,
+        color: '#0066b3',
+        textAlign: 'center',
+        letterSpacing: '1px',
+        marginBottom: '50px'
+      }}>
           Proposta Commerciale
         </h1>
 
         {/* Ragione Sociale dinamica */}
         <p style={{
-          fontSize: '22px',
-          fontWeight: 700,
-          color: '#1a1a1a',
-          textAlign: 'center',
-          letterSpacing: '1px',
-        }}>
+        fontSize: '28px',
+        fontWeight: 700,
+        color: '#1a1a1a',
+        textAlign: 'center',
+        textTransform: 'uppercase',
+        letterSpacing: '1.5px',
+        borderBottom: '3px solid #0066b3',
+        paddingBottom: '12px'
+      }}>
           {ragioneSociale}
         </p>
       </div>
@@ -124,35 +120,58 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
       <div className="html2pdf__page-break" />
 
       {/* ============ PAGINA 2+ - CONTENUTO ============ */}
-      <div className="p-6" style={{ marginTop: 0, paddingTop: '20mm' }}>
+      <div className="p-6" style={{
+      marginTop: 0,
+      paddingTop: 0
+    }}>
         {/* SEZIONE 1: VALORIZZAZIONE ECONOMICA */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6" style={{
+        pageBreakInside: 'avoid'
+      }}>
           <h3 className={sectionTitleStyle}>
             1. VALORIZZAZIONE ECONOMICA DELLA FORNITURA GT FLEET 365
           </h3>
 
-          {selectedServices.length > 0 ? (
-            <>
-            <table className="w-full text-[10px] border-collapse mb-3" style={{ pageBreakInside: 'avoid', display: 'table' }}>
+          {selectedServices.length > 0 ? <>
+            <table className="w-full text-[10px] border-collapse mb-3" style={{
+            pageBreakInside: 'avoid',
+            display: 'table'
+          }}>
                 <thead>
-                  <tr className="bg-[#0066b3] text-white text-[9px] font-semibold uppercase" style={{ pageBreakInside: 'avoid' }}>
-                    <th className="text-left p-2 border border-[#0066b3]" style={{ width: '15%' }}>Servizio</th>
-                    <th className="text-left p-2 border border-[#0066b3]" style={{ width: '32%' }}>Descrizione</th>
-                    <th className="text-center p-2 border border-[#0066b3]" style={{ width: '7%' }}>N° Servizi</th>
-                    <th className="text-center p-2 border border-[#0066b3]" style={{ width: '8%' }}>Durata</th>
-                    <th className="text-center p-2 border border-[#0066b3]" style={{ width: '11%' }}>Prezzo Listino</th>
-                    <th className="text-center p-2 border border-[#0066b3]" style={{ width: '11%' }}>Canone Unitario</th>
-                    <th className="text-center p-2 border border-[#0066b3]" style={{ width: '11%' }}>Una Tantum</th>
+                  <tr className="bg-[#0066b3] text-white text-[9px] font-semibold uppercase" style={{
+                pageBreakInside: 'avoid'
+              }}>
+                    <th className="text-left p-2 border border-[#0066b3]" style={{
+                  width: '15%'
+                }}>Servizio</th>
+                    <th className="text-left p-2 border border-[#0066b3]" style={{
+                  width: '32%'
+                }}>Descrizione</th>
+                    <th className="text-center p-2 border border-[#0066b3]" style={{
+                  width: '7%'
+                }}>N° Servizi</th>
+                    <th className="text-center p-2 border border-[#0066b3]" style={{
+                  width: '8%'
+                }}>Durata</th>
+                    <th className="text-center p-2 border border-[#0066b3]" style={{
+                  width: '11%'
+                }}>Prezzo Listino</th>
+                    <th className="text-center p-2 border border-[#0066b3]" style={{
+                  width: '11%'
+                }}>Canone Unitario</th>
+                    <th className="text-center p-2 border border-[#0066b3]" style={{
+                  width: '11%'
+                }}>Una Tantum</th>
                   </tr>
                 </thead>
                 <tbody>
                   {selectedServices.map((service, idx) => {
-                    const isUnaTantum = service.periodo === 'U.T.';
-                    const durataLabel = paymentInfo.durataContrattuale ? `${paymentInfo.durataContrattuale} mesi` : '—';
-                    const hasDiscount = service.prezzoListino > service.prezzoUnitario;
-                    
-                    return (
-                      <tr key={service.id} className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} style={{ pageBreakInside: 'avoid' }}>
+                const isUnaTantum = service.periodo === 'U.T.';
+                const durataLabel = paymentInfo.durataContrattuale ? `${paymentInfo.durataContrattuale} mesi` : '—';
+                const hasDiscount = service.prezzoListino > service.prezzoUnitario;
+                return <tr key={service.id} className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} style={{
+                  pageBreakInside: 'avoid'
+                }}>
                         <td className="p-2 border border-gray-200 align-middle">
                           <div className="font-medium text-gray-900 text-[9px]">{service.nome}</div>
                           <div className="text-[7px] text-gray-500">
@@ -175,82 +194,66 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                           <span className="text-gray-600">{formatPrice(service.prezzoListino)}</span>
                         </td>
                         <td className="p-2 border border-gray-200 text-right align-middle">
-                          {!isUnaTantum ? (
-                            <span className="font-semibold">{formatPrice(service.prezzoUnitario)}</span>
-                          ) : '—'}
+                          {!isUnaTantum ? <span className="font-semibold">{formatPrice(service.prezzoUnitario)}</span> : '—'}
                         </td>
                         <td className="p-2 border border-gray-200 text-right align-middle">
-                          {isUnaTantum ? (
-                            <span className="font-semibold">{formatPrice(service.prezzoUnitario)}</span>
-                          ) : '—'}
+                          {isUnaTantum ? <span className="font-semibold">{formatPrice(service.prezzoUnitario)}</span> : '—'}
                         </td>
-                      </tr>
-                    );
-                  })}
+                      </tr>;
+              })}
                 </tbody>
               </table>
 
               <p className="text-[10px] text-gray-600 italic mt-2">
                 Nota: L'installazione dei dispositivi è a carico del cliente.
               </p>
-            </>
-          ) : (
-            <div className="text-center py-8 text-gray-400 border-2 border-dashed border-gray-200 rounded">
+            </> : <div className="text-center py-8 text-gray-400 border-2 border-dashed border-gray-200 rounded">
               <p>Seleziona i servizi dal form per visualizzare la tabella</p>
-            </div>
-          )}
+            </div>}
         </div>
 
         {/* SEZIONE 2: CONDIZIONI DI FORNITURA */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6" style={{
+        pageBreakInside: 'avoid'
+      }}>
           <h3 className={sectionTitleStyle}>
             2. CONDIZIONI DI FORNITURA
           </h3>
 
           <div className="border border-gray-200 rounded p-3 min-h-[80px]">
-            {paymentInfo.condizioniPagamento || paymentInfo.validitaOfferta || paymentInfo.condizioniFornitura || paymentInfo.durataContrattuale ? (
-              <div className="space-y-2 text-[10px]">
+            {paymentInfo.condizioniPagamento || paymentInfo.validitaOfferta || paymentInfo.condizioniFornitura || paymentInfo.durataContrattuale ? <div className="space-y-2 text-[10px]">
                 <div className="grid grid-cols-4 gap-3 pb-2 border-b border-gray-100">
-                  {paymentInfo.durataContrattuale && (
-                    <div>
+                  {paymentInfo.durataContrattuale && <div>
                       <span className="text-[9px] text-gray-500 uppercase font-semibold">Durata Contrattuale:</span>
                       <p className="font-medium text-gray-900">{paymentInfo.durataContrattuale} mesi</p>
-                    </div>
-                  )}
+                    </div>}
                   <div>
                     <span className="text-[9px] text-gray-500 uppercase font-semibold">Data Emissione:</span>
                     <p className="font-medium text-gray-900">{formatDateFull()}</p>
                   </div>
-                  {paymentInfo.condizioniPagamento && (
-                    <div>
+                  {paymentInfo.condizioniPagamento && <div>
                       <span className="text-[9px] text-gray-500 uppercase font-semibold">Condizioni di Pagamento:</span>
                       <p className="font-medium text-gray-900">{paymentInfo.condizioniPagamento}</p>
-                    </div>
-                  )}
-                  {paymentInfo.validitaOfferta && (
-                    <div>
+                    </div>}
+                  {paymentInfo.validitaOfferta && <div>
                       <span className="text-[9px] text-gray-500 uppercase font-semibold">Validità Offerta:</span>
                       <p className="font-medium text-gray-900">{calculateExpiryDate()}</p>
-                    </div>
-                  )}
+                    </div>}
                 </div>
-                {paymentInfo.condizioniFornitura && (
-                  <div>
+                {paymentInfo.condizioniFornitura && <div>
                     <span className="text-[9px] text-gray-500 uppercase font-semibold">Note:</span>
                     <p className="text-gray-700 whitespace-pre-wrap">{paymentInfo.condizioniFornitura}</p>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <p className="text-gray-400 text-[10px] text-center py-2">
+                  </div>}
+              </div> : <p className="text-gray-400 text-[10px] text-center py-2">
                 Inserisci le condizioni di fornitura nel form
-              </p>
-            )}
+              </p>}
           </div>
         </div>
 
         {/* SEZIONE 3: ESONERO RESPONSABILITÀ DI MACNIL */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6" style={{
+        pageBreakInside: 'avoid'
+      }}>
           <h3 className={sectionTitleStyle}>
             3. ESONERO RESPONSABILITÀ DI MACNIL
           </h3>
@@ -262,9 +265,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
               <li>gli eventuali danni a persone o a cose provocati dall'utilizzo del sistema;</li>
               <li>gli eventuali danni determinati dalla mancata erogazione del servizio dovuta a:
                 <ul className="list-none ml-4 mt-1 space-y-0.5">
-                  <li>(I) interruzioni, sospensioni o limitazioni della rete telefonica "fissa", della diffusione di INTERNET, del segnale GSM, 2G, 4G, 5G e GPS dovute a mancato o difettoso funzionamento dei mezzi tecnici di emissione;</li>
-                  <li>(II) interruzioni dovute a cause accidentali, a fatti di terzi o a disposizioni legislative o amministrative sopravvenute;</li>
-                  <li>(III) interruzioni dovute a qualsiasi causa non imputabile a MACNIL.</li>
+                  <li>(i) interruzioni, sospensioni o limitazioni della rete telefonica "fissa", della diffusione di INTERNET, del segnale GSM, 2G, 4G, 5G e GPS dovute a mancato o difettoso funzionamento dei mezzi tecnici di emissione;</li>
+                  <li>(ii) interruzioni dovute a cause accidentali, a fatti di terzi o a disposizioni legislative o amministrative sopravvenute;</li>
+                  <li>(iii) interruzioni dovute a qualsiasi causa non imputabile a MACNIL.</li>
                 </ul>
               </li>
               <li>gli eventuali danni derivanti dalla mancata ricezione del segnale GSM/GPS in ambienti non raggiungibili (gallerie, garage sotterranei, traghetti, ambienti schermati);</li>
@@ -287,7 +290,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
 
         {/* SEZIONE 4: ALTRE NORME CONTRATTUALI */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6" style={{
+        pageBreakInside: 'avoid'
+      }}>
           <h3 className={sectionTitleStyle}>
             4. ALTRE NORME CONTRATTUALI
           </h3>
@@ -302,7 +307,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
 
         {/* SEZIONE 5: CERTIFICAZIONI */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6" style={{
+        pageBreakInside: 'avoid'
+      }}>
           <h3 className={sectionTitleStyle}>
             5. CERTIFICAZIONI
           </h3>
@@ -317,7 +324,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
 
         {/* SEZIONE 6: MANUTENZIONE E GARANZIA */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6" style={{
+        pageBreakInside: 'avoid'
+      }}>
           <h3 className={sectionTitleStyle}>
             6. MANUTENZIONE E GARANZIA
           </h3>
@@ -338,7 +347,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
 
         {/* SEZIONE 7: TRATTAMENTO DATI - GDPR */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6" style={{
+        pageBreakInside: 'avoid'
+      }}>
           <h3 className={sectionTitleStyle}>
             7. TRATTAMENTO DATI PERSONALE DEI CLIENTI – GDPR - LEGGE SULLA PRIVACY
           </h3>
@@ -353,7 +364,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
 
         {/* SEZIONE 8: CONTROVERSIE */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6" style={{
+        pageBreakInside: 'avoid'
+      }}>
           <h3 className={sectionTitleStyle}>
             8. CONTROVERSIE
           </h3>
@@ -370,7 +383,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
 
         {/* SEZIONE FIRME - Box unico con colonne affiancate */}
-        <div className="mb-6 pt-4 border-t border-gray-200" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6 pt-4 border-t border-gray-200" style={{
+        pageBreakInside: 'avoid'
+      }}>
           <div className="border border-gray-300 rounded p-4">
             <div className="grid grid-cols-2 gap-8">
               <div className="text-center">
@@ -379,7 +394,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                 <p className="text-[9px] text-gray-500 mt-1">(timbro e firma leggibile)</p>
               </div>
               <div className="text-center">
-                <p className="text-[11px] font-semibold text-gray-700 mb-1">{ragioneSociale}</p>
+                <p className="text-[11px] font-semibold text-gray-700 mb-1 uppercase">{ragioneSociale}</p>
                 <div className="border-b-2 border-gray-400 h-16 mb-1"></div>
                 <p className="text-[9px] text-gray-500 mt-1">(timbro e firma leggibile)</p>
               </div>
@@ -387,20 +402,20 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           </div>
 
           {/* Clausole vessatorie - font ridotto e stile discreto */}
-          <div className="mt-3 p-4 border border-gray-300 rounded text-[9px] text-gray-500 leading-relaxed">
-            <p className="mb-3 text-[9px]">
+          <div className="mt-3 p-3 border border-gray-100 rounded text-[8px] text-gray-500 leading-relaxed">
+            <p className="mb-3">
               Ai sensi e per gli effetti di cui agli art. 1341, comma 2°, e 1342, c.c. si approvano specificamente i seguenti articoli: <strong className="text-gray-600">Articoli 3 e 4</strong>.
             </p>
             <div className="grid grid-cols-2 gap-8">
               <div className="text-center">
-                <p className="text-[11px] font-semibold text-gray-700 mb-1">MAC&NIL s.r.l.</p>
-                <div className="border-b-2 border-gray-400 h-16 mb-1"></div>
-                <p className="text-[9px] text-gray-500 mt-1">(timbro e firma leggibile)</p>
+                <p className="font-semibold text-gray-600 mb-1 text-[8px]">MAC&NIL s.r.l.</p>
+                <div className="border-b border-gray-300 h-8"></div>
+                <p className="text-gray-400 mt-1 text-[7px]">(timbro e firma leggibile)</p>
               </div>
               <div className="text-center">
-                <p className="text-[11px] font-semibold text-gray-700 mb-1">{ragioneSociale}</p>
-                <div className="border-b-2 border-gray-400 h-16 mb-1"></div>
-                <p className="text-[9px] text-gray-500 mt-1">(timbro e firma leggibile)</p>
+                <p className="font-semibold text-gray-600 mb-1 text-[8px] uppercase">{ragioneSociale}</p>
+                <div className="border-b border-gray-300 h-8"></div>
+                <p className="text-gray-400 mt-1 text-[7px]">(timbro e firma leggibile)</p>
               </div>
             </div>
           </div>
@@ -413,11 +428,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
 
         {/* FOOTER AZIENDALE - Ultima pagina */}
         <div className="mt-8 pt-4 border-t-2 border-[#0066b3]/20">
-          <div className="flex items-center justify-center gap-4 mb-3">
-            <div className="bg-white p-2 rounded">
-              <img alt="MACNIL" className="h-8 w-auto" src="/lovable-uploads/e90623ee-efb8-4b1d-880f-4d111991019a.png" />
-            </div>
-          </div>
+          
           <div className="text-center space-y-1">
             <p className="text-[10px] font-medium text-gray-700">
               MAC&NIL s.r.l. | Via L. Pasteur, 26 - 70023 Gravina in Puglia (BA)
@@ -428,8 +439,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 });
-
 QuotePreview.displayName = "QuotePreview";
