@@ -70,11 +70,12 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
     }}>
       {/* ============ PAGINA 1 - FRONTESPIZIO ============ */}
       <div style={{
-        height: '297mm',
+        minHeight: '297mm',
         width: '100%',
         position: 'relative',
         boxSizing: 'border-box',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        pageBreakAfter: 'always'
       }}>
         <div className="p-6 flex flex-col h-full">
           {/* Header con logo */}
@@ -111,8 +112,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         {/* Footer pagina 1 rimosso - Data e Redatto da spostati nelle Condizioni di Fornitura */}
       </div>
 
-      {/* Page break forzato dopo copertina */}
-      <div className="html2pdf__page-break" />
+      {/* Page break gestito tramite pageBreakAfter sulla copertina */}
 
       {/* ============ PAGINA 2+ - CONTENUTO ============ */}
       <div className="p-6" style={{ marginTop: 0, paddingTop: '6mm' }}>
@@ -124,9 +124,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
 
           {selectedServices.length > 0 ? (
             <>
-              <table className="w-full text-[10px] border-collapse mb-3" style={{ pageBreakInside: 'avoid' }}>
+            <table className="w-full text-[10px] border-collapse mb-3" style={{ pageBreakInside: 'avoid', display: 'table' }}>
                 <thead>
-                  <tr className="bg-[#0066b3] text-white text-[9px] font-semibold uppercase">
+                  <tr className="bg-[#0066b3] text-white text-[9px] font-semibold uppercase" style={{ pageBreakInside: 'avoid' }}>
                     <th className="text-left p-2 border border-[#0066b3]" style={{ width: '15%' }}>Servizio</th>
                     <th className="text-left p-2 border border-[#0066b3]" style={{ width: '32%' }}>Descrizione</th>
                     <th className="text-center p-2 border border-[#0066b3]" style={{ width: '7%' }}>N° Servizi</th>
@@ -143,7 +143,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                     const hasDiscount = service.prezzoListino > service.prezzoUnitario;
                     
                     return (
-                      <tr key={service.id} className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                      <tr key={service.id} className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} style={{ pageBreakInside: 'avoid' }}>
                         <td className="p-2 border border-gray-200 align-middle">
                           <div className="font-medium text-gray-900 text-[9px]">{service.nome}</div>
                           <div className="text-[7px] text-gray-500">

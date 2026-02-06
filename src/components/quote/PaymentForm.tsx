@@ -45,6 +45,11 @@ const validitaOptions = [
 ];
 
 export function PaymentForm({ paymentInfo, onChange, activePreset, onPresetChange }: PaymentFormProps) {
+  // Check if current text is a preset text (not manually written)
+  const isPresetText = (text: string) => {
+    return Object.values(PRESET_DATA).some(p => p.testo === text);
+  };
+
   const handlePresetClick = (presetKey: Exclude<PresetType, null>) => {
     if (activePreset === presetKey) {
       // Deselect: clear condizioniFornitura, reset durata to 24
@@ -55,6 +60,14 @@ export function PaymentForm({ paymentInfo, onChange, activePreset, onPresetChang
         durataContrattuale: "24",
       });
     } else {
+      // If notes field has custom text (non-empty and not a preset), ask confirmation
+      const currentText = paymentInfo.condizioniFornitura.trim();
+      if (currentText && !isPresetText(currentText)) {
+        const confirmed = window.confirm(
+          "Il campo 'Condizioni di Fornitura' contiene testo personalizzato. Vuoi sovrascriverlo con il preset?"
+        );
+        if (!confirmed) return;
+      }
       const data = PRESET_DATA[presetKey];
       onPresetChange(presetKey);
       onChange({
