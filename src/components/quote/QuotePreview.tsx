@@ -81,7 +81,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         marginBottom: 0,
       }}>
         {/* Logo Aziendale */}
-        <img src={gtFleet365Logo} alt="GT Fleet 365" style={{ height: '50px', marginBottom: '40px' }} />
+        <img src={gtFleet365Logo} alt="GT Fleet 365" style={{ height: '65px', marginBottom: '40px' }} />
 
         {/* Testo fisso */}
         <p style={{
