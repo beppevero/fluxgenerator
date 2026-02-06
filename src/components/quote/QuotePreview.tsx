@@ -146,35 +146,38 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
 
       </div>
 
-      {/* Salto pagina forzato singolo */}
-      <div className="html2pdf__page-break" style={{ position: 'relative' }}>
-        {showPageBreaks && (
-          <div style={{
-            borderTop: '2px dashed rgba(59, 130, 246, 0.4)',
-            width: '100%',
-            position: 'relative',
-            margin: '0',
+      {/* Salto pagina forzato - elemento vuoto per html2pdf */}
+      <div className="html2pdf__page-break" style={{ height: 0, margin: 0, padding: 0, overflow: 'hidden', lineHeight: 0, fontSize: 0 }} />
+
+      {/* Indicatore visivo Fine Pag. 1 - solo preview, nascosto nel PDF */}
+      {showPageBreaks && (
+        <div className="pdf-preview-only" style={{
+          borderTop: '2px dashed rgba(59, 130, 246, 0.4)',
+          width: '100%',
+          position: 'relative',
+          margin: '0',
+        }}>
+          <span style={{
+            position: 'absolute',
+            top: '-10px',
+            right: '8px',
+            fontSize: '9px',
+            color: 'rgba(59, 130, 246, 0.6)',
+            backgroundColor: 'white',
+            padding: '0 4px',
+            fontFamily: 'sans-serif',
           }}>
-            <span style={{
-              position: 'absolute',
-              top: '-10px',
-              right: '8px',
-              fontSize: '9px',
-              color: 'rgba(59, 130, 246, 0.6)',
-              backgroundColor: 'white',
-              padding: '0 4px',
-              fontFamily: 'sans-serif',
-            }}>
-              — Fine Pag. 1 —
-            </span>
-          </div>
-        )}
-      </div>
+            — Fine Pag. 1 —
+          </span>
+        </div>
+      )}
 
       {/* ============ PAGINA 2+ - CONTENUTO ============ */}
+      {/* Nessun padding top/bottom: i margini verticali sono gestiti da html2pdf per ogni pagina */}
+      {/* Padding orizzontale 20mm per simulare la larghezza utile del PDF nell'anteprima */}
       <div style={{
         marginTop: 0,
-        padding: '20mm',
+        padding: '0 20mm',
         position: 'relative',
         boxSizing: 'border-box',
         ...(showPageBreaks ? {
