@@ -63,7 +63,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
 
   // Stili comuni
   const sectionTitleStyle = "text-sm font-bold text-[#0066b3] mb-3";
-  const legalTextStyle = "text-[10px] text-gray-600 leading-relaxed";
+  const legalTextStyle = "text-[10px] text-gray-600 leading-relaxed pdf-text-flow";
 
   return (
     <div ref={ref} className="bg-white text-gray-900 min-h-full" style={{
@@ -184,16 +184,16 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         } : {}),
       }}>
         {/* SEZIONE 1: VALORIZZAZIONE ECONOMICA */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6">
           <h3 className={sectionTitleStyle}>
             1. VALORIZZAZIONE ECONOMICA DELLA FORNITURA GT FLEET 365
           </h3>
 
           {selectedServices.length > 0 ? (
             <>
-            <table className="w-full text-[10px] border-collapse mb-3" style={{ pageBreakInside: 'avoid', display: 'table' }}>
-                <thead>
-                  <tr className="bg-[#0066b3] text-white text-[9px] font-semibold uppercase" style={{ pageBreakInside: 'avoid' }}>
+            <table className="w-full text-[10px] border-collapse mb-3" style={{ display: 'table' }}>
+                <thead style={{ display: 'table-header-group' }}>
+                  <tr className="bg-[#0066b3] text-white text-[9px] font-semibold uppercase">
                     <th className="text-left p-2 border border-[#0066b3]" style={{ width: '15%' }}>Servizio</th>
                     <th className="text-left p-2 border border-[#0066b3]" style={{ width: '32%' }}>Descrizione</th>
                     <th className="text-center p-2 border border-[#0066b3]" style={{ width: '7%' }}>N° Servizi</th>
@@ -260,7 +260,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
 
         {/* SEZIONE 2: CONDIZIONI DI FORNITURA */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6">
           <h3 className={sectionTitleStyle}>
             2. CONDIZIONI DI FORNITURA
           </h3>
@@ -294,7 +294,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                 </div>
                 {paymentInfo.condizioniFornitura && (
                   <div>
-                    <span className="text-[9px] text-gray-500 uppercase font-semibold">Note:</span>
                     <p className="text-gray-700 whitespace-pre-wrap">{paymentInfo.condizioniFornitura}</p>
                   </div>
                 )}
@@ -308,7 +307,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
 
         {/* SEZIONE 3: ESONERO RESPONSABILITÀ DI MACNIL */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6">
           <h3 className={sectionTitleStyle}>
             3. ESONERO RESPONSABILITÀ DI MACNIL
           </h3>
@@ -345,7 +344,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
 
         {/* SEZIONE 4: ALTRE NORME CONTRATTUALI */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6">
           <h3 className={sectionTitleStyle}>
             4. ALTRE NORME CONTRATTUALI
           </h3>
@@ -360,7 +359,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
 
         {/* SEZIONE 5: CERTIFICAZIONI */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6">
           <h3 className={sectionTitleStyle}>
             5. CERTIFICAZIONI
           </h3>
@@ -375,7 +374,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
 
         {/* SEZIONE 6: MANUTENZIONE E GARANZIA */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6">
           <h3 className={sectionTitleStyle}>
             6. MANUTENZIONE E GARANZIA
           </h3>
@@ -396,7 +395,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
 
         {/* SEZIONE 7: TRATTAMENTO DATI - GDPR */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6">
           <h3 className={sectionTitleStyle}>
             7. TRATTAMENTO DATI PERSONALE DEI CLIENTI – GDPR - LEGGE SULLA PRIVACY
           </h3>
@@ -411,7 +410,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
 
         {/* SEZIONE 8: CONTROVERSIE */}
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-6">
           <h3 className={sectionTitleStyle}>
             8. CONTROVERSIE
           </h3>
