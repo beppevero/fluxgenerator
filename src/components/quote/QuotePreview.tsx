@@ -262,9 +262,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
               <li>gli eventuali danni a persone o a cose provocati dall'utilizzo del sistema;</li>
               <li>gli eventuali danni determinati dalla mancata erogazione del servizio dovuta a:
                 <ul className="list-none ml-4 mt-1 space-y-0.5">
-                  <li>(i) interruzioni, sospensioni o limitazioni della rete telefonica "fissa", della diffusione di INTERNET, del segnale GSM, 2G, 4G, 5G e GPS dovute a mancato o difettoso funzionamento dei mezzi tecnici di emissione;</li>
-                  <li>(ii) interruzioni dovute a cause accidentali, a fatti di terzi o a disposizioni legislative o amministrative sopravvenute;</li>
-                  <li>(iii) interruzioni dovute a qualsiasi causa non imputabile a MACNIL.</li>
+                  <li>(I) interruzioni, sospensioni o limitazioni della rete telefonica "fissa", della diffusione di INTERNET, del segnale GSM, 2G, 4G, 5G e GPS dovute a mancato o difettoso funzionamento dei mezzi tecnici di emissione;</li>
+                  <li>(II) interruzioni dovute a cause accidentali, a fatti di terzi o a disposizioni legislative o amministrative sopravvenute;</li>
+                  <li>(III) interruzioni dovute a qualsiasi causa non imputabile a MACNIL.</li>
                 </ul>
               </li>
               <li>gli eventuali danni derivanti dalla mancata ricezione del segnale GSM/GPS in ambienti non raggiungibili (gallerie, garage sotterranei, traghetti, ambienti schermati);</li>
