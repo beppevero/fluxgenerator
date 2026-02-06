@@ -7,6 +7,7 @@ import { PaymentForm } from "@/components/quote/PaymentForm";
 import { QuotePreview } from "@/components/quote/QuotePreview";
 import { TotalsSummary } from "@/components/quote/TotalsSummary";
 import { ClientData, PaymentInfo, SelectedService, QuoteData } from "@/types/quote";
+import { PresetType } from "@/components/quote/PaymentForm";
 import { MEZZI_PER_CARTA } from "@/data/services";
 import html2pdf from "html2pdf.js";
 import fluxLogo from "@/assets/flux-logo.png";
@@ -24,6 +25,7 @@ const Index = () => {
     durataContrattuale: "24" // Default changed to 24 months
   });
   const [selectedServices, setSelectedServices] = useState<SelectedService[]>([]);
+  const [activePreset, setActivePreset] = useState<PresetType>(null);
 
   // Calculate totals
   const totals = useMemo(() => {
@@ -94,6 +96,7 @@ const Index = () => {
       durataContrattuale: "24"
     });
     setSelectedServices([]);
+    setActivePreset(null);
   }, []);
 
   return (
@@ -142,7 +145,7 @@ const Index = () => {
               <div className="space-y-4 pr-3">
                 <ClientDataForm clientData={clientData} onChange={setClientData} />
                 <ServicesForm selectedServices={selectedServices} onChange={setSelectedServices} carteAziendaSuggerite={totals.carteAziendaSuggerite} />
-                <PaymentForm paymentInfo={paymentInfo} onChange={setPaymentInfo} />
+                <PaymentForm paymentInfo={paymentInfo} onChange={setPaymentInfo} activePreset={activePreset} onPresetChange={setActivePreset} />
                 <TotalsSummary totals={totals} />
               </div>
             </ScrollArea>
