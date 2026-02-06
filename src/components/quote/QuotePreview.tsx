@@ -6,10 +6,12 @@ import macnilLogo from "@/assets/macnil-logo.png";
 
 interface QuotePreviewProps {
   quoteData: QuoteData;
+  showPageBreaks?: boolean;
 }
 
 export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
-  quoteData
+  quoteData,
+  showPageBreaks = false
 }, ref) => {
   const {
     clientData,
@@ -145,10 +147,41 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
       </div>
 
       {/* Salto pagina forzato singolo */}
-      <div className="html2pdf__page-break" />
+      <div className="html2pdf__page-break" style={{ position: 'relative' }}>
+        {showPageBreaks && (
+          <div style={{
+            borderTop: '2px dashed rgba(59, 130, 246, 0.4)',
+            width: '100%',
+            position: 'relative',
+            margin: '0',
+          }}>
+            <span style={{
+              position: 'absolute',
+              top: '-10px',
+              right: '8px',
+              fontSize: '9px',
+              color: 'rgba(59, 130, 246, 0.6)',
+              backgroundColor: 'white',
+              padding: '0 4px',
+              fontFamily: 'sans-serif',
+            }}>
+              — Fine Pag. 1 —
+            </span>
+          </div>
+        )}
+      </div>
 
       {/* ============ PAGINA 2+ - CONTENUTO ============ */}
-      <div className="p-6" style={{ marginTop: 0, paddingTop: '20mm' }}>
+      <div className="p-6" style={{
+        marginTop: 0,
+        paddingTop: '20mm',
+        position: 'relative',
+        ...(showPageBreaks ? {
+          backgroundImage: 'repeating-linear-gradient(to bottom, transparent, transparent calc(277mm - 1px), rgba(59, 130, 246, 0.25) calc(277mm - 1px), rgba(59, 130, 246, 0.25) 277mm)',
+          backgroundSize: '100% 277mm',
+          backgroundPosition: 'top',
+        } : {}),
+      }}>
         {/* SEZIONE 1: VALORIZZAZIONE ECONOMICA */}
         <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
           <h3 className={sectionTitleStyle}>
