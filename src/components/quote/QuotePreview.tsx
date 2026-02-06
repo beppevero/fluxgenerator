@@ -397,7 +397,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                 <p className="text-[9px] text-gray-500 mt-1">(timbro e firma leggibile)</p>
               </div>
               <div className="text-center">
-                <p className="text-[11px] font-semibold text-gray-700 mb-1 uppercase">{ragioneSociale}</p>
+                <p className="text-[11px] font-semibold text-gray-700 mb-1">{ragioneSociale}</p>
                 <div className="border-b-2 border-gray-400 h-16 mb-1"></div>
                 <p className="text-[9px] text-gray-500 mt-1">(timbro e firma leggibile)</p>
               </div>
@@ -405,20 +405,20 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           </div>
 
           {/* Clausole vessatorie - font ridotto e stile discreto */}
-          <div className="mt-3 p-3 border border-gray-100 rounded text-[8px] text-gray-500 leading-relaxed">
+          <div className="mt-3 border border-gray-300 rounded p-4 text-[9px] text-gray-500 leading-relaxed">
             <p className="mb-3">
               Ai sensi e per gli effetti di cui agli art. 1341, comma 2°, e 1342, c.c. si approvano specificamente i seguenti articoli: <strong className="text-gray-600">Articoli 3 e 4</strong>.
             </p>
             <div className="grid grid-cols-2 gap-8">
               <div className="text-center">
-                <p className="font-semibold text-gray-600 mb-1 text-[8px]">MAC&NIL s.r.l.</p>
-                <div className="border-b border-gray-300 h-8"></div>
-                <p className="text-gray-400 mt-1 text-[7px]">(timbro e firma leggibile)</p>
+                <p className="text-[11px] font-semibold text-gray-700 mb-1">MAC&NIL s.r.l.</p>
+                <div className="border-b-2 border-gray-400 h-16 mb-1"></div>
+                <p className="text-[9px] text-gray-500 mt-1">(timbro e firma leggibile)</p>
               </div>
               <div className="text-center">
-                <p className="font-semibold text-gray-600 mb-1 text-[8px] uppercase">{ragioneSociale}</p>
-                <div className="border-b border-gray-300 h-8"></div>
-                <p className="text-gray-400 mt-1 text-[7px]">(timbro e firma leggibile)</p>
+                <p className="text-[11px] font-semibold text-gray-700 mb-1">{ragioneSociale}</p>
+                <div className="border-b-2 border-gray-400 h-16 mb-1"></div>
+                <p className="text-[9px] text-gray-500 mt-1">(timbro e firma leggibile)</p>
               </div>
             </div>
           </div>
