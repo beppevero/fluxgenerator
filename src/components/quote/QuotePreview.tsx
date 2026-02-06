@@ -57,7 +57,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
   const totaleCanoneAnnuale = selectedServices.filter(s => s.periodo === 'ANNUALE').reduce((sum, s) => sum + s.prezzoUnitario * s.quantita, 0);
   const totaleUnaTantum = selectedServices.filter(s => s.periodo === 'U.T.').reduce((sum, s) => sum + s.prezzoUnitario * s.quantita, 0);
   const ragioneSociale = clientData.ragioneSociale || "RAGIONE SOCIALE AZIENDA";
-  const redattoDa = clientData.redattoDa || "Nome Commerciale";
+  // redattoDa rimosso
 
   // Stili comuni
   const sectionTitleStyle = "text-sm font-bold text-[#0066b3] mb-3";
@@ -70,52 +70,63 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
     }}>
       {/* ============ PAGINA 1 - FRONTESPIZIO ============ */}
       <div style={{
-        minHeight: '297mm',
+        height: '297mm',
         width: '100%',
-        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
         boxSizing: 'border-box',
-        overflow: 'hidden',
-        pageBreakAfter: 'always'
+        padding: '20mm',
+        marginBottom: 0,
       }}>
-        <div className="p-6 flex flex-col h-full">
-          {/* Header con logo */}
-          <div className="text-center pb-3 mb-4 border-b border-gray-200">
-            <div className="text-[9px] text-gray-500 leading-tight">
-              Piattaforma Software Avanzata | Mobilità, Gestione, Controllo e Sicurezza, Telematica di Mezzi Aziendali e Asset
-            </div>
-          </div>
+        {/* Logo Aziendale */}
+        <img src={gtFleet365Logo} alt="GT Fleet 365" style={{ height: '50px', marginBottom: '40px' }} />
 
-          {/* Contenuto centrale */}
-          <div className="flex-1 flex flex-col justify-center items-center text-center py-8">
-            {/* Logo GT Fleet 365 sopra il titolo */}
-            <img src={gtFleet365Logo} alt="GT Fleet 365" className="h-12 w-auto mb-4" />
-            
-            <h2 className="text-base text-gray-600 font-medium mb-1">
-              Progetto per la DIGITAL TRANSFORMATION
-            </h2>
-            <h3 className="text-sm text-gray-500 mb-6">
-              nella Gestione dei Mezzi Aziendali
-            </h3>
-            
-            <h1 className="text-2xl font-bold text-[#0066b3] tracking-tight mb-6">
-              Proposta Commerciale
-            </h1>
-            
-            <div className="border-l-4 px-6 py-4 bg-primary-foreground border-primary-foreground">
-              <p className="text-xl font-bold text-gray-900 uppercase tracking-wide">
-                {ragioneSociale}
-              </p>
-            </div>
-          </div>
-        </div>
+        {/* Testo fisso */}
+        <p style={{
+          fontSize: '13px',
+          color: '#555',
+          textAlign: 'center',
+          marginBottom: '8px',
+          fontStyle: 'italic',
+          letterSpacing: '0.3px',
+        }}>
+          Progetto per la DIGITAL TRANSFORMATION nella Gestione dei Mezzi Aziendali
+        </p>
 
-        {/* Footer pagina 1 rimosso - Data e Redatto da spostati nelle Condizioni di Fornitura */}
+        {/* Sottotitolo */}
+        <h1 style={{
+          fontSize: '26px',
+          fontWeight: 700,
+          color: '#0066b3',
+          textAlign: 'center',
+          letterSpacing: '1px',
+          marginBottom: '50px',
+        }}>
+          Proposta Commerciale
+        </h1>
+
+        {/* Ragione Sociale dinamica */}
+        <p style={{
+          fontSize: '28px',
+          fontWeight: 700,
+          color: '#1a1a1a',
+          textAlign: 'center',
+          textTransform: 'uppercase',
+          letterSpacing: '1.5px',
+          borderBottom: '3px solid #0066b3',
+          paddingBottom: '12px',
+        }}>
+          {ragioneSociale}
+        </p>
       </div>
 
-      {/* Page break gestito tramite pageBreakAfter sulla copertina */}
+      {/* Salto pagina forzato singolo */}
+      <div className="html2pdf__page-break" />
 
       {/* ============ PAGINA 2+ - CONTENUTO ============ */}
-      <div className="p-6" style={{ marginTop: 0, paddingTop: '6mm' }}>
+      <div className="p-6" style={{ marginTop: 0, paddingTop: 0 }}>
         {/* SEZIONE 1: VALORIZZAZIONE ECONOMICA */}
         <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
           <h3 className={sectionTitleStyle}>

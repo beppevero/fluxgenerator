@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Building2, UserPen } from "lucide-react";
+import { Building2 } from "lucide-react";
 import { ClientData } from "@/types/quote";
 
 interface ClientDataFormProps {
@@ -24,21 +24,6 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
             placeholder="Inserisci ragione sociale"
             value={clientData.ragioneSociale}
             onChange={(e) => onChange({ ...clientData, ragioneSociale: e.target.value })}
-            className="glass-input"
-            required
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="redattoDa" className="flex items-center gap-2 text-foreground/80">
-            <UserPen className="w-3 h-3" />
-            Redatto da (Nome Commerciale) *
-          </Label>
-          <Input
-            id="redattoDa"
-            placeholder="Es: Mario Rossi"
-            value={clientData.redattoDa}
-            onChange={(e) => onChange({ ...clientData, redattoDa: e.target.value })}
             className="glass-input"
             required
           />

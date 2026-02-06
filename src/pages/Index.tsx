@@ -16,7 +16,6 @@ const Index = () => {
   const previewRef = useRef<HTMLDivElement>(null);
   const [clientData, setClientData] = useState<ClientData>({
     ragioneSociale: "",
-    redattoDa: ""
   });
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
     condizioniPagamento: "",
@@ -87,7 +86,6 @@ const Index = () => {
   const handleClearAll = useCallback(() => {
     setClientData({
       ragioneSociale: "",
-      redattoDa: ""
     });
     setPaymentInfo({
       condizioniPagamento: "",
