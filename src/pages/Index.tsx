@@ -64,7 +64,7 @@ const Index = () => {
     const nomeAzienda = clientData.ragioneSociale.trim() || "Cliente";
     const filename = `Proposta Commerciale_${nomeAzienda}_${formatDateForFilename()}.pdf`;
     const opt = {
-      margin: [10, 10, 10, 10] as [number, number, number, number],
+      margin: [20, 20, 20, 20] as [number, number, number, number],
       filename,
       image: {
         type: "jpeg" as const,
