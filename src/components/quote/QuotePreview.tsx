@@ -97,6 +97,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
 
         {/* Sottotitolo */}
         <h1 style={{
+          marginTop: '20px',
           fontSize: '26px',
           fontWeight: 700,
           color: '#0066b3',
