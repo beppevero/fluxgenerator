@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useMemo } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, Brush, AlertCircle } from "lucide-react";
+import { FileText, Brush, AlertCircle, Scissors } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
@@ -25,6 +25,7 @@ const Index = () => {
   });
   const [selectedServices, setSelectedServices] = useState<SelectedService[]>([]);
   const [activePreset, setActivePreset] = useState<PresetType>(null);
+  const [showPageBreaks, setShowPageBreaks] = useState(false);
 
   // Calculate totals
   const totals = useMemo(() => {
@@ -157,10 +158,23 @@ const Index = () => {
           <div className="glass-card overflow-hidden">
             <div className="bg-white/5 px-4 py-3 border-b border-white/10 flex items-center justify-between">
               <span className="text-sm font-medium text-foreground">Anteprima Preventivo</span>
-              <span className="text-xs text-muted-foreground">Aggiornamento live</span>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setShowPageBreaks(!showPageBreaks)}
+                  className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full transition-all ${
+                    showPageBreaks
+                      ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                      : 'bg-white/5 text-muted-foreground border border-white/10 hover:bg-white/10'
+                  }`}
+                >
+                  <Scissors className="w-3 h-3" />
+                  {showPageBreaks ? 'Nascondi pagine' : 'Mostra pagine'}
+                </button>
+                <span className="text-xs text-muted-foreground">Aggiornamento live</span>
+              </div>
             </div>
             <ScrollArea className="h-[calc(100vh-200px)]">
-              <QuotePreview ref={previewRef} quoteData={quoteData} />
+              <QuotePreview ref={previewRef} quoteData={quoteData} showPageBreaks={showPageBreaks} />
             </ScrollArea>
           </div>
         </div>
