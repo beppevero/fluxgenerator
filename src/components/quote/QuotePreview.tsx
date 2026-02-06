@@ -124,7 +124,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
       <div className="html2pdf__page-break" />
 
       {/* ============ PAGINA 2+ - CONTENUTO ============ */}
-      <div className="p-6" style={{ marginTop: 0, paddingTop: 0 }}>
+      <div className="p-6" style={{ marginTop: 0, paddingTop: '20mm' }}>
         {/* SEZIONE 1: VALORIZZAZIONE ECONOMICA */}
         <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
           <h3 className={sectionTitleStyle}>
