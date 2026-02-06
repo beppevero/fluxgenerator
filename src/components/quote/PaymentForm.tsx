@@ -16,15 +16,15 @@ interface PaymentFormProps {
 
 const PRESET_DATA: Record<Exclude<PresetType, null>, { testo: string; durata: string }> = {
   STANDARD: {
-    testo: `- I dispositivi sono forniti in comodato d'uso gratuito;\n- Solo per telematica di Bordo: si richiede l'invio dei libretti dei mezzi per un previo controllo di compatibilità;\n- Consegna stimata in 1/4 settimane dal saldo;\n- Recesso: non ammesso nel 1° anno. Dal 2° anno, penale del 50% dei canoni residui.`,
+    testo: `- I dispositivi sono forniti in comodato d'uso gratuito;\n- Solo per telematica di Bordo: si richiede l'invio dei libretti dei mezzi per un previo controllo di compatibilità dei dispositivi con il mezzo;\n- I tempi di consegna sono stimati in 1/4 settimane dalla sottoscrizione e successivo saldo della presente proposta commerciale;\n- Non è ammessa disdetta anticipata entro il primo anno di contratto. A partire dal secondo anno, in caso di recesso anticipato, il Cliente sarà tenuto al pagamento di un corrispettivo pari al 50% dei canoni residui fino alla naturale scadenza contrattuale.`,
     durata: "24",
   },
   RENTRI: {
-    testo: `- I dispositivi sono forniti in comodato d'uso gratuito;\n- Consegna stimata in 1/4 settimane dal saldo;\n- Recesso: non ammesso nel 1° anno. Dal 2° anno, penale del 50% dei canoni residui.\n- Conformità R.E.N.T.R.I. (Art. 16 D.M. 59/2023): Il sistema garantisce i requisiti tecnici per la tracciabilità rifiuti.\n- Responsabilità: Il Cliente resta l'unico responsabile della trasmissione dati al portale RENTRI e dell'associazione FIR digitale.`,
+    testo: `- I dispositivi sono forniti in comodato d'uso gratuito;\n- I tempi di consegna sono stimati in 1/4 settimane dalla sottoscrizione e successivo saldo della presente proposta commerciale;\n- Non è ammessa disdetta anticipata entro il primo anno di contratto. A partire dal secondo anno, in caso di recesso anticipato, il Cliente sarà tenuto al pagamento di un corrispettivo pari al 50% dei canoni residui fino alla naturale scadenza contrattuale.\n- Il Fornitore garantisce che il servizio di localizzazione veicolare (di seguito, il 'Sistema') è conforme ai requisiti tecnici e funzionali stabiliti per i sistemi di geolocalizzazione previsti dall'Articolo 16 del D.M. n. 59/2023 (R.E.N.T.R.I.) e dal relativo Decreto Direttoriale attuativo (D.D. n. 253/2024 e ss.mm.ii.).\n- Il Sistema è progettato per rilevare, registrare e rendere disponibili le informazioni relative al percorso, al tempo di percorrenza e alla posizione geografica degli autoveicoli oggetto del servizio, secondo gli standard richiesti per la tracciabilità dei rifiuti.\n- Il Cliente (Trasportatore) resta l'unico responsabile per l'adempimento degli obblighi di trasmissione dei dati di geolocalizzazione al R.E.N.T.R.I. e per la corretta associazione del percorso al Formulario di Identificazione del Rifiuto (FIR) digitale, secondo le modalità e le tempistiche definite dalla normativa vigente.`,
     durata: "36",
   },
   INCENTIVO: {
-    testo: `- I dispositivi sono forniti in vendita;\n- Consegna stimata in 1/4 settimane dal saldo;\n- Idoneità Transizione 4.0: Il dispositivo rientra tra i beni strumentali interconnessi (Allegato A, Legge 232/2016) per agevolazioni fiscali.`,
+    testo: `- I dispositivi sono forniti in vendita;\n- I tempi di consegna sono stimati in 1/4 settimane dalla sottoscrizione e successivo saldo della presente proposta commerciale;\n- Il dispositivo proposto rientra tra i beni strumentali interconnessi e conformi ai requisiti previsti dal Piano Nazionale Industria 4.0 (oggi Transizione 4.0), come da Allegato A della Legge n. 232/2016, e risulta pertanto idoneo ai fini delle agevolazioni fiscali previste dalla normativa vigente.`,
     durata: "60",
   },
 };
