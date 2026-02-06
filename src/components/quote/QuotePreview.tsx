@@ -122,7 +122,10 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
       {/* ============ PAGINA 2+ - CONTENUTO ============ */}
       <div className="p-6" style={{
       marginTop: 0,
-      paddingTop: 0
+      paddingTop: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: 'calc(297mm - 20mm)'
     }}>
         {/* SEZIONE 1: VALORIZZAZIONE ECONOMICA */}
         <div className="mb-6" style={{
@@ -422,20 +425,21 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
 
         {/* Footer documento */}
-        <div className="mt-6 pt-3 border-t border-gray-200 text-center text-[9px] text-gray-400">
-          <p>Documento generato automaticamente • I prezzi si intendono IVA esclusa</p>
-        </div>
+        <div style={{ marginTop: 'auto', pageBreakInside: 'avoid' }}>
+          <div className="pt-3 border-t border-gray-200 text-center text-[9px] text-gray-400">
+            <p>Documento generato automaticamente • I prezzi si intendono IVA esclusa</p>
+          </div>
 
-        {/* FOOTER AZIENDALE - Ultima pagina */}
-        <div className="mt-8 pt-4 border-t-2 border-[#0066b3]/20">
-          
-          <div className="text-center space-y-1">
-            <p className="text-[10px] font-medium text-gray-700">
-              MAC&NIL s.r.l. | Via L. Pasteur, 26 - 70023 Gravina in Puglia (BA)
-            </p>
-            <p className="text-[9px] text-gray-500">
-              P.I. 05607900726 | Tel. e Whatsapp +39 080 2464245 | <a href="http://www.macnil.it" className="text-[#0066b3] hover:underline">www.macnil.it</a>
-            </p>
+          {/* FOOTER AZIENDALE - Ultima pagina */}
+          <div className="mt-4 pt-4 border-t-2 border-[#0066b3]/20">
+            <div className="text-center space-y-1">
+              <p className="text-[10px] font-medium text-gray-700">
+                MAC&NIL s.r.l. | Via L. Pasteur, 26 - 70023 Gravina in Puglia (BA)
+              </p>
+              <p className="text-[9px] text-gray-500">
+                P.I. 05607900726 | Tel. e Whatsapp +39 080 2464245 | <a href="http://www.macnil.it" className="text-[#0066b3] hover:underline">www.macnil.it</a>
+              </p>
+            </div>
           </div>
         </div>
       </div>
