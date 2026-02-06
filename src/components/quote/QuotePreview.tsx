@@ -108,18 +108,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           </div>
         </div>
 
-        {/* Footer pagina 1 - Posizionato in basso assoluto dentro contenitore 297mm */}
-        <div style={{
-          position: 'absolute',
-          bottom: '20mm',
-          left: 0,
-          width: '100%',
-          padding: '0 24px',
-          boxSizing: 'border-box'
-        }} className="pt-3 border-t border-gray-200 text-[9px] text-gray-400 flex justify-between items-center">
-          <span>Data emissione: {formatDateFull()}</span>
-          <span>Redatto da: <strong className="text-gray-600">{redattoDa}</strong></span>
-        </div>
+        {/* Footer pagina 1 rimosso - Data e Redatto da spostati nelle Condizioni di Fornitura */}
       </div>
 
       {/* Page break forzato dopo copertina */}
@@ -172,20 +161,16 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                         <td className="p-2 border border-gray-200 text-center align-middle">
                           {!isUnaTantum ? durataLabel : '—'}
                         </td>
-                        {/* Colonna Prezzo Listino */}
-                        <td className="p-2 border border-gray-200 text-center align-middle">
-                          {hasDiscount ? (
-                            <span className="text-gray-400 line-through">{formatPrice(service.prezzoListino)}</span>
-                          ) : (
-                            <span className="text-gray-600">{formatPrice(service.prezzoListino)}</span>
-                          )}
+                        {/* Colonna Prezzo Listino - senza strikethrough */}
+                        <td className="p-2 border border-gray-200 text-right align-middle">
+                          <span className="text-gray-600">{formatPrice(service.prezzoListino)}</span>
                         </td>
-                        <td className="p-2 border border-gray-200 text-center align-middle">
+                        <td className="p-2 border border-gray-200 text-right align-middle">
                           {!isUnaTantum ? (
                             <span className="font-semibold">{formatPrice(service.prezzoUnitario)}</span>
                           ) : '—'}
                         </td>
-                        <td className="p-2 border border-gray-200 text-center align-middle">
+                        <td className="p-2 border border-gray-200 text-right align-middle">
                           {isUnaTantum ? (
                             <span className="font-semibold">{formatPrice(service.prezzoUnitario)}</span>
                           ) : '—'}
@@ -196,9 +181,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                 </tbody>
               </table>
 
-              <div className="p-2 bg-amber-50 border border-amber-200 rounded text-[10px] text-amber-800">
-                <strong>Nota:</strong> L'installazione dei dispositivi è a carico del cliente.
-              </div>
+              <p className="text-[10px] text-gray-600 italic mt-2">
+                Nota: L'installazione dei dispositivi è a carico del cliente.
+              </p>
             </>
           ) : (
             <div className="text-center py-8 text-gray-400 border-2 border-dashed border-gray-200 rounded">
@@ -216,13 +201,17 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           <div className="border border-gray-200 rounded p-3 min-h-[80px]">
             {paymentInfo.condizioniPagamento || paymentInfo.validitaOfferta || paymentInfo.condizioniFornitura || paymentInfo.durataContrattuale ? (
               <div className="space-y-2 text-[10px]">
-                <div className="grid grid-cols-3 gap-3 pb-2 border-b border-gray-100">
+                <div className="grid grid-cols-4 gap-3 pb-2 border-b border-gray-100">
                   {paymentInfo.durataContrattuale && (
                     <div>
                       <span className="text-[9px] text-gray-500 uppercase font-semibold">Durata Contrattuale:</span>
                       <p className="font-medium text-gray-900">{paymentInfo.durataContrattuale} mesi</p>
                     </div>
                   )}
+                  <div>
+                    <span className="text-[9px] text-gray-500 uppercase font-semibold">Data Emissione:</span>
+                    <p className="font-medium text-gray-900">{formatDateFull()}</p>
+                  </div>
                   {paymentInfo.condizioniPagamento && (
                     <div>
                       <span className="text-[9px] text-gray-500 uppercase font-semibold">Condizioni di Pagamento:</span>
@@ -371,36 +360,38 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           <p>Gravina in Puglia, lì <strong>{formatDateLong()}</strong></p>
         </div>
 
-        {/* SEZIONE FIRME */}
+        {/* SEZIONE FIRME - Box unico con colonne affiancate */}
         <div className="mb-6 pt-4 border-t border-gray-200" style={{ pageBreakInside: 'avoid' }}>
-          <div className="grid grid-cols-2 gap-6">
-            <div className="text-center">
-              <p className="text-[11px] font-semibold text-gray-700 mb-1">MAC&NIL s.r.l.</p>
-              <p className="text-[9px] text-gray-500 mb-3">(timbro e firma leggibile)</p>
-              <div className="border-b-2 border-gray-400 h-12 mb-1"></div>
-            </div>
-            <div className="text-center">
-              <p className="text-[11px] font-semibold text-gray-700 mb-1 uppercase">{ragioneSociale}</p>
-              <p className="text-[9px] text-gray-500 mb-3">(timbro e firma leggibile)</p>
-              <div className="border-b-2 border-gray-400 h-12 mb-1"></div>
+          <div className="border border-gray-300 rounded p-4">
+            <div className="grid grid-cols-2 gap-8">
+              <div className="text-center">
+                <p className="text-[11px] font-semibold text-gray-700 mb-1">MAC&NIL s.r.l.</p>
+                <div className="border-b-2 border-gray-400 h-16 mb-1"></div>
+                <p className="text-[9px] text-gray-500 mt-1">(timbro e firma leggibile)</p>
+              </div>
+              <div className="text-center">
+                <p className="text-[11px] font-semibold text-gray-700 mb-1 uppercase">{ragioneSociale}</p>
+                <div className="border-b-2 border-gray-400 h-16 mb-1"></div>
+                <p className="text-[9px] text-gray-500 mt-1">(timbro e firma leggibile)</p>
+              </div>
             </div>
           </div>
 
-          {/* Clausola vessatoria */}
-          <div className="mt-4 p-3 border border-gray-200 rounded text-[9px] text-gray-600 bg-inherit">
+          {/* Clausole vessatorie - font ridotto e stile discreto */}
+          <div className="mt-3 p-3 border border-gray-100 rounded text-[8px] text-gray-500 leading-relaxed">
             <p className="mb-3">
-              Ai sensi e per gli effetti di cui agli art. 1341, comma 2°, e 1342, c.c. si approvano specificamente i seguenti articoli: <strong>Articoli 3 e 4</strong>.
+              Ai sensi e per gli effetti di cui agli art. 1341, comma 2°, e 1342, c.c. si approvano specificamente i seguenti articoli: <strong className="text-gray-600">Articoli 3 e 4</strong>.
             </p>
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-8">
               <div className="text-center">
-                <p className="font-semibold text-gray-700 mb-1">MAC&NIL s.r.l.</p>
-                <p className="text-gray-500 mb-2">(timbro e firma leggibile)</p>
-                <div className="border-b-2 border-gray-400 h-10"></div>
+                <p className="font-semibold text-gray-600 mb-1 text-[8px]">MAC&NIL s.r.l.</p>
+                <div className="border-b border-gray-300 h-8"></div>
+                <p className="text-gray-400 mt-1 text-[7px]">(timbro e firma leggibile)</p>
               </div>
               <div className="text-center">
-                <p className="font-semibold text-gray-700 mb-1 uppercase">{ragioneSociale}</p>
-                <p className="text-gray-500 mb-2">(timbro e firma leggibile)</p>
-                <div className="border-b-2 border-gray-400 h-10"></div>
+                <p className="font-semibold text-gray-600 mb-1 text-[8px] uppercase">{ragioneSociale}</p>
+                <div className="border-b border-gray-300 h-8"></div>
+                <p className="text-gray-400 mt-1 text-[7px]">(timbro e firma leggibile)</p>
               </div>
             </div>
           </div>
