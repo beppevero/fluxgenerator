@@ -1,6 +1,5 @@
 export interface ClientData {
   ragioneSociale: string;
-  redattoDa: string;
 }
 
 export interface PaymentInfo {
