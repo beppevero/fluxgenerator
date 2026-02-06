@@ -72,7 +72,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
     }}>
       {/* ============ PAGINA 1 - FRONTESPIZIO (COPERTINA FISSA) ============ */}
       <div style={{
-        height: '277mm',
+        height: '257mm',
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
@@ -172,13 +172,14 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
       </div>
 
       {/* ============ PAGINA 2+ - CONTENUTO ============ */}
-      <div className="p-6" style={{
+      <div style={{
         marginTop: 0,
-        paddingTop: '20mm',
+        padding: '20mm',
         position: 'relative',
+        boxSizing: 'border-box',
         ...(showPageBreaks ? {
-          backgroundImage: 'repeating-linear-gradient(to bottom, transparent, transparent calc(277mm - 1px), rgba(59, 130, 246, 0.25) calc(277mm - 1px), rgba(59, 130, 246, 0.25) 277mm)',
-          backgroundSize: '100% 277mm',
+          backgroundImage: 'repeating-linear-gradient(to bottom, transparent, transparent calc(257mm - 1px), rgba(59, 130, 246, 0.25) calc(257mm - 1px), rgba(59, 130, 246, 0.25) 257mm)',
+          backgroundSize: '100% 257mm',
           backgroundPosition: 'top',
         } : {}),
       }}>
@@ -470,11 +471,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
 
         {/* FOOTER AZIENDALE - Ultima pagina */}
         <div className="mt-8 pt-4 border-t-2 border-[#0066b3]/20">
-          <div className="flex items-center justify-center gap-4 mb-3">
-            <div className="bg-white p-2 rounded">
-              <img alt="MACNIL" className="h-8 w-auto" src="/lovable-uploads/e90623ee-efb8-4b1d-880f-4d111991019a.png" />
-            </div>
-          </div>
           <div className="text-center space-y-1">
             <p className="text-[10px] font-medium text-gray-700">
               MAC&NIL s.r.l. | Via L. Pasteur, 26 - 70023 Gravina in Puglia (BA)
