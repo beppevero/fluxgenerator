@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Building2 } from "lucide-react";
-import { ClientData } from "@/types/quote";
+import { ClientData, DocumentType } from "@/types/quote";
 
 interface ClientDataFormProps {
   clientData: ClientData;
@@ -9,6 +9,8 @@ interface ClientDataFormProps {
 }
 
 export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
+  const docType = clientData.documentType || 'standard';
+
   return (
     <div className="form-section">
       <h3 className="form-section-title">
@@ -27,6 +29,39 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
             className="glass-input"
             required
           />
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-foreground/80">Tipo Documento</Label>
+          <div className="flex rounded-lg overflow-hidden border border-white/10">
+            <button
+              type="button"
+              onClick={() => onChange({ ...clientData, documentType: 'standard' })}
+              className={`flex-1 py-2 px-3 text-xs font-medium transition-all ${
+                docType === 'standard'
+                  ? 'bg-accent text-accent-foreground'
+                  : 'bg-white/5 text-muted-foreground hover:bg-white/10'
+              }`}
+            >
+              Proposta Standard
+            </button>
+            <button
+              type="button"
+              onClick={() => onChange({ ...clientData, documentType: 'modulo' })}
+              className={`flex-1 py-2 px-3 text-xs font-medium transition-all ${
+                docType === 'modulo'
+                  ? 'bg-accent text-accent-foreground'
+                  : 'bg-white/5 text-muted-foreground hover:bg-white/10'
+              }`}
+            >
+              Modulo
+            </button>
+          </div>
+          <p className="text-[10px] text-muted-foreground">
+            {docType === 'standard' 
+              ? 'PDF completo con tutte le sezioni legali e contrattuali.' 
+              : 'PDF breve: copertina, tabella economica, condizioni e firme.'}
+          </p>
         </div>
       </div>
     </div>

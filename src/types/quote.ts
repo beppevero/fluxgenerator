@@ -1,5 +1,8 @@
+export type DocumentType = 'standard' | 'modulo';
+
 export interface ClientData {
   ragioneSociale: string;
+  documentType: DocumentType;
 }
 
 export interface PaymentInfo {
