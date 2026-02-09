@@ -85,8 +85,7 @@ const Index = () => {
         orientation: "portrait" as const
       },
       pagebreak: {
-        mode: ['css', 'legacy'],
-        after: '.html2pdf__page-break'
+        mode: ['css', 'legacy']
       }
     };
     html2pdf().set(opt).from(element).save().then(() => {

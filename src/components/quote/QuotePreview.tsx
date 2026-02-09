@@ -81,6 +81,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         padding: '20mm 20mm 15mm 20mm',
         marginBottom: 0,
         position: 'relative',
+        pageBreakAfter: 'always',
       }}>
         {/* Logo GT FLEET 365 - in alto */}
         <div style={{ marginTop: '30mm', marginBottom: '50px' }}>
@@ -146,8 +147,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
 
       </div>
 
-      {/* Salto pagina forzato dopo copertina - nessun style inline, gestito da html2pdf config */}
-      <div className="html2pdf__page-break" style={{ height: 0, margin: 0, padding: 0, overflow: 'hidden', lineHeight: 0, fontSize: 0 }} />
+      {/* Page break gestito inline sulla copertina - nessun div separato */}
 
       {/* Indicatore visivo Fine Pag. 1 - solo preview, nascosto nel PDF */}
       {showPageBreaks && (
