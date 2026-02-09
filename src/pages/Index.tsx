@@ -7,6 +7,7 @@ import { PaymentForm } from "@/components/quote/PaymentForm";
 import { QuotePreview } from "@/components/quote/QuotePreview";
 import { TotalsSummary } from "@/components/quote/TotalsSummary";
 import { ClientData, PaymentInfo, SelectedService, QuoteData } from "@/types/quote";
+import { emptyClientData } from "@/data/defaults";
 import { PresetType } from "@/components/quote/PaymentForm";
 import { MEZZI_PER_CARTA } from "@/data/services";
 import html2pdf from "html2pdf.js";
@@ -14,10 +15,7 @@ import fluxLogo from "@/assets/flux-logo.png";
 
 const Index = () => {
   const previewRef = useRef<HTMLDivElement>(null);
-  const [clientData, setClientData] = useState<ClientData>({
-    ragioneSociale: "",
-    documentType: "standard",
-  });
+  const [clientData, setClientData] = useState<ClientData>({ ...emptyClientData });
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
     condizioniPagamento: "",
     condizioniFornitura: "",
@@ -63,7 +61,8 @@ const Index = () => {
     if (!previewRef.current || !canExport) return;
     const element = previewRef.current;
     const nomeAzienda = clientData.ragioneSociale.trim() || "Cliente";
-    const filename = `Proposta Commerciale_${nomeAzienda}_${formatDateForFilename()}.pdf`;
+    const prefix = clientData.documentType === 'modulo' ? 'Copia Commissione' : 'Proposta Commerciale';
+    const filename = `${prefix}_${nomeAzienda}_${formatDateForFilename()}.pdf`;
 
     // Nascondi gli indicatori di anteprima prima della generazione PDF
     const previewOnlyElements = element.querySelectorAll('.pdf-preview-only');
@@ -97,10 +96,7 @@ const Index = () => {
 
   // Reset ALL states
   const handleClearAll = useCallback(() => {
-    setClientData({
-      ragioneSociale: "",
-      documentType: "standard",
-    });
+    setClientData({ ...emptyClientData });
     setPaymentInfo({
       condizioniPagamento: "",
       condizioniFornitura: "",
