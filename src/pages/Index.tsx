@@ -86,7 +86,7 @@ const Index = () => {
       },
       pagebreak: {
         mode: ['css', 'legacy'],
-        before: '.html2pdf__page-break'
+        after: '.html2pdf__page-break'
       }
     };
     html2pdf().set(opt).from(element).save().then(() => {

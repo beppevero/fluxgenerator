@@ -146,8 +146,8 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
 
       </div>
 
-      {/* Salto pagina forzato dopo copertina */}
-      <div className="html2pdf__page-break" style={{ height: 0, margin: 0, padding: 0, overflow: 'hidden', lineHeight: 0, fontSize: 0, pageBreakAfter: 'always' }} />
+      {/* Salto pagina forzato dopo copertina - nessun style inline, gestito da html2pdf config */}
+      <div className="html2pdf__page-break" style={{ height: 0, margin: 0, padding: 0, overflow: 'hidden', lineHeight: 0, fontSize: 0 }} />
 
       {/* Indicatore visivo Fine Pag. 1 - solo preview, nascosto nel PDF */}
       {showPageBreaks && (
