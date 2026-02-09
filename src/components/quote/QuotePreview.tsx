@@ -146,8 +146,8 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
 
       </div>
 
-      {/* Salto pagina forzato - elemento vuoto per html2pdf */}
-      <div className="html2pdf__page-break" style={{ height: 0, margin: 0, padding: 0, overflow: 'hidden', lineHeight: 0, fontSize: 0 }} />
+      {/* Salto pagina forzato dopo copertina */}
+      <div className="html2pdf__page-break" style={{ height: 0, margin: 0, padding: 0, overflow: 'hidden', lineHeight: 0, fontSize: 0, pageBreakAfter: 'always' }} />
 
       {/* Indicatore visivo Fine Pag. 1 - solo preview, nascosto nel PDF */}
       {showPageBreaks && (
@@ -466,22 +466,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           </div>
         </div>
 
-        {/* Footer documento */}
-        <div className="mt-6 pt-3 border-t border-gray-200 text-center text-[9px] text-gray-400">
-          <p>Documento generato automaticamente • I prezzi si intendono IVA esclusa</p>
-        </div>
-
-        {/* FOOTER AZIENDALE - Ultima pagina */}
-        <div className="mt-8 pt-4 border-t-2 border-[#0066b3]/20">
-          <div className="text-center space-y-1">
-            <p className="text-[10px] font-medium text-gray-700">
-              MAC&NIL s.r.l. | Via L. Pasteur, 26 - 70023 Gravina in Puglia (BA)
-            </p>
-            <p className="text-[9px] text-gray-500">
-              P.I. 05607900726 | Tel. e Whatsapp +39 080 2464245 | <a href="http://www.macnil.it" className="text-[#0066b3] hover:underline">www.macnil.it</a>
-            </p>
-          </div>
-        </div>
+        {/* Documento termina qui dopo le firme - nessun footer aziendale */}
       </div>
     </div>
   );
