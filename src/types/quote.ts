@@ -1,8 +1,32 @@
 export type DocumentType = 'standard' | 'modulo';
 
+export interface LegaleRappresentante {
+  cognome: string;
+  nome: string;
+  luogoDiNascita: string;
+  dataDiNascita: string;
+  codiceFiscale: string;
+}
+
+export interface DatiAzienda {
+  partitaIva: string;
+  codiceFiscaleAzienda: string;
+  indirizzo: string;
+  citta: string;
+  cap: string;
+  provincia: string;
+  telefono: string;
+  cellulare: string;
+  pec: string;
+  email: string;
+  codiceUnivoco: string;
+}
+
 export interface ClientData {
   ragioneSociale: string;
   documentType: DocumentType;
+  legaleRappresentante: LegaleRappresentante;
+  datiAzienda: DatiAzienda;
 }
 
 export interface PaymentInfo {
@@ -26,7 +50,7 @@ export interface Service {
 
 export interface SelectedService extends Service {
   quantita: number;
-  prezzoUnitario: number; // Prezzo editabile
+  prezzoUnitario: number;
 }
 
 export interface QuoteData {
