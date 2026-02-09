@@ -69,7 +69,7 @@ const Index = () => {
     previewOnlyElements.forEach(el => (el as HTMLElement).style.display = 'none');
 
     const opt = {
-      margin: [20, 20, 20, 20] as [number, number, number, number],
+      margin: [20, 12, 20, 12] as [number, number, number, number],
       filename,
       image: {
         type: "jpeg" as const,

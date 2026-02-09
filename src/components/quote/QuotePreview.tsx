@@ -78,10 +78,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         flexDirection: 'column',
         alignItems: 'center',
         boxSizing: 'border-box',
-        padding: '20mm 20mm 15mm 20mm',
+        padding: '20mm 12mm 15mm 12mm',
         marginBottom: 0,
         position: 'relative',
-        pageBreakAfter: 'always',
       }}>
         {/* Logo GT FLEET 365 - in alto */}
         <div style={{ marginTop: '30mm', marginBottom: '50px' }}>
@@ -177,7 +176,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
       {/* Padding orizzontale 20mm per simulare la larghezza utile del PDF nell'anteprima */}
       <div style={{
         marginTop: 0,
-        padding: '0 20mm',
+        padding: '0 12mm',
         position: 'relative',
         boxSizing: 'border-box',
         ...(showPageBreaks ? {
