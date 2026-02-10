@@ -181,7 +181,7 @@ const Index = () => {
         <div className="inline-flex items-center gap-3 glass-card-intense px-5 py-2.5 rounded-full">
           <img src={fluxLogo} alt="Flux Logo" className="h-7 w-auto" />
           <div className="flex items-baseline gap-1.5">
-            <span className="text-sm font-semibold text-foreground tracking-wide leading-none">GT FLEET 365</span>
+            <span className="text-sm font-semibold text-foreground tracking-wide leading-none">FLUX</span>
             <span className="text-sm font-light text-muted-foreground leading-none">|</span>
             <span className="text-sm font-light text-muted-foreground tracking-wide leading-none">Smart Quote</span>
           </div>
