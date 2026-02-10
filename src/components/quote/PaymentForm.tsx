@@ -29,7 +29,7 @@ const PRESET_DATA: Record<Exclude<PresetType, null>, { testo: string; durata: st
   },
   PA: {
     testo: `- L'offerta è da intendersi al netto di IVA. Si applicherà il regime di Split Payment (Scissione dei pagamenti) ai sensi dell'art. 17-ter del DPR 633/72, con fatturazione elettronica obbligatoria tramite sistema SDI;\n- I dispositivi sono forniti in vendita;\n- Modalità di perfezionamento: La fornitura sarà gestita tramite Ordine Diretto o Trattativa Diretta su portale MePA (o altra piattaforma di e-procurement indicata dall'Ente), previa emissione di CIG (Codice Identificativo Gara);\n- Modalità di pagamento: Il pagamento avverrà tramite bonifico bancario su conto corrente dedicato alla tracciabilità dei flussi finanziari (L. 136/2010), con scadenza a 30 giorni data ricevimento fattura, previa verifica di regolarità contributiva (DURC) e attestazione di regolare esecuzione/collaudo;\n- Le attività di installazione e configurazione sono a carico dell'Ente. L'azienda fornirà la documentazione tecnica necessaria e il supporto remoto per il primo avvio;\n- La consegna del materiale avverrà entro 4/8 settimane dalla data di ricezione dell'ordinativo di fornitura (OdF) sul portale MePA o dalla notifica del provvedimento di affidamento definitivo.`,
-    durata: "36",
+    durata: "12",
   },
 };
 
