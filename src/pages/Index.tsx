@@ -20,7 +20,7 @@ const CENTRALE_ONDEMAND_ANNUALE_ID = 'centrale-ondemand-annuale';
 const DDD_EXCLUDED_IDS = ['crono-silver', 'crono-gold'];
 
 const isCronoTrigger = (s: SelectedService) =>
-  s.isCrono && !DDD_EXCLUDED_IDS.includes(s.id);
+  s.isCrono && !DDD_EXCLUDED_IDS.includes(s.id) && s.id !== CARTA_AZIENDALE_ID;
 
 const Index = () => {
   const previewRef = useRef<HTMLDivElement>(null);
