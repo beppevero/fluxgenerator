@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CreditCard, FileText, Clock, CalendarDays, Zap } from "lucide-react";
 import { PaymentInfo } from "@/types/quote";
 
-export type PresetType = "STANDARD" | "RENTRI" | "INCENTIVO" | null;
+export type PresetType = "STANDARD" | "RENTRI" | "INCENTIVO" | "PA" | null;
 
 interface PaymentFormProps {
   paymentInfo: PaymentInfo;
@@ -27,12 +27,17 @@ const PRESET_DATA: Record<Exclude<PresetType, null>, { testo: string; durata: st
     testo: `- I dispositivi sono forniti in vendita;\n- I tempi di consegna sono stimati in 1/4 settimane dalla sottoscrizione e successivo saldo della presente proposta commerciale;\n- Il dispositivo proposto rientra tra i beni strumentali interconnessi e conformi ai requisiti previsti dal Piano Nazionale Industria 4.0 (oggi Transizione 4.0), come da Allegato A della Legge n. 232/2016, e risulta pertanto idoneo ai fini delle agevolazioni fiscali previste dalla normativa vigente.`,
     durata: "60",
   },
+  PA: {
+    testo: `- L'offerta è da intendersi al netto di IVA. Si applicherà il regime di Split Payment (Scissione dei pagamenti) ai sensi dell'art. 17-ter del DPR 633/72, con fatturazione elettronica obbligatoria tramite sistema SDI;\n- I dispositivi sono forniti in vendita;\n- Modalità di perfezionamento: La fornitura sarà gestita tramite Ordine Diretto o Trattativa Diretta su portale MePA (o altra piattaforma di e-procurement indicata dall'Ente), previa emissione di CIG (Codice Identificativo Gara);\n- Modalità di pagamento: Il pagamento avverrà tramite bonifico bancario su conto corrente dedicato alla tracciabilità dei flussi finanziari (L. 136/2010), con scadenza a 30 giorni data ricevimento fattura, previa verifica di regolarità contributiva (DURC) e attestazione di regolare esecuzione/collaudo;\n- Le attività di installazione e configurazione sono a carico dell'Ente. L'azienda fornirà la documentazione tecnica necessaria e il supporto remoto per il primo avvio;\n- La consegna del materiale avverrà entro 4/8 settimane dalla data di ricezione dell'ordinativo di fornitura (OdF) sul portale MePA o dalla notifica del provvedimento di affidamento definitivo.`,
+    durata: "36",
+  },
 };
 
 const PRESET_LABELS: { key: Exclude<PresetType, null>; label: string }[] = [
   { key: "STANDARD", label: "STANDARD" },
   { key: "RENTRI", label: "R.E.N.T.R.I." },
   { key: "INCENTIVO", label: "INCENTIVO 4.0/5.0" },
+  { key: "PA", label: "P.A." },
 ];
 
 const validitaOptions = [
