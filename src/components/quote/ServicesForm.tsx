@@ -19,17 +19,26 @@ interface ServicesFormProps {
 
 export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [periodoFilter, setPeriodoFilter] = useState<string | null>(null);
 
-  // Filter services based on search query
+  // Filter services based on search query and periodo filter
   const filteredServices = useMemo(() => {
-    if (!searchQuery.trim()) return servicesList;
+    let result = servicesList;
     
-    const query = searchQuery.toLowerCase().trim();
-    return servicesList.filter(service => 
-      service.nome.toLowerCase().includes(query) ||
-      service.descrizione.toLowerCase().includes(query)
-    );
-  }, [searchQuery]);
+    if (periodoFilter) {
+      result = result.filter(service => service.periodo === periodoFilter);
+    }
+    
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      result = result.filter(service => 
+        service.nome.toLowerCase().includes(query) ||
+        service.descrizione.toLowerCase().includes(query)
+      );
+    }
+    
+    return result;
+  }, [searchQuery, periodoFilter]);
 
   const groupedServices = useMemo(() => {
     return filteredServices.reduce((acc, service) => {
@@ -104,6 +113,29 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
         Servizi e Dispositivi
       </h3>
       
+      {/* Periodo Filter */}
+      <div className="flex items-center gap-2 mb-3 flex-wrap">
+        <span className="text-xs text-muted-foreground font-medium">Filtra per:</span>
+        {([
+          { value: 'U.T.', label: 'Una Tantum' },
+          { value: 'ANNUALE', label: 'Annuale' },
+          { value: 'MENSILE', label: 'Mensile' },
+        ] as const).map(opt => (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => setPeriodoFilter(periodoFilter === opt.value ? null : opt.value)}
+            className={`px-3 py-1 rounded-full text-xs font-medium border transition-all ${
+              periodoFilter === opt.value
+                ? 'bg-accent text-white border-accent shadow-sm'
+                : 'bg-white/40 text-foreground/70 border-border/40 hover:border-accent/50'
+            }`}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+
       {/* Search Bar */}
       <div className="relative mb-4">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
