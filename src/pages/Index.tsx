@@ -203,7 +203,7 @@ const Index = () => {
             </button>
           </div>
           {!canExport && (
-            <div className="flex items-center gap-1 text-[10px] text-amber-700">
+            <div className="flex items-center gap-1 text-[10px] text-white">
               <AlertCircle className="w-3 h-3" />
               <span>Compila Ragione Sociale e seleziona almeno un servizio</span>
             </div>
