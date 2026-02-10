@@ -181,7 +181,7 @@ const Index = () => {
         <div className="inline-flex items-center gap-3 glass-card-intense px-5 py-2.5 rounded-full">
           <img src={fluxLogo} alt="Flux Logo" className="h-7 w-auto" />
           <div className="flex items-baseline gap-1.5">
-            <span className="text-sm font-light text-foreground tracking-wide leading-none">Flux</span>
+            <span className="text-sm font-semibold text-foreground tracking-wide leading-none">GT FLEET 365</span>
             <span className="text-sm font-light text-muted-foreground leading-none">|</span>
             <span className="text-sm font-light text-muted-foreground tracking-wide leading-none">Smart Quote</span>
           </div>
@@ -203,7 +203,7 @@ const Index = () => {
             </button>
           </div>
           {!canExport && (
-            <div className="flex items-center gap-1 text-[10px] text-amber-400/80">
+            <div className="flex items-center gap-1 text-[10px] text-amber-700">
               <AlertCircle className="w-3 h-3" />
               <span>Compila Ragione Sociale e seleziona almeno un servizio</span>
             </div>
@@ -228,7 +228,7 @@ const Index = () => {
 
           {/* Right Panel - Preview */}
           <div className="glass-card overflow-hidden">
-              <div className="bg-white/5 px-4 py-3 border-b border-white/10 flex items-center justify-between">
+              <div className="bg-white/40 px-4 py-3 border-b border-black/5 flex items-center justify-between">
               <span className="text-sm font-medium text-foreground">Anteprima Preventivo</span>
               <span className="text-xs text-muted-foreground">Aggiornamento live</span>
             </div>

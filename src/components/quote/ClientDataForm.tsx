@@ -44,14 +44,14 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
 
         <div className="space-y-2">
           <Label className="text-foreground/80">Tipo Documento</Label>
-          <div className="flex rounded-xl overflow-hidden border border-white/10">
+          <div className="flex rounded-xl overflow-hidden border border-black/8">
             <button
               type="button"
               onClick={() => onChange({ ...clientData, documentType: 'standard' })}
               className={`flex-1 py-2 px-3 text-xs font-medium transition-all duration-300 ${
                 docType === 'standard'
-                  ? 'bg-accent text-accent-foreground shadow-md shadow-accent/20'
-                  : 'bg-white/5 text-muted-foreground hover:bg-white/8'
+                  ? 'bg-accent text-accent-foreground shadow-md'
+                  : 'bg-white/40 text-muted-foreground hover:bg-white/60'
               }`}
             >
               Proposta Standard
@@ -61,8 +61,8 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
               onClick={() => onChange({ ...clientData, documentType: 'modulo' })}
               className={`flex-1 py-2 px-3 text-xs font-medium transition-all duration-300 ${
                 docType === 'modulo'
-                  ? 'bg-accent text-accent-foreground shadow-md shadow-accent/20'
-                  : 'bg-white/5 text-muted-foreground hover:bg-white/8'
+                  ? 'bg-accent text-accent-foreground shadow-md'
+                  : 'bg-white/40 text-muted-foreground hover:bg-white/60'
               }`}
             >
               Modulo
@@ -78,7 +78,7 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
         {isModulo && (
           <>
             {/* Legale Rappresentante */}
-            <div className="space-y-3 p-3 rounded-lg border border-white/10 bg-white/5">
+            <div className="space-y-3 p-3 rounded-lg border border-black/6 bg-white/30">
               <h4 className="text-xs font-semibold text-foreground/70 flex items-center gap-1.5">
                 <User className="w-3.5 h-3.5 text-accent" />
                 Legale Rappresentante
@@ -108,7 +108,7 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
             </div>
 
             {/* Dati Azienda */}
-            <div className="space-y-3 p-3 rounded-lg border border-white/10 bg-white/5">
+            <div className="space-y-3 p-3 rounded-lg border border-black/6 bg-white/30">
               <h4 className="text-xs font-semibold text-foreground/70 flex items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5 text-accent" />
                 Dati Azienda
