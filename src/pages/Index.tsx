@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useMemo } from "react";
+import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { FileText, Brush, AlertCircle } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
@@ -9,9 +9,18 @@ import { TotalsSummary } from "@/components/quote/TotalsSummary";
 import { ClientData, PaymentInfo, SelectedService, QuoteData } from "@/types/quote";
 import { emptyClientData } from "@/data/defaults";
 import { PresetType } from "@/components/quote/PaymentForm";
-import { MEZZI_PER_CARTA } from "@/data/services";
+import { MEZZI_PER_CARTA, servicesList } from "@/data/services";
 import html2pdf from "html2pdf.js";
 import fluxLogo from "@/assets/flux-logo.png";
+
+// IDs for automation
+const CARTA_AZIENDALE_ID = 'carta-aziendale';
+const SHADOW_ID = 'dispositivo-shadow';
+const CENTRALE_ONDEMAND_ANNUALE_ID = 'centrale-ondemand-annuale';
+const DDD_EXCLUDED_IDS = ['crono-silver', 'crono-gold'];
+
+const isCronoTrigger = (s: SelectedService) =>
+  s.isCrono && !DDD_EXCLUDED_IDS.includes(s.id);
 
 const Index = () => {
   const previewRef = useRef<HTMLDivElement>(null);
@@ -26,7 +35,64 @@ const Index = () => {
   const [activePreset, setActivePreset] = useState<PresetType>(null);
   
 
-  // Calculate totals
+  // === AUTOMAZIONI SERVIZI ===
+  useEffect(() => {
+    let updated = [...selectedServices];
+    let changed = false;
+
+    // 1. Automazione Crono → Carta Aziendale
+    const cronoMezzi = updated
+      .filter(isCronoTrigger)
+      .reduce((sum, s) => sum + s.quantita, 0);
+    const carteNeeded = cronoMezzi > 0 ? Math.ceil(cronoMezzi / MEZZI_PER_CARTA) : 0;
+    const cartaIdx = updated.findIndex(s => s.id === CARTA_AZIENDALE_ID);
+
+    if (carteNeeded > 0) {
+      if (cartaIdx >= 0) {
+        if (updated[cartaIdx].quantita !== carteNeeded) {
+          updated[cartaIdx] = { ...updated[cartaIdx], quantita: carteNeeded };
+          changed = true;
+        }
+      } else {
+        const cartaService = servicesList.find(s => s.id === CARTA_AZIENDALE_ID);
+        if (cartaService) {
+          updated.push({ ...cartaService, quantita: carteNeeded, prezzoUnitario: cartaService.prezzoRiservato });
+          changed = true;
+        }
+      }
+    } else if (cartaIdx >= 0) {
+      updated.splice(cartaIdx, 1);
+      changed = true;
+    }
+
+    // 2. Automazione Shadow → Centrale Operativa On Demand
+    const shadowService = updated.find(s => s.id === SHADOW_ID);
+    const centraleIdx = updated.findIndex(s => s.id === CENTRALE_ONDEMAND_ANNUALE_ID);
+
+    if (shadowService) {
+      if (centraleIdx >= 0) {
+        if (updated[centraleIdx].quantita !== shadowService.quantita) {
+          updated[centraleIdx] = { ...updated[centraleIdx], quantita: shadowService.quantita };
+          changed = true;
+        }
+      } else {
+        const centraleService = servicesList.find(s => s.id === CENTRALE_ONDEMAND_ANNUALE_ID);
+        if (centraleService) {
+          updated.push({ ...centraleService, quantita: shadowService.quantita, prezzoUnitario: centraleService.prezzoRiservato });
+          changed = true;
+        }
+      }
+    } else if (centraleIdx >= 0) {
+      updated.splice(centraleIdx, 1);
+      changed = true;
+    }
+
+    if (changed) {
+      setSelectedServices(updated);
+    }
+  }, [selectedServices]);
+
+
   const totals = useMemo(() => {
     const mensile = selectedServices.filter(s => s.periodo === "MENSILE").reduce((sum, s) => sum + s.prezzoUnitario * s.quantita, 0);
     const annuale = selectedServices.filter(s => s.periodo === "ANNUALE").reduce((sum, s) => sum + s.prezzoUnitario * s.quantita, 0);
@@ -152,7 +218,7 @@ const Index = () => {
             <ScrollArea className="h-[calc(100vh-160px)]">
               <div className="space-y-4 pr-3">
                 <ClientDataForm clientData={clientData} onChange={setClientData} />
-                <ServicesForm selectedServices={selectedServices} onChange={setSelectedServices} carteAziendaSuggerite={totals.carteAziendaSuggerite} />
+                <ServicesForm selectedServices={selectedServices} onChange={setSelectedServices} />
                 <PaymentForm paymentInfo={paymentInfo} onChange={setPaymentInfo} activePreset={activePreset} onPresetChange={setActivePreset} />
                 <TotalsSummary totals={totals} />
               </div>
