@@ -3,9 +3,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { ListChecks, Info, AlertCircle, Search, Check } from "lucide-react";
+import { ListChecks, Info, Search, Check, Lock } from "lucide-react";
 import { Service, SelectedService } from "@/types/quote";
-import { servicesList, categorieLabels, MEZZI_PER_CARTA } from "@/data/services";
+import { servicesList, categorieLabels } from "@/data/services";
 import {
   Tooltip,
   TooltipContent,
@@ -15,10 +15,9 @@ import {
 interface ServicesFormProps {
   selectedServices: SelectedService[];
   onChange: (services: SelectedService[]) => void;
-  carteAziendaSuggerite: number;
 }
 
-export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite }: ServicesFormProps) {
+export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Filter services based on search query
@@ -94,7 +93,9 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
     }
   };
 
-  const hasCronoService = selectedServices.some(s => s.isCrono);
+  
+  const AUTO_MANAGED_IDS = ['carta-aziendale', 'centrale-ondemand-annuale'];
+  const isAutoManaged = (id: string) => AUTO_MANAGED_IDS.includes(id);
 
   return (
     <div className="form-section">
@@ -118,16 +119,6 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
       <p className="text-xs text-muted-foreground mb-4 italic">
         * L'installazione è a carico del cliente
       </p>
-
-      {/* Suggerimento Carte Azienda */}
-      {hasCronoService && carteAziendaSuggerite > 0 && (
-        <div className="mb-4 p-3 bg-accent/10 border border-accent/30 rounded-lg flex items-start gap-2 backdrop-blur-sm">
-          <AlertCircle className="w-4 h-4 text-accent mt-0.5 shrink-0" />
-          <div className="text-sm">
-            <span className="font-medium">Suggerimento:</span> Con i servizi Crono selezionati, si consiglia l'aggiunta di <strong>{carteAziendaSuggerite}</strong> Carta/e Aziendale/i (€50 U.T. ogni {MEZZI_PER_CARTA} mezzi totali).
-          </div>
-        </div>
-      )}
       
       <div className="space-y-5">
         {Object.keys(groupedServices).length === 0 ? (
@@ -146,30 +137,34 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
                 {services.map((service) => {
                   const selected = getSelectedService(service.id);
                   const isChecked = isSelected(service.id);
+                  const managed = isAutoManaged(service.id);
                   
                   return (
                     <div
                       key={service.id}
                       className={`p-3 rounded-lg border-2 transition-all backdrop-blur-sm relative ${
                         isChecked
-                          ? 'border-accent bg-accent/10 shadow-sm'
+                          ? managed
+                            ? 'border-accent/50 bg-accent/5 shadow-sm opacity-80'
+                            : 'border-accent bg-accent/10 shadow-sm'
                           : 'border-border/30 bg-white/30 hover:border-accent/30'
                       }`}
                     >
-                      {/* Check icon for selected items */}
+                      {/* Check / Lock icon */}
                       {isChecked && (
                         <div className="absolute top-2 right-2 w-5 h-5 bg-accent rounded-full flex items-center justify-center">
-                          <Check className="w-3 h-3 text-white" />
+                          {managed ? <Lock className="w-3 h-3 text-white" /> : <Check className="w-3 h-3 text-white" />}
                         </div>
                       )}
                       
                       <div 
-                        className="flex items-start gap-3 cursor-pointer"
-                        onClick={() => toggleService(service)}
+                        className={`flex items-start gap-3 ${managed && isChecked ? 'cursor-default' : 'cursor-pointer'}`}
+                        onClick={() => !managed && toggleService(service)}
                       >
                         <Checkbox
                           id={service.id}
                           checked={isChecked}
+                          disabled={managed}
                           className="mt-0.5 h-5 w-5 border-2 border-accent/60 data-[state=checked]:bg-accent data-[state=checked]:border-accent"
                         />
                         <div className="flex-1 min-w-0 pr-6">
@@ -188,6 +183,11 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
                             {service.isCrono && (
                               <Badge className="bg-accent/20 text-accent border-accent/30 text-xs">
                                 Crono
+                              </Badge>
+                            )}
+                            {managed && isChecked && (
+                              <Badge variant="outline" className="text-xs border-accent/30 text-muted-foreground">
+                                Auto
                               </Badge>
                             )}
                           </div>
@@ -213,16 +213,22 @@ export function ServicesForm({ selectedServices, onChange, carteAziendaSuggerite
                         <div className="mt-3 pt-3 border-t border-border/20 grid grid-cols-3 gap-3">
                           <div className="space-y-1">
                             <Label className="text-xs text-muted-foreground">N° Servizi</Label>
-                            <Input
-                              type="text"
-                              inputMode="numeric"
-                              pattern="[0-9]*"
-                              value={selected.quantita === 0 ? '' : selected.quantita}
-                              onChange={(e) => updateQuantita(service.id, e.target.value)}
-                              onBlur={(e) => handleQuantitaBlur(service.id, e.target.value)}
-                              onClick={(e) => e.stopPropagation()}
-                              className="h-8 text-sm glass-input"
-                            />
+                            {managed ? (
+                              <div className="h-8 flex items-center text-sm font-medium text-foreground/70">
+                                {selected.quantita}
+                              </div>
+                            ) : (
+                              <Input
+                                type="text"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
+                                value={selected.quantita === 0 ? '' : selected.quantita}
+                                onChange={(e) => updateQuantita(service.id, e.target.value)}
+                                onBlur={(e) => handleQuantitaBlur(service.id, e.target.value)}
+                                onClick={(e) => e.stopPropagation()}
+                                className="h-8 text-sm glass-input"
+                              />
+                            )}
                           </div>
                           <div className="space-y-1">
                             <Label className="text-xs text-muted-foreground">Prezzo Unitario €</Label>
