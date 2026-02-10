@@ -1,70 +1,69 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Flux - Fleet Management Quoter - Light Glassmorphism Design System */
+/* Flux – Premium Tech Dark Glassmorphism */
 
 @layer base {
   :root {
-    /* Light theme with glassmorphism */
-    --background: 200 20% 95%;
-    --foreground: 220 25% 15%;
+    --background: 220 20% 6%;
+    --foreground: 0 0% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 25% 15%;
+    --card: 220 20% 10%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 15%;
+    --popover: 220 20% 10%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 199 89% 40%;
+    --primary: 199 89% 48%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 200 15% 90%;
-    --secondary-foreground: 220 20% 25%;
+    --secondary: 220 15% 15%;
+    --secondary-foreground: 0 0% 85%;
 
-    --muted: 200 15% 92%;
-    --muted-foreground: 220 15% 40%;
+    --muted: 220 15% 18%;
+    --muted-foreground: 220 10% 55%;
 
-    --accent: 199 89% 40%;
+    --accent: 199 89% 48%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 200 20% 80%;
-    --input: 200 15% 85%;
-    --ring: 199 89% 40%;
+    --border: 220 15% 18%;
+    --input: 220 15% 20%;
+    --ring: 199 89% 48%;
 
     --radius: 1rem;
 
-    /* Glassmorphism tokens - Light theme */
-    --glass-bg: rgba(255, 255, 255, 0.6);
-    --glass-border: rgba(255, 255, 255, 0.8);
-    --glass-highlight: rgba(255, 255, 255, 0.9);
-    --glass-shadow: rgba(0, 0, 0, 0.1);
-    
-    /* Flux brand colors */
-    --flux-blue: 199 89% 40%;
+    /* Glassmorphism tokens – Dark iOS */
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-highlight: rgba(255, 255, 255, 0.06);
+    --glass-shadow: rgba(0, 0, 0, 0.4);
+
+    /* Flux brand */
+    --flux-blue: 199 89% 48%;
     --flux-cyan: 187 85% 45%;
     --adobe-red: 0 88% 53%;
-    
-    /* Quote preview specific */
-    --quote-header: 199 89% 40%;
-    --quote-border: 200 15% 75%;
-    --quote-accent: 199 89% 40%;
-    --quote-text: 220 25% 15%;
-    --quote-muted: 220 15% 45%;
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 25% 15%;
-    --sidebar-primary: 199 89% 40%;
+    /* Quote preview */
+    --quote-header: 199 89% 48%;
+    --quote-border: 220 15% 25%;
+    --quote-accent: 199 89% 48%;
+    --quote-text: 0 0% 95%;
+    --quote-muted: 220 10% 55%;
+
+    --sidebar-background: 220 20% 8%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 199 89% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 200 15% 92%;
-    --sidebar-accent-foreground: 220 20% 25%;
-    --sidebar-border: 200 20% 80%;
-    --sidebar-ring: 199 89% 40%;
+    --sidebar-accent: 220 15% 15%;
+    --sidebar-accent-foreground: 0 0% 85%;
+    --sidebar-border: 220 15% 18%;
+    --sidebar-ring: 199 89% 48%;
   }
 }
 
@@ -74,12 +73,12 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground antialiased;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
     min-height: 100vh;
     position: relative;
   }
-  
+
   body::before {
     content: '';
     position: fixed;
@@ -91,52 +90,63 @@
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    filter: blur(3px);
+    z-index: -2;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.65);
     z-index: -1;
   }
 }
 
 @layer components {
-  /* Glassmorphism card - Light theme */
+  /* iOS Liquid Glass Card */
   .glass-card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 
-      0 8px 32px var(--glass-shadow),
-      inset 0 1px 0 var(--glass-highlight);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.3s ease;
   }
-  
+
   .glass-card-intense {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 
-      0 8px 32px var(--glass-shadow),
-      inset 0 1px 0 rgba(255, 255, 255, 1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.3s ease;
   }
-  
+
   .glass-input {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: hsl(var(--foreground));
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  
+
   .glass-input:focus {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.1);
     border-color: hsl(var(--accent));
-    box-shadow: 0 0 0 3px hsla(var(--accent), 0.2);
+    box-shadow: 0 0 0 3px hsla(var(--accent), 0.15),
+                0 0 20px hsla(var(--accent), 0.1);
   }
-  
+
   .glass-input::placeholder {
     color: hsl(var(--muted-foreground));
   }
@@ -144,35 +154,43 @@
   .quote-section-title {
     @apply text-sm font-semibold uppercase tracking-wider text-accent mb-2;
   }
-  
+
   .quote-table-header {
     @apply bg-accent/20 text-accent text-xs font-semibold uppercase tracking-wide;
   }
-  
+
   .quote-table-row {
     @apply border-b border-border/50 text-sm;
   }
-  
+
   .form-section {
-    @apply glass-card p-6;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.3s ease;
   }
-  
+
   .form-section-title {
     @apply text-base font-semibold text-foreground mb-4 flex items-center gap-2;
   }
 
-  /* Improved text contrast for glass cards - Light theme */
-  .glass-card label {
+  /* Glass label styling */
+  .glass-card label,
+  .form-section label {
     color: hsl(var(--foreground));
     font-weight: 500;
   }
-  
+
   .glass-card-intense span,
   .glass-card-intense p {
     color: hsl(var(--foreground));
   }
-  
-  /* Adobe PDF Button */
+
+  /* Glow Action Buttons */
   .btn-adobe-pdf {
     background: hsl(var(--adobe-red));
     color: white;
@@ -182,59 +200,63 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 14px hsla(var(--adobe-red), 0.4);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 14px hsla(var(--adobe-red), 0.4),
+                0 0 30px hsla(var(--adobe-red), 0.15);
   }
-  
+
   .btn-adobe-pdf:hover {
     background: hsl(0, 88%, 48%);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px hsla(var(--adobe-red), 0.5);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px hsla(var(--adobe-red), 0.5),
+                0 0 40px hsla(var(--adobe-red), 0.25);
   }
-  
-  /* Action Buttons - Bottom of Preview */
+
   .btn-action-primary {
     background: #A90708;
     color: white;
     font-weight: 600;
     padding: 0.625rem 1.25rem;
-    border-radius: 0.5rem;
+    border-radius: 12px;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     font-size: 0.875rem;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 14px rgba(169, 7, 8, 0.35);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 14px rgba(169, 7, 8, 0.35),
+                0 0 30px rgba(169, 7, 8, 0.15);
   }
-  
+
   .btn-action-primary:hover {
-    background: #8a0607;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(169, 7, 8, 0.45);
+    background: #c00809;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(169, 7, 8, 0.5),
+                0 0 40px rgba(169, 7, 8, 0.25);
   }
-  
+
   .btn-action-secondary {
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     color: hsl(var(--foreground));
     font-weight: 600;
     padding: 0.625rem 1.25rem;
-    border-radius: 0.5rem;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     font-size: 0.875rem;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  
+
   .btn-action-secondary:hover {
-    background: rgba(255, 255, 255, 0.8);
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.08);
   }
-  
-  /* Compact Action Buttons for Header */
+
+  /* Compact Header Buttons */
   .btn-action-primary-sm {
     background: #A90708;
     color: white;
@@ -245,35 +267,53 @@
     align-items: center;
     gap: 0.375rem;
     font-size: 0.75rem;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(169, 7, 8, 0.3);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 2px 8px rgba(169, 7, 8, 0.3),
+                0 0 20px rgba(169, 7, 8, 0.12);
   }
-  
+
   .btn-action-primary-sm:hover {
-    background: #8a0607;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(169, 7, 8, 0.4);
+    background: #c00809;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 16px rgba(169, 7, 8, 0.5),
+                0 0 30px rgba(169, 7, 8, 0.2);
   }
-  
+
   .btn-action-secondary-sm {
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     color: hsl(var(--foreground));
     font-weight: 600;
     padding: 0.4rem 0.875rem;
     border-radius: 9999px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
     font-size: 0.75rem;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  
+
   .btn-action-secondary-sm:hover {
-    background: rgba(255, 255, 255, 0.85);
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.06);
+  }
+
+  /* Custom Scrollbar – Thin white rubber */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
   }
 }
 
@@ -285,12 +325,18 @@
   page-break-inside: avoid;
 }
 
-/* Table rows: prevent single row from splitting */
 table tr {
   page-break-inside: avoid;
 }
 
-/* Table header repeats on new pages */
 thead {
   display: table-header-group;
+}
+
+/* Spring hover for table rows */
+.service-row-hover {
+  transition: background 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.service-row-hover:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
 }

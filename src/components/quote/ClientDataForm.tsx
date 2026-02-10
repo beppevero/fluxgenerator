@@ -44,14 +44,14 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
 
         <div className="space-y-2">
           <Label className="text-foreground/80">Tipo Documento</Label>
-          <div className="flex rounded-lg overflow-hidden border border-white/10">
+          <div className="flex rounded-xl overflow-hidden border border-white/10">
             <button
               type="button"
               onClick={() => onChange({ ...clientData, documentType: 'standard' })}
-              className={`flex-1 py-2 px-3 text-xs font-medium transition-all ${
+              className={`flex-1 py-2 px-3 text-xs font-medium transition-all duration-300 ${
                 docType === 'standard'
-                  ? 'bg-accent text-accent-foreground'
-                  : 'bg-white/5 text-muted-foreground hover:bg-white/10'
+                  ? 'bg-accent text-accent-foreground shadow-md shadow-accent/20'
+                  : 'bg-white/5 text-muted-foreground hover:bg-white/8'
               }`}
             >
               Proposta Standard
@@ -59,10 +59,10 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
             <button
               type="button"
               onClick={() => onChange({ ...clientData, documentType: 'modulo' })}
-              className={`flex-1 py-2 px-3 text-xs font-medium transition-all ${
+              className={`flex-1 py-2 px-3 text-xs font-medium transition-all duration-300 ${
                 docType === 'modulo'
-                  ? 'bg-accent text-accent-foreground'
-                  : 'bg-white/5 text-muted-foreground hover:bg-white/10'
+                  ? 'bg-accent text-accent-foreground shadow-md shadow-accent/20'
+                  : 'bg-white/5 text-muted-foreground hover:bg-white/8'
               }`}
             >
               Modulo
