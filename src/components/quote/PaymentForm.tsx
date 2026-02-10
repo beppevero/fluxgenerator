@@ -104,10 +104,10 @@ export function PaymentForm({ paymentInfo, onChange, activePreset, onPresetChang
                 type="button"
                 onClick={() => handlePresetClick(key)}
                 className={`
-                  px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 border
+                  px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 border
                   ${activePreset === key
-                    ? 'bg-accent text-accent-foreground border-accent shadow-md scale-105'
-                    : 'bg-white/50 text-foreground/70 border-border hover:bg-white/80 hover:border-accent/50 hover:text-foreground'
+                    ? 'bg-accent text-accent-foreground border-accent shadow-md shadow-accent/25 scale-105'
+                    : 'bg-white/5 text-foreground/70 border-white/10 hover:bg-white/10 hover:border-accent/40 hover:text-foreground'
                   }
                 `}
               >
@@ -130,7 +130,7 @@ export function PaymentForm({ paymentInfo, onChange, activePreset, onPresetChang
               <SelectTrigger className="glass-input">
                 <SelectValue placeholder="Mesi" />
               </SelectTrigger>
-              <SelectContent className="bg-white border-border z-50">
+              <SelectContent className="bg-[hsl(220,20%,12%)] border-white/10 z-50">
                 <SelectItem value="12">12 mesi</SelectItem>
                 <SelectItem value="24">24 mesi</SelectItem>
                 <SelectItem value="36">36 mesi</SelectItem>
@@ -165,7 +165,7 @@ export function PaymentForm({ paymentInfo, onChange, activePreset, onPresetChang
               <SelectTrigger className="glass-input">
                 <SelectValue placeholder="Seleziona..." />
               </SelectTrigger>
-              <SelectContent className="bg-white border-border z-50">
+              <SelectContent className="bg-[hsl(220,20%,12%)] border-white/10 z-50">
                 {validitaOptions.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}

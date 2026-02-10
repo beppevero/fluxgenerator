@@ -125,10 +125,10 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
             key={opt.value}
             type="button"
             onClick={() => setPeriodoFilter(periodoFilter === opt.value ? null : opt.value)}
-            className={`px-3 py-1 rounded-full text-xs font-medium border transition-all ${
+            className={`px-3 py-1 rounded-full text-xs font-medium border transition-all duration-300 ${
               periodoFilter === opt.value
-                ? 'bg-accent text-white border-accent shadow-sm'
-                : 'bg-white/40 text-foreground/70 border-border/40 hover:border-accent/50'
+                ? 'bg-accent text-white border-accent shadow-md shadow-accent/20'
+                : 'bg-white/5 text-foreground/70 border-white/10 hover:border-accent/40 hover:bg-white/8'
             }`}
           >
             {opt.label}
@@ -174,12 +174,12 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                   return (
                     <div
                       key={service.id}
-                      className={`p-3 rounded-lg border-2 transition-all backdrop-blur-sm relative ${
+                      className={`p-3 rounded-xl border transition-all backdrop-blur-sm relative service-row-hover ${
                         isChecked
                           ? managed
-                            ? 'border-accent/50 bg-accent/5 shadow-sm opacity-80'
-                            : 'border-accent bg-accent/10 shadow-sm'
-                          : 'border-border/30 bg-white/30 hover:border-accent/30'
+                            ? 'border-accent/40 bg-accent/5 shadow-sm opacity-80'
+                            : 'border-accent/60 bg-accent/10 shadow-sm'
+                          : 'border-white/8 bg-white/3 hover:border-white/15'
                       }`}
                     >
                       {/* Check / Lock icon */}
@@ -233,7 +233,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                             <span className="text-xs font-medium text-accent">
                               Riservato: {formatPrice(service.prezzoRiservato)}
                             </span>
-                            <Badge variant="secondary" className="text-xs bg-white/10 border-white/20">
+                            <Badge variant="secondary" className="text-xs bg-white/5 border-white/10">
                               {getPeriodoLabel(service.periodo)}
                             </Badge>
                           </div>
