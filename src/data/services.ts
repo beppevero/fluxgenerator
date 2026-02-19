@@ -414,6 +414,26 @@ export const servicesList: Service[] = [
     prezzoRiservato: 18.00,
     periodo: 'U.T.',
   },
+  {
+    id: 'installazione',
+    nome: 'INSTALLAZIONE',
+    descrizione: 'Servizio di installazione',
+    categoria: 'servizi_aggiuntivi',
+    prezzoListino: 60.00,
+    prezzoScontato: 60.00,
+    prezzoRiservato: 60.00,
+    periodo: 'U.T.',
+  },
+  {
+    id: 'spedizione',
+    nome: 'SPEDIZIONE',
+    descrizione: 'Servizio di spedizione',
+    categoria: 'servizi_aggiuntivi',
+    prezzoListino: 10.00,
+    prezzoScontato: 10.00,
+    prezzoRiservato: 10.00,
+    periodo: 'U.T.',
+  },
 
   // CENTRALE OPERATIVA
   {
@@ -481,7 +501,7 @@ export const servicesList: Service[] = [
   },
   {
     id: 'piani-viaggio-annuale',
-    nome: 'GT FLEET 365 - PIANI DI VIAGGIO',
+    nome: 'GT FLEET 365 - APP DRIVER',
     descrizione: 'Predisposizione piano di viaggio o delle attività via web ed app, Trasmissione piano attività dal web all\'app driver, Gestione delle attività attraverso l\'app driver, Gestione automatica del piano di viaggio (in auto geo fencing), Gestione referenti notifiche, Reportistica, Formazione, Assistenza',
     categoria: 'accessori',
     prezzoListino: 360.00,
@@ -491,7 +511,7 @@ export const servicesList: Service[] = [
   },
   {
     id: 'piani-viaggio-mensile',
-    nome: 'GT FLEET 365 - PIANI DI VIAGGIO',
+    nome: 'GT FLEET 365 - APP DRIVER',
     descrizione: 'Predisposizione piano di viaggio o delle attività via web ed app, Trasmissione piano attività dal web all\'app driver, Gestione delle attività attraverso l\'app driver, Gestione automatica del piano di viaggio (in auto geo fencing), Gestione referenti notifiche, Reportistica, Formazione, Assistenza',
     categoria: 'accessori',
     prezzoListino: 40.00,
