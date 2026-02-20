@@ -40,14 +40,40 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
     return result;
   }, [searchQuery, periodoFilter]);
 
+  const categoryOrder = [
+    'dispositivi',
+    'fleet_base',
+    'fleet_gold',
+    'fleet_plus',
+    'fleet_premium',
+    'crono',
+    'crono_telematica',
+    'crono_premium',
+    'servizio_rimorchi',
+    'tractor',
+    'asset',
+    'driver',
+    'piattaforme',
+    'servizi_aggiuntivi',
+    'centrale_operativa',
+    'accessori',
+    'software',
+  ];
+
   const groupedServices = useMemo(() => {
-    return filteredServices.reduce((acc, service) => {
+    const grouped = filteredServices.reduce((acc, service) => {
       if (!acc[service.categoria]) {
         acc[service.categoria] = [];
       }
       acc[service.categoria].push(service);
       return acc;
     }, {} as Record<string, Service[]>);
+
+    const sortedEntries = Object.entries(grouped).sort(
+      ([catA], [catB]) => categoryOrder.indexOf(catA) - categoryOrder.indexOf(catB)
+    );
+
+    return Object.fromEntries(sortedEntries);
   }, [filteredServices]);
 
   const isSelected = (serviceId: string) => 
