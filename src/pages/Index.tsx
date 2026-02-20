@@ -104,17 +104,17 @@ const Index = () => {
     const element = previewRef.current;
     const nomeAzienda = clientData.ragioneSociale.trim() || "Cliente";
     const prefix = clientData.documentType === 'modulo' ? 'Copia Commissione' : 'Proposta Commerciale';
-    const filename = `${prefix}_${nomeAzienda}_${new Date().toISOString().slice(0,10)}.pdf`;
+    const filename = `${prefix}_${nomeAzienda}_${new Date().toISOString().slice(0,10).replace(/-/g, '')}.pdf`;
 
     const previewOnlyElements = element.querySelectorAll('.pdf-preview-only');
     previewOnlyElements.forEach(el => (el as HTMLElement).style.display = 'none');
 
     const opt = {
-      margin: [20, 12, 20, 12],
+      margin: [20, 12, 20, 12] as [number, number, number, number],
       filename,
-      image: { type: "jpeg", quality: 0.98 },
+      image: { type: "jpeg" as const, quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" as const },
       pagebreak: { mode: ['css', 'legacy'] }
     };
     html2pdf().set(opt).from(element).save().then(() => {
