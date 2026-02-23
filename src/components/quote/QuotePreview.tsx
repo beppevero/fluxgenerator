@@ -438,16 +438,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
 
         {renderStandardSignatures()}
-
-        {/* Logo Macnil */}
-        <div className="mt-8 pt-8 border-t border-gray-100 flex items-center justify-between opacity-50 grayscale">
-          <img src={macnilLogo} alt="Macnil" className="h-6" />
-          <div className="text-[8px] text-gray-400 text-center">
-            Progetto GT Fleet 365 - Digital Transformation<br/>
-            MAC&NIL S.r.l. - Gravina in Puglia (BA)
-          </div>
-          <img src={fluxLogo} alt="Flux" className="h-4" />
-        </div>
       </div>
     </div>
   );
