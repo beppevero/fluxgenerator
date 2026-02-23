@@ -30,6 +30,7 @@ const Index = () => {
     durataContrattuale: "24"
   });
   const [selectedServices, setSelectedServices] = useState<SelectedService[]>([]);
+  const [activePreset, setActivePreset] = useState<PresetType>(null);
   const lastEditedServiceId = useRef<string | null>(null);
 
   useEffect(() => {
@@ -149,6 +150,7 @@ const Index = () => {
     });
     setSelectedServices([]);
     setActivePreset(null);
+    lastEditedServiceId.current = null;
   }, []);
 
   return (
