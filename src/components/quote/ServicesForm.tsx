@@ -227,7 +227,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                         />
                         <div className="flex-1 min-w-0 pr-6">
                           <div className="flex items-center gap-2">
-                            <Label htmlFor={service.id} className="cursor-pointer text-sm font-medium block text-foreground">
+                            <Label htmlFor={service.id} className="cursor-pointer text-sm font-semibold block text-white">
                               {service.nome}
                             </Label>
                             <Tooltip>
@@ -270,7 +270,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                       {isChecked && selected && (
                         <div className="mt-3 pt-3 border-t border-border/20 grid grid-cols-3 gap-3">
                           <div className="space-y-1">
-                            <Label className="text-xs text-muted-foreground">N° Servizi</Label>
+                            <Label className="text-xs text-white/70 font-medium">N° Servizi</Label>
                             {managed ? (
                               <div className="h-8 flex items-center text-sm font-medium text-foreground/70">
                                 {selected.quantita}

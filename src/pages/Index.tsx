@@ -30,7 +30,7 @@ const Index = () => {
     durataContrattuale: "24"
   });
   const [selectedServices, setSelectedServices] = useState<SelectedService[]>([]);
-  const [activePreset, setActivePreset] = useState<PresetType>(null);
+  const lastEditedServiceId = useRef<string | null>(null);
 
   useEffect(() => {
     let updated = [...selectedServices];
@@ -84,6 +84,23 @@ const Index = () => {
     if (changed) {
       setSelectedServices(updated);
     }
+  }, [selectedServices]);
+
+  const handleServicesChange = useCallback((services: SelectedService[]) => {
+    // Individua il servizio aggiunto o modificato
+    if (services.length > selectedServices.length) {
+      // Servizio aggiunto
+      const newService = services.find(s => !selectedServices.some(old => old.id === s.id));
+      if (newService) lastEditedServiceId.current = newService.id;
+    } else if (services.length === selectedServices.length) {
+      // Servizio modificato
+      const changedService = services.find(s => {
+        const old = selectedServices.find(o => o.id === s.id);
+        return old && (old.quantita !== s.quantita || old.prezzoUnitario !== s.prezzoUnitario);
+      });
+      if (changedService) lastEditedServiceId.current = changedService.id;
+    }
+    setSelectedServices(services);
   }, [selectedServices]);
 
   const totals = useMemo(() => {
@@ -169,21 +186,12 @@ const Index = () => {
         {/* Main Interface */}
         <main className="flex-1 p-6 pt-0 overflow-hidden">
           <div className="h-full glass-container rounded-[2rem] overflow-hidden flex flex-col lg:flex-row border border-white/10 shadow-2xl">
-            {/* Sidebar Controls (Optional representation of the image) */}
-            <div className="w-20 hidden lg:flex flex-col items-center py-8 gap-8 border-r border-white/5 bg-white/[0.02]">
-              {[1, 2, 3, 4, 5].map(i => (
-                <div key={i} className="w-10 h-10 rounded-xl flex items-center justify-center text-white/40 hover:text-primary hover:bg-primary/10 cursor-pointer transition-colors">
-                  <LayoutDashboard className="w-5 h-5" />
-                </div>
-              ))}
-            </div>
-
             {/* Left Column: Forms */}
             <div className="flex-1 lg:max-w-[45%] border-r border-white/5 bg-black/20">
               <ScrollArea className="h-[calc(100vh-180px)]">
                 <div className="p-8 space-y-8">
                   <ClientDataForm clientData={clientData} onChange={setClientData} />
-                  <ServicesForm selectedServices={selectedServices} onChange={setSelectedServices} />
+                  <ServicesForm selectedServices={selectedServices} onChange={handleServicesChange} />
                   <PaymentForm paymentInfo={paymentInfo} onChange={setPaymentInfo} activePreset={activePreset} onPresetChange={setActivePreset} />
                   <TotalsSummary totals={totals} />
                 </div>
@@ -203,7 +211,11 @@ const Index = () => {
                 <div className="flex-1 overflow-hidden p-8 flex justify-center">
                   <div className="w-full max-w-[800px] h-full shadow-2xl rounded-lg overflow-hidden glass-card">
                     <ScrollArea className="h-full bg-white">
-                      <QuotePreview ref={previewRef} quoteData={quoteData} />
+                      <QuotePreview 
+                        ref={previewRef} 
+                        quoteData={quoteData} 
+                        highlightServiceId={lastEditedServiceId.current}
+                      />
                     </ScrollArea>
                   </div>
                 </div>

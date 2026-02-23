@@ -31,19 +31,19 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
       
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="ragioneSociale" className="text-foreground/80">Ragione Sociale *</Label>
+          <Label htmlFor="ragioneSociale" className="text-white/90 font-medium">Ragione Sociale *</Label>
           <Input
             id="ragioneSociale"
             placeholder="Inserisci ragione sociale"
             value={clientData.ragioneSociale}
             onChange={(e) => onChange({ ...clientData, ragioneSociale: e.target.value })}
-            className="glass-input"
+            className="glass-input font-medium"
             required
           />
         </div>
 
         <div className="space-y-2">
-          <Label className="text-foreground/80">Tipo Documento</Label>
+          <Label className="text-white/90 font-medium">Tipo Documento</Label>
           <div className="flex rounded-xl overflow-hidden border border-black/8">
             <button
               type="button"

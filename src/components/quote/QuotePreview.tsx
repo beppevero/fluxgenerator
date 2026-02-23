@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import { QuoteData } from "@/types/quote";
 import fluxLogo from "@/assets/flux-logo.png";
 import gtFleet365Logo from "@/assets/gt-fleet-365-logo.png";
@@ -6,15 +6,24 @@ import macnilLogo from "@/assets/macnil-logo.png";
 
 interface QuotePreviewProps {
   quoteData: QuoteData;
+  highlightServiceId?: string | null;
 }
 
 export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
   quoteData,
+  highlightServiceId,
 }, ref) => {
   const { clientData, paymentInfo, selectedServices, totals } = quoteData;
   const isModulo = clientData.documentType === 'modulo';
   const lr = clientData.legaleRappresentante;
   const da = clientData.datiAzienda;
+  const economicTableRef = useRef<HTMLTableElement>(null);
+
+  useEffect(() => {
+    if (highlightServiceId && economicTableRef.current) {
+      economicTableRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [highlightServiceId, selectedServices]);
 
   const formatPrice = (price: number) => new Intl.NumberFormat("it-IT", {
     style: "currency",
@@ -57,7 +66,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
       </h3>
       {selectedServices.length > 0 ? (
         <>
-          <table className="w-full text-[10px] border-collapse mb-3" style={{ display: 'table' }}>
+          <table ref={economicTableRef} className="w-full text-[10px] border-collapse mb-3" style={{ display: 'table' }}>
             <thead style={{ display: 'table-header-group' }}>
               <tr className="bg-[#0066b3] text-white text-[9px] font-semibold uppercase">
                 <th className="text-left p-2 border border-[#0066b3]" style={{ width: '15%' }}>Servizio</th>
@@ -73,8 +82,14 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
               {selectedServices.map((service, idx) => {
                 const isUnaTantum = service.periodo === 'U.T.';
                 const durataLabel = paymentInfo.durataContrattuale ? `${paymentInfo.durataContrattuale} mesi` : '—';
+                const isHighlighted = highlightServiceId === service.id;
+                
                 return (
-                  <tr key={service.id} className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} style={{ pageBreakInside: 'avoid' }}>
+                  <tr 
+                    key={service.id} 
+                    className={`${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} ${isHighlighted ? 'animate-pulse bg-blue-100 ring-2 ring-primary/20' : ''}`} 
+                    style={{ pageBreakInside: 'avoid', transition: 'all 0.5s ease' }}
+                  >
                     <td className="p-2 border border-gray-200 align-middle">
                       <div className="font-medium text-gray-900 text-[9px]">{service.nome}</div>
                       <div className="text-[7px] text-gray-500">
