@@ -7,17 +7,34 @@ import macnilLogo from "@/assets/macnil-logo.png";
 interface QuotePreviewProps {
   quoteData: QuoteData;
   highlightServiceId?: string | null;
+  activeSection?: string | null;
 }
 
 export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
   quoteData,
   highlightServiceId,
+  activeSection,
 }, ref) => {
   const { clientData, paymentInfo, selectedServices, totals } = quoteData;
   const isModulo = clientData.documentType === 'modulo';
   const lr = clientData.legaleRappresentante;
   const da = clientData.datiAzienda;
+  
+  const headerRef = useRef<HTMLDivElement>(null);
   const economicTableRef = useRef<HTMLTableElement>(null);
+  const conditionsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const scrollOptions: ScrollIntoViewOptions = { behavior: 'smooth', block: 'center' };
+    
+    if (activeSection === 'client' && headerRef.current) {
+      headerRef.current.scrollIntoView(scrollOptions);
+    } else if (activeSection === 'services' && economicTableRef.current) {
+      economicTableRef.current.scrollIntoView(scrollOptions);
+    } else if (activeSection === 'payment' && conditionsRef.current) {
+      conditionsRef.current.scrollIntoView(scrollOptions);
+    }
+  }, [activeSection]);
 
   useEffect(() => {
     if (highlightServiceId && economicTableRef.current) {
@@ -129,7 +146,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
 
   // ─── Shared: Conditions ───
   const renderConditions = () => (
-    <div className="mb-6">
+    <div ref={conditionsRef} className={`mb-6 transition-all duration-500 rounded-lg p-2 ${activeSection === 'payment' ? 'ring-4 ring-primary/10 bg-blue-50/30' : ''}`}>
       <h3 className={sectionTitleStyle}>2. CONDIZIONI DI FORNITURA</h3>
       <div className="border border-gray-200 rounded p-3 min-h-[80px]">
         {paymentInfo.condizioniPagamento || paymentInfo.validitaOfferta || paymentInfo.condizioniFornitura || paymentInfo.durataContrattuale ? (
@@ -356,7 +373,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
       fontSize: '11px'
     }}>
       {/* ============ PAGINA 1 - FRONTESPIZIO ============ */}
-      <div style={{
+      <div ref={headerRef} className={`transition-all duration-500 ${activeSection === 'client' ? 'ring-4 ring-primary/10 bg-blue-50/30' : ''}`} style={{
         height: '257mm',
         width: '100%',
         display: 'flex',

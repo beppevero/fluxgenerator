@@ -32,7 +32,18 @@ const Index = () => {
   });
   const [selectedServices, setSelectedServices] = useState<SelectedService[]>([]);
   const [activePreset, setActivePreset] = useState<PresetType>(null);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   const lastEditedServiceId = useRef<string | null>(null);
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const triggerScroll = useCallback((section: string) => {
+    if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+    scrollTimeout.current = setTimeout(() => {
+      setActiveSection(section);
+      // Reset after animation
+      setTimeout(() => setActiveSection(null), 1000);
+    }, 150);
+  }, []);
 
   useEffect(() => {
     let updated = [...selectedServices];
@@ -193,9 +204,15 @@ const Index = () => {
             <div className="flex-1 lg:max-w-[45%] border-r border-white/5 bg-black/20">
               <ScrollArea className="h-[calc(100vh-180px)]">
                 <div className="p-8 space-y-8">
-                  <ClientDataForm clientData={clientData} onChange={setClientData} />
-                  <ServicesForm selectedServices={selectedServices} onChange={handleServicesChange} />
-                  <PaymentForm paymentInfo={paymentInfo} onChange={setPaymentInfo} activePreset={activePreset} onPresetChange={setActivePreset} />
+                  <div onFocus={() => triggerScroll('client')}>
+                    <ClientDataForm clientData={clientData} onChange={setClientData} />
+                  </div>
+                  <div onFocus={() => triggerScroll('services')} onClick={() => triggerScroll('services')}>
+                    <ServicesForm selectedServices={selectedServices} onChange={handleServicesChange} />
+                  </div>
+                  <div onFocus={() => triggerScroll('payment')} onClick={() => triggerScroll('payment')}>
+                    <PaymentForm paymentInfo={paymentInfo} onChange={setPaymentInfo} activePreset={activePreset} onPresetChange={(p) => { setActivePreset(p); triggerScroll('payment'); }} />
+                  </div>
                   <TotalsSummary totals={totals} />
                 </div>
               </ScrollArea>
@@ -218,6 +235,7 @@ const Index = () => {
                         ref={previewRef} 
                         quoteData={quoteData} 
                         highlightServiceId={lastEditedServiceId.current}
+                        activeSection={activeSection}
                       />
                     </ScrollArea>
                   </div>
