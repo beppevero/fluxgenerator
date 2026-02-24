@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, Brush, AlertCircle, LayoutDashboard } from "lucide-react";
+import { FileText, Brush, AlertCircle } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
@@ -11,6 +11,7 @@ import { emptyClientData } from "@/data/defaults";
 import { PresetType } from "@/components/quote/PaymentForm";
 import { MEZZI_PER_CARTA, servicesList } from "@/data/services";
 import html2pdf from "html2pdf.js";
+import fluxNewLogo from "@/assets/Gemini_Generated_Image_nr2mofnr2mofnr2m_1771920931147.png";
 
 const CARTA_AZIENDALE_ID = 'carta-aziendale';
 const SHADOW_ID = 'dispositivo-shadow';
@@ -161,8 +162,8 @@ const Index = () => {
         {/* Header */}
         <header className="p-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
-              <LayoutDashboard className="w-6 h-6 text-primary" />
+            <div className="w-12 h-12 rounded-xl overflow-hidden flex items-center justify-center">
+              <img src={fluxNewLogo} alt="Flux Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
