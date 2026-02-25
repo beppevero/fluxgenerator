@@ -40,7 +40,7 @@ export interface Service {
   id: string;
   nome: string;
   descrizione: string;
-  categoria: 'dispositivi' | 'fleet_base' | 'fleet_gold' | 'fleet_plus' | 'fleet_premium' | 'crono' | 'crono_telematica' | 'crono_premium' | 'servizio_rimorchi' | 'tractor' | 'asset' | 'piattaforme' | 'servizi_aggiuntivi' | 'centrale_operativa' | 'accessori' | 'software';
+  categoria: 'dispositivi' | 'fleet_base' | 'fleet_gold' | 'fleet_plus' | 'fleet_premium' | 'crono' | 'crono_telematica' | 'crono_premium' | 'servizio_rimorchi' | 'tractor' | 'asset' | 'piattaforme' | 'servizi_aggiuntivi' | 'centrale_operativa' | 'accessori' | 'software' | 'cold' | 'driver';
   prezzoListino: number;
   prezzoScontato: number;
   prezzoRiservato: number;
@@ -51,12 +51,14 @@ export interface Service {
 export interface SelectedService extends Service {
   quantita: number;
   prezzoUnitario: number;
+  customTitle?: string;
 }
 
 export interface QuoteData {
   clientData: ClientData;
   paymentInfo: PaymentInfo;
   selectedServices: SelectedService[];
+  smartRounding: boolean;
   totals: {
     mensile: number;
     annuale: number;

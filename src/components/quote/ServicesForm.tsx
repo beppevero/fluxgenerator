@@ -52,12 +52,13 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
     'servizio_rimorchi',
     'tractor',
     'asset',
+    'cold',
     'driver',
     'piattaforme',
+    'software',
     'servizi_aggiuntivi',
     'centrale_operativa',
     'accessori',
-    'software',
   ];
 
   const groupedServices = useMemo(() => {
@@ -227,9 +228,23 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                         />
                         <div className="flex-1 min-w-0 pr-6">
                           <div className="flex items-center gap-2">
-                            <Label htmlFor={service.id} className="cursor-pointer text-sm font-semibold block text-white">
-                              {service.nome}
-                            </Label>
+                            {service.id === 'custom-service' ? (
+                              <Input
+                                placeholder="Titolo servizio personalizzato..."
+                                value={selected.customTitle || ""}
+                                onChange={(e) => {
+                                  onChange(selectedServices.map(s => 
+                                    s.id === service.id ? { ...s, customTitle: e.target.value } : s
+                                  ));
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                                className="h-7 text-sm glass-input max-w-[300px]"
+                              />
+                            ) : (
+                              <Label htmlFor={service.id} className="cursor-pointer text-sm font-semibold block text-white">
+                                {service.nome}
+                              </Label>
+                            )}
                             <Tooltip>
                               <TooltipTrigger asChild>
                                 <Info className="w-3.5 h-3.5 text-muted-foreground cursor-help" />

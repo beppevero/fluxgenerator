@@ -32,6 +32,7 @@ const Index = () => {
   });
   const [selectedServices, setSelectedServices] = useState<SelectedService[]>([]);
   const [activePreset, setActivePreset] = useState<PresetType>(null);
+  const [smartRounding, setSmartRounding] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const lastEditedServiceId = useRef<string | null>(null);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -126,7 +127,7 @@ const Index = () => {
     return { mensile, annuale, unaTantum, carteAziendaSuggerite };
   }, [selectedServices]);
 
-  const quoteData: QuoteData = { clientData, paymentInfo, selectedServices, totals };
+  const quoteData: QuoteData = { clientData, paymentInfo, selectedServices, totals, smartRounding };
   const canExport = clientData.ragioneSociale.trim().length > 0 && selectedServices.length > 0;
 
   const handleExportPDF = useCallback(() => {
@@ -213,7 +214,7 @@ const Index = () => {
                   <div onFocus={() => triggerScroll('payment')} onClick={() => triggerScroll('payment')}>
                     <PaymentForm paymentInfo={paymentInfo} onChange={setPaymentInfo} activePreset={activePreset} onPresetChange={(p) => { setActivePreset(p); triggerScroll('payment'); }} />
                   </div>
-                  <TotalsSummary totals={totals} />
+                  <TotalsSummary totals={totals} smartRounding={smartRounding} onRoundingChange={setSmartRounding} />
                 </div>
               </ScrollArea>
             </div>

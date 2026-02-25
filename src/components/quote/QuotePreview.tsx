@@ -10,12 +10,16 @@ interface QuotePreviewProps {
   activeSection?: string | null;
 }
 
+function roundToNearestTen(value: number): number {
+  return Math.floor(value / 10) * 10;
+}
+
 export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
   quoteData,
   highlightServiceId,
   activeSection,
 }, ref) => {
-  const { clientData, paymentInfo, selectedServices, totals } = quoteData;
+  const { clientData, paymentInfo, selectedServices, totals, smartRounding } = quoteData;
   const isModulo = clientData.documentType === 'modulo';
   const lr = clientData.legaleRappresentante;
   const da = clientData.datiAzienda;
@@ -42,10 +46,13 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
     }
   }, [highlightServiceId, selectedServices]);
 
-  const formatPrice = (price: number) => new Intl.NumberFormat("it-IT", {
-    style: "currency",
-    currency: "EUR"
-  }).format(price);
+  const formatPrice = (price: number) => {
+    const valueToFormat = smartRounding ? roundToNearestTen(price) : price;
+    return new Intl.NumberFormat("it-IT", {
+      style: "currency",
+      currency: "EUR"
+    }).format(valueToFormat);
+  };
 
   const formatDateFull = () => {
     const d = new Date();
@@ -108,7 +115,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                     style={{ pageBreakInside: 'avoid', transition: 'all 0.5s ease' }}
                   >
                     <td className="p-2 border border-gray-200 align-middle">
-                      <div className="font-medium text-gray-900 text-[9px]">{service.nome}</div>
+                      <div className="font-medium text-gray-900 text-[9px]">
+                        {service.id === 'custom-service' ? service.customTitle : service.nome}
+                      </div>
                       <div className="text-[7px] text-gray-500">
                         {service.periodo === 'MENSILE' && '(Mensile)'}
                         {service.periodo === 'ANNUALE' && '(Annuale)'}
