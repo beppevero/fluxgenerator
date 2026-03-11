@@ -24,6 +24,11 @@ export const emptyDatiAzienda: DatiAzienda = {
 
 export const emptyClientData: ClientData = {
   ragioneSociale: "",
+  partitaIva: "",
+  nomeReferente: "",
+  cognomeReferente: "",
+  emailCliente: "",
+  mezziTrattativa: "",
   documentType: "standard",
   legaleRappresentante: { ...emptyLegaleRappresentante },
   datiAzienda: { ...emptyDatiAzienda },

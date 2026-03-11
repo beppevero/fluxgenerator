@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Building2, User, MapPin } from "lucide-react";
+import { Building2, User, MapPin, Hash, Mail, Truck } from "lucide-react";
 import { ClientData, DocumentType, LegaleRappresentante, DatiAzienda } from "@/types/quote";
 
 interface ClientDataFormProps {
@@ -30,18 +30,7 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
       </h3>
       
       <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="ragioneSociale" className="text-white/90 font-medium">Ragione Sociale *</Label>
-          <Input
-            id="ragioneSociale"
-            placeholder="Inserisci ragione sociale"
-            value={clientData.ragioneSociale}
-            onChange={(e) => onChange({ ...clientData, ragioneSociale: e.target.value })}
-            className="glass-input font-medium"
-            required
-          />
-        </div>
-
+        {/* Tipo Documento */}
         <div className="space-y-2">
           <Label className="text-white/90 font-medium">Tipo Documento</Label>
           <div className="flex rounded-xl overflow-hidden border border-black/8">
@@ -75,6 +64,86 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
           </p>
         </div>
 
+        {/* Ragione Sociale - always visible */}
+        <div className="space-y-1.5">
+          <Label htmlFor="ragioneSociale" className="text-white/90 font-medium">Ragione Sociale *</Label>
+          <Input
+            id="ragioneSociale"
+            placeholder="Inserisci ragione sociale"
+            value={clientData.ragioneSociale}
+            onChange={(e) => onChange({ ...clientData, ragioneSociale: e.target.value })}
+            className="glass-input font-medium border-white/20"
+            required
+          />
+        </div>
+
+        {/* Proposta Standard fields */}
+        {!isModulo && (
+          <>
+            <div className="space-y-1.5">
+              <Label htmlFor="partitaIva" className="text-white/90 font-medium">P. IVA</Label>
+              <div className="relative">
+                <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="partitaIva"
+                  placeholder="Inserisci Partita IVA"
+                  value={clientData.partitaIva}
+                  onChange={(e) => onChange({ ...clientData, partitaIva: e.target.value })}
+                  className="glass-input pl-9 border-white/20"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="nomeReferente" className="text-white/90 font-medium">Nome Referente</Label>
+                <Input
+                  id="nomeReferente"
+                  placeholder="Nome"
+                  value={clientData.nomeReferente}
+                  onChange={(e) => onChange({ ...clientData, nomeReferente: e.target.value })}
+                  className="glass-input border-white/20"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="cognomeReferente" className="text-white/90 font-medium">Cognome Referente</Label>
+                <Input
+                  id="cognomeReferente"
+                  placeholder="Cognome"
+                  value={clientData.cognomeReferente}
+                  onChange={(e) => onChange({ ...clientData, cognomeReferente: e.target.value })}
+                  className="glass-input border-white/20"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="emailCliente" className="text-white/90 font-medium">Email Cliente</Label>
+              <Input
+                id="emailCliente"
+                type="email"
+                placeholder="es. mario.rossi@azienda.it"
+                value={clientData.emailCliente}
+                onChange={(e) => onChange({ ...clientData, emailCliente: e.target.value })}
+                className="glass-input border-white/20"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="mezziTrattativa" className="text-white/90 font-medium">N° Mezzi Trattativa</Label>
+              <Input
+                id="mezziTrattativa"
+                type="number"
+                placeholder="N° mezzi"
+                value={clientData.mezziTrattativa}
+                onChange={(e) => onChange({ ...clientData, mezziTrattativa: e.target.value })}
+                className="glass-input border-white/20"
+              />
+            </div>
+          </>
+        )}
+
+        {/* Modulo fields */}
         {isModulo && (
           <>
             {/* Legale Rappresentante */}

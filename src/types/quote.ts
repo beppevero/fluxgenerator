@@ -24,6 +24,11 @@ export interface DatiAzienda {
 
 export interface ClientData {
   ragioneSociale: string;
+  partitaIva: string;
+  nomeReferente: string;
+  cognomeReferente: string;
+  emailCliente: string;
+  mezziTrattativa: string;
   documentType: DocumentType;
   legaleRappresentante: LegaleRappresentante;
   datiAzienda: DatiAzienda;

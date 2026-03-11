@@ -195,11 +195,11 @@ const Index = () => {
                   <div onFocus={() => triggerScroll('client')}>
                     <ClientDataForm clientData={clientData} onChange={setClientData} />
                   </div>
-                  <div onFocus={() => triggerScroll('services')} onClick={() => triggerScroll('services')}>
-                    <ServicesForm selectedServices={selectedServices} onChange={handleServicesChange} />
-                  </div>
                   <div onFocus={() => triggerScroll('payment')} onClick={() => triggerScroll('payment')}>
                     <PaymentForm paymentInfo={paymentInfo} onChange={setPaymentInfo} activePreset={activePreset} onPresetChange={(p) => { setActivePreset(p); triggerScroll('payment'); }} />
+                  </div>
+                  <div onFocus={() => triggerScroll('services')} onClick={() => triggerScroll('services')}>
+                    <ServicesForm selectedServices={selectedServices} onChange={handleServicesChange} />
                   </div>
                   <TotalsSummary totals={totals} smartRounding={smartRounding} onRoundingChange={setSmartRounding} />
                 </div>
