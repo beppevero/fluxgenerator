@@ -231,7 +231,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                             {service.id === 'custom-service' ? (
                               <Input
                                 placeholder="Titolo servizio personalizzato..."
-                                value={selected.customTitle || ""}
+                                value={selected?.customTitle || ""}
                                 onChange={(e) => {
                                   onChange(selectedServices.map(s => 
                                     s.id === service.id ? { ...s, customTitle: e.target.value } : s

@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, Brush, AlertCircle } from "lucide-react";
+import { FileText, X, Trash2 } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
@@ -11,7 +11,7 @@ import { emptyClientData } from "@/data/defaults";
 import { PresetType } from "@/components/quote/PaymentForm";
 import { MEZZI_PER_CARTA, servicesList } from "@/data/services";
 import html2pdf from "html2pdf.js";
-import fluxNewLogo from "@/assets/Gemini_Generated_Image_nr2mofnr2mofnr2m_1771920931147.png";
+import AnimatedBackground from "@/components/ui/AnimatedBackground"; // Importa il nuovo sfondo
 
 const CARTA_AZIENDALE_ID = 'carta-aziendale';
 const SHADOW_ID = 'dispositivo-shadow';
@@ -41,7 +41,6 @@ const Index = () => {
     if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
     scrollTimeout.current = setTimeout(() => {
       setActiveSection(section);
-      // Reset after animation
       setTimeout(() => setActiveSection(null), 1000);
     }, 150);
   }, []);
@@ -101,13 +100,10 @@ const Index = () => {
   }, [selectedServices]);
 
   const handleServicesChange = useCallback((services: SelectedService[]) => {
-    // Individua il servizio aggiunto o modificato
     if (services.length > selectedServices.length) {
-      // Servizio aggiunto
       const newService = services.find(s => !selectedServices.some(old => old.id === s.id));
       if (newService) lastEditedServiceId.current = newService.id;
     } else if (services.length === selectedServices.length) {
-      // Servizio modificato
       const changedService = services.find(s => {
         const old = selectedServices.find(o => o.id === s.id);
         return old && (old.quantita !== s.quantita || old.prezzoUnitario !== s.prezzoUnitario);
@@ -168,42 +164,33 @@ const Index = () => {
 
   return (
     <div className="relative min-h-screen">
-      <div className="flux-bg" />
+      <AnimatedBackground />
       
       <div className="relative z-10 max-w-[1600px] mx-auto min-h-screen flex flex-col">
         {/* Header */}
-        <header className="p-6 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl overflow-hidden flex items-center justify-center">
-              <img src={fluxNewLogo} alt="Flux Logo" className="w-full h-full object-cover" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-                FLUX <span className="text-white/40 font-light">|</span> <span className="font-medium text-white/90">Smart Quote</span>
-              </h1>
-            </div>
-          </div>
+        <header className="p-6 flex items-center justify-between bg-transparent">
+          <h1 className="text-2xl font-bold text-white">QUOTY</h1>
 
           <div className="flex items-center gap-3">
-            <button onClick={handleClearAll} className="px-4 py-2 rounded-xl glass-card text-sm font-medium hover:bg-white/10 flex items-center gap-2">
-              <Brush className="w-4 h-4" /> Pulisci
+            <button onClick={handleClearAll} className="px-4 py-2 rounded-lg bg-gray-200 text-gray-800 text-sm font-medium hover:bg-gray-300 flex items-center gap-2">
+              <Trash2 className="w-4 h-4" /> Pulisci
             </button>
             <button
               onClick={handleExportPDF}
               disabled={!canExport}
-              className={`px-5 py-2 rounded-xl btn-primary text-sm flex items-center gap-2 ${!canExport ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`px-5 py-2 rounded-lg bg-[#EF4444] text-white text-sm flex items-center gap-2 ${!canExport ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              <FileText className="w-4 h-4" /> Esporta PDF
+              <FileText className="w-4 h-4" /> Esporta
             </button>
           </div>
         </header>
 
         {/* Main Interface */}
         <main className="flex-1 p-6 pt-0 overflow-hidden">
-          <div className="h-full glass-container rounded-[2rem] overflow-hidden flex flex-col lg:flex-row border border-white/10 shadow-2xl">
+          <div className="h-full rounded-[2rem] overflow-hidden flex flex-col lg:flex-row border border-white/10 shadow-2xl bg-transparent">
             {/* Left Column: Forms */}
             <div className="flex-1 lg:max-w-[45%] border-r border-white/5 bg-black/20">
-              <ScrollArea className="h-[calc(100vh-180px)]">
+              <ScrollArea className="h-[calc(100vh-140px)]">
                 <div className="p-8 space-y-8">
                   <div onFocus={() => triggerScroll('client')}>
                     <ClientDataForm clientData={clientData} onChange={setClientData} />
@@ -222,15 +209,11 @@ const Index = () => {
             {/* Right Column: Preview */}
             <div className="flex-1 bg-black/40 relative">
               <div className="absolute inset-0 flex flex-col">
-                <div className="px-8 py-4 border-b border-white/5 flex items-center justify-between">
-                  <span className="text-sm font-medium text-white/60 uppercase tracking-widest">Document Preview</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                    <span className="text-xs text-white/40 font-mono">LIVE UPDATE</span>
-                  </div>
+                <div className="px-8 py-4 border-b border-white/5">
+                  {/* Spazio per la barra superiore, come richiesto */}
                 </div>
                 <div className="flex-1 overflow-hidden p-8 flex justify-center">
-                  <div className="w-full max-w-[800px] h-full shadow-2xl rounded-lg overflow-hidden glass-card">
+                  <div className="w-full max-w-[800px] h-full shadow-2xl rounded-lg overflow-hidden">
                     <ScrollArea className="h-full bg-white">
                       <QuotePreview 
                         ref={previewRef} 
@@ -247,7 +230,7 @@ const Index = () => {
         </main>
 
         <footer className="p-4 text-center text-[10px] text-white/20 uppercase tracking-[0.2em]">
-          Flux Platform &copy; 2026 • Intelligent Fleet Management
+          QUOTY &copy; 2024 • Smart Quote Generator
         </footer>
       </div>
     </div>
