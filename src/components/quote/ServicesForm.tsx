@@ -122,8 +122,8 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
 
   const getPeriodoLabel = (periodo: string) => {
     switch (periodo) {
-      case 'MENSILE': return '/mese';
-      case 'ANNUALE': return '/anno';
+      case 'MENSILE': return 'Mensile';
+      case 'ANNUALE': return 'Annuale';
       case 'U.T.': return 'U.T.';
       default: return periodo;
     }
