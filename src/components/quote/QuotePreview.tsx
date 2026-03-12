@@ -151,13 +151,20 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                     style={{ pageBreakInside: 'avoid', transition: 'all 0.15s ease' }}
                   >
                     <td className="p-2 border border-gray-200 align-middle">
-                      <div className="font-medium text-gray-900 text-[9px]">
-                        {service.id === 'custom-service' ? service.customTitle : service.nome}
-                      </div>
-                      <div className="text-[7px] text-gray-500">
-                        {service.periodo === 'MENSILE' && '(Mensile)'}
-                        {service.periodo === 'ANNUALE' && '(Annuale)'}
-                        {service.periodo === 'U.T.' && '(Una Tantum)'}
+                      <div className="flex items-start gap-1">
+                        {onReorderServices && (
+                          <GripVertical className="w-3 h-3 text-gray-300 mt-0.5 flex-shrink-0 pdf-preview-only" />
+                        )}
+                        <div>
+                          <div className="font-medium text-gray-900 text-[9px]">
+                            {service.id === 'custom-service' ? service.customTitle : service.nome}
+                          </div>
+                          <div className="text-[7px] text-gray-500">
+                            {service.periodo === 'MENSILE' && '(Mensile)'}
+                            {service.periodo === 'ANNUALE' && '(Annuale)'}
+                            {service.periodo === 'U.T.' && '(Una Tantum)'}
+                          </div>
+                        </div>
                       </div>
                     </td>
                     <td className="p-2 border border-gray-200 text-[8px] text-gray-600 align-middle leading-snug">{service.descrizione}</td>
