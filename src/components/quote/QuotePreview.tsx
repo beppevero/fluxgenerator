@@ -1,13 +1,15 @@
-import { forwardRef, useEffect, useRef } from "react";
-import { QuoteData } from "@/types/quote";
+import { forwardRef, useEffect, useRef, useState, useCallback } from "react";
+import { QuoteData, SelectedService } from "@/types/quote";
 import fluxLogo from "@/assets/flux-logo.png";
 import gtFleet365Logo from "@/assets/gt-fleet-365-logo.png";
 import macnilLogo from "@/assets/macnil-logo.png";
+import { GripVertical } from "lucide-react";
 
 interface QuotePreviewProps {
   quoteData: QuoteData;
   highlightServiceId?: string | null;
   activeSection?: string | null;
+  onReorderServices?: (services: SelectedService[]) => void;
 }
 
 function roundToNearestTen(value: number): number {
@@ -18,6 +20,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
   quoteData,
   highlightServiceId,
   activeSection,
+  onReorderServices,
 }, ref) => {
   const { clientData, paymentInfo, selectedServices, totals, smartRounding } = quoteData;
   const isModulo = clientData.documentType === 'modulo';
@@ -27,6 +30,32 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
   const headerRef = useRef<HTMLDivElement>(null);
   const economicTableRef = useRef<HTMLTableElement>(null);
   const conditionsRef = useRef<HTMLDivElement>(null);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+
+  const handleDragStart = useCallback((idx: number) => {
+    setDragIndex(idx);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent, idx: number) => {
+    e.preventDefault();
+    setDragOverIndex(idx);
+  }, []);
+
+  const handleDrop = useCallback((idx: number) => {
+    if (dragIndex === null || dragIndex === idx || !onReorderServices) return;
+    const reordered = [...selectedServices];
+    const [moved] = reordered.splice(dragIndex, 1);
+    reordered.splice(idx, 0, moved);
+    onReorderServices(reordered);
+    setDragIndex(null);
+    setDragOverIndex(null);
+  }, [dragIndex, selectedServices, onReorderServices]);
+
+  const handleDragEnd = useCallback(() => {
+    setDragIndex(null);
+    setDragOverIndex(null);
+  }, []);
 
   useEffect(() => {
     const scrollOptions: ScrollIntoViewOptions = { behavior: 'smooth', block: 'center' };
@@ -107,21 +136,35 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                 const isUnaTantum = service.periodo === 'U.T.';
                 const durataLabel = paymentInfo.durataContrattuale ? `${paymentInfo.durataContrattuale} mesi` : '—';
                 const isHighlighted = highlightServiceId === service.id;
+                const isDragging = dragIndex === idx;
+                const isDragOver = dragOverIndex === idx;
                 
                 return (
                   <tr 
-                    key={service.id} 
-                    className={`${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} ${isHighlighted ? 'animate-pulse bg-blue-100 ring-2 ring-primary/20' : ''}`} 
-                    style={{ pageBreakInside: 'avoid', transition: 'all 0.5s ease' }}
+                    key={service.id}
+                    draggable={!!onReorderServices}
+                    onDragStart={() => handleDragStart(idx)}
+                    onDragOver={(e) => handleDragOver(e, idx)}
+                    onDrop={() => handleDrop(idx)}
+                    onDragEnd={handleDragEnd}
+                    className={`${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} ${isHighlighted ? 'animate-pulse bg-blue-100 ring-2 ring-primary/20' : ''} ${isDragging ? 'opacity-40' : ''} ${isDragOver ? 'border-t-2 border-t-blue-500' : ''} ${onReorderServices ? 'cursor-grab active:cursor-grabbing' : ''}`} 
+                    style={{ pageBreakInside: 'avoid', transition: 'all 0.15s ease' }}
                   >
                     <td className="p-2 border border-gray-200 align-middle">
-                      <div className="font-medium text-gray-900 text-[9px]">
-                        {service.id === 'custom-service' ? service.customTitle : service.nome}
-                      </div>
-                      <div className="text-[7px] text-gray-500">
-                        {service.periodo === 'MENSILE' && '(Mensile)'}
-                        {service.periodo === 'ANNUALE' && '(Annuale)'}
-                        {service.periodo === 'U.T.' && '(Una Tantum)'}
+                      <div className="flex items-start gap-1">
+                        {onReorderServices && (
+                          <GripVertical className="w-3 h-3 text-gray-300 mt-0.5 flex-shrink-0 pdf-preview-only" />
+                        )}
+                        <div>
+                          <div className="font-medium text-gray-900 text-[9px]">
+                            {service.id === 'custom-service' ? service.customTitle : service.nome}
+                          </div>
+                          <div className="text-[7px] text-gray-500">
+                            {service.periodo === 'MENSILE' && '(Mensile)'}
+                            {service.periodo === 'ANNUALE' && '(Annuale)'}
+                            {service.periodo === 'U.T.' && '(Una Tantum)'}
+                          </div>
+                        </div>
                       </div>
                     </td>
                     <td className="p-2 border border-gray-200 text-[8px] text-gray-600 align-middle leading-snug">{service.descrizione}</td>

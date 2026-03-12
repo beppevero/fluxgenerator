@@ -455,15 +455,6 @@ export const servicesList: Service[] = [
     periodo: 'U.T.',
   },
   {
-    id: 'custom-service',
-    nome: 'SERVIZIO PERSONALIZZATO',
-    descrizione: 'Voce di spesa personalizzabile',
-    categoria: 'servizi_aggiuntivi',
-    prezzoListino: 0,
-    prezzoRiservato: 0,
-    periodo: 'U.T.',
-  },
-  {
     id: 'attivazione-gt-fleet',
     nome: 'ATTIVAZIONE GT FLEET 365',
     descrizione: 'Attivazione piattaforma GT FLEET 365',
@@ -481,6 +472,15 @@ export const servicesList: Service[] = [
     prezzoRiservato: 120.00,
     periodo: 'ANNUALE',
     isCrono: true,
+  },
+  {
+    id: 'custom-service',
+    nome: 'SERVIZIO PERSONALIZZATO',
+    descrizione: 'Voce di spesa personalizzabile',
+    categoria: 'servizi_aggiuntivi',
+    prezzoListino: 0,
+    prezzoRiservato: 0,
+    periodo: 'U.T.',
   },
 
   // SERVIZI ESTERNI - THE GUARDIAN (CENTRALE OPERATIVA)

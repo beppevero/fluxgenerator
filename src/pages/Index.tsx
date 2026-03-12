@@ -226,6 +226,7 @@ const Index = () => {
                         quoteData={quoteData} 
                         highlightServiceId={lastEditedServiceId.current}
                         activeSection={activeSection}
+                        onReorderServices={setSelectedServices}
                       />
                     </ScrollArea>
                   </div>
