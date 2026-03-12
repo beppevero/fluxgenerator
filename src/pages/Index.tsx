@@ -130,8 +130,13 @@ const Index = () => {
     if (!previewRef.current || !canExport) return;
     const element = previewRef.current;
     const nomeAzienda = clientData.ragioneSociale.trim() || "Cliente";
-    const prefix = clientData.documentType === 'modulo' ? 'Copia Commissione' : 'Proposta Commerciale';
-    const filename = `${prefix}_${nomeAzienda}_${new Date().toISOString().slice(0,10).replace(/-/g, '')}.pdf`;
+    const oggi = new Date();
+    const gg = String(oggi.getDate()).padStart(2, '0');
+    const mm = String(oggi.getMonth() + 1).padStart(2, '0');
+    const aaaa = oggi.getFullYear();
+    const dataFormattata = `${gg}${mm}${aaaa}`;
+    const prefix = clientData.documentType === 'modulo' ? 'Modulo Ordine' : 'Proposta Commerciale';
+    const filename = `${prefix}_${nomeAzienda}_${dataFormattata}.pdf`;
 
     const previewOnlyElements = element.querySelectorAll('.pdf-preview-only');
     previewOnlyElements.forEach(el => (el as HTMLElement).style.display = 'none');
@@ -162,6 +167,39 @@ const Index = () => {
     lastEditedServiceId.current = null;
   }, []);
 
+  const handleSend = useCallback(() => {
+    if (!clientData.emailCliente?.trim() || !clientData.mezziTrattativa?.trim()) return;
+
+    const validitaGiorni = parseInt(paymentInfo.validitaOfferta) || 30;
+    const dataScadenza = new Date();
+    dataScadenza.setDate(dataScadenza.getDate() + validitaGiorni);
+    const gg = String(dataScadenza.getDate()).padStart(2, '0');
+    const mm = String(dataScadenza.getMonth() + 1).padStart(2, '0');
+    const aaaa = dataScadenza.getFullYear();
+    const dataValidita = `${gg}.${mm}.${aaaa}`;
+
+    const nMezzi = parseInt(clientData.mezziTrattativa) || 1;
+    const mezziTesto = nMezzi === 1 ? 'mezzo' : 'mezzi';
+
+    const nome = clientData.nomeReferente?.trim();
+    const cognome = clientData.cognomeReferente?.trim();
+    const useLei = !nome && !!cognome;
+    let saluto = '';
+    if (nome && cognome) saluto = `Buongiorno ${nome} ${cognome}`;
+    else if (cognome) saluto = `Buongiorno sig./sig.ra ${cognome}`;
+    else if (nome) saluto = `Buongiorno ${nome}`;
+    else saluto = `Buongiorno`;
+
+    const corpo = useLei
+      ? `${saluto},\n\ncome da accordi, Le invio la proposta commerciale calcolata su base annuale per n° ${nMezzi} ${mezziTesto}.\n\nLe segnalo che l'offerta è valida fino al ${dataValidita} e, in caso di accettazione, il modulo d'ordine va stampato, compilato e inviato via mail.\n\nAlla lettura dell'offerta, sarebbe ottimo sentirci telefonicamente per un confronto diretto e valutare insieme ogni aspetto della proposta.\n\nResto a disposizione per qualsiasi chiarimento. A presto!`
+      : `${saluto},\n\ncome da accordi, ti invio la proposta commerciale calcolata su base annuale per n° ${nMezzi} ${mezziTesto}.\n\nTi segnalo che l'offerta è valida fino al ${dataValidita} e, in caso di accettazione, il modulo d'ordine va stampato, compilato e inviato via mail.\n\nAlla lettura dell'offerta, sarebbe ottimo sentirci telefonicamente per un confronto diretto e valutare insieme ogni aspetto della proposta.\n\nResto a disposizione per qualsiasi chiarimento. A presto!`;
+
+    const oggetto = `Proposta Commerciale GT FLEET 365 - ${clientData.ragioneSociale}`;
+    const mailtoLink = `mailto:${clientData.emailCliente}?subject=${encodeURIComponent(oggetto)}&body=${encodeURIComponent(corpo)}`;
+    window.open(mailtoLink, '_blank');
+    handleExportPDF();
+  }, [clientData, paymentInfo, handleExportPDF]);
+
   return (
     <div className="relative min-h-screen">
       <AnimatedBackground />
@@ -176,8 +214,13 @@ const Index = () => {
               <Trash2 className="w-4 h-4" /> Pulisci
             </button>
             <button
-              disabled={!clientData.emailCliente?.trim()}
-              className={`px-5 py-2 rounded-lg bg-[#0066b3] text-white text-sm flex items-center gap-2 ${!clientData.emailCliente?.trim() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#005299]'}`}
+              onClick={handleSend}
+              disabled={!clientData.emailCliente?.trim() || !clientData.mezziTrattativa?.trim()}
+              className={`px-5 py-2 rounded-lg bg-[#0066b3] text-white text-sm flex items-center gap-2 ${
+                !clientData.emailCliente?.trim() || !clientData.mezziTrattativa?.trim()
+                  ? 'opacity-50 cursor-not-allowed'
+                  : 'hover:bg-[#005299]'
+              }`}
             >
               <Send className="w-4 h-4" /> Invia
             </button>
