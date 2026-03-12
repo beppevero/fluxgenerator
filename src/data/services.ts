@@ -458,7 +458,7 @@ export const servicesList: Service[] = [
     id: 'carta-aziendale',
     nome: 'CARTA AZIENDALE CRONO (25 MEZZI)',
     descrizione: 'Copia carta aziendale crono (ogni 25 mezzi)',
-    categoria: 'accessori',
+    categoria: 'servizi_aggiuntivi',
     prezzoListino: 192.00,
     prezzoRiservato: 120.00,
     periodo: 'ANNUALE',
