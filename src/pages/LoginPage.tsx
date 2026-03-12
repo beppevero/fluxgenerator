@@ -18,6 +18,7 @@ import AnimatedBackground from '../components/ui/AnimatedBackground';
 import { Eye, EyeOff } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
 import { useToast } from '../components/ui/use-toast';
+import { SatelliteAnimation } from '../components/ui/SatelliteAnimation';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -44,11 +45,11 @@ const LoginPage = () => {
   const getWelcomeMessage = (name: string) => {
     const lowerCaseName = name.toLowerCase();
     if (femaleNames.includes(lowerCaseName)) {
-      return `Benvenuta ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+      return `Benvenuta, ${name.charAt(0).toUpperCase() + name.slice(1)}!`;
     } else if (name.toLowerCase().endsWith('a')) {
-        return `Benvenuta ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+        return `Benvenuta, ${name.charAt(0).toUpperCase() + name.slice(1)}!`;
     }
-    return `Benvenuto ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+    return `Benvenuto, ${name.charAt(0).toUpperCase() + name.slice(1)}!`;
   };
 
   const onSubmit = async (values) => {
@@ -58,8 +59,14 @@ const LoginPage = () => {
       const firstName = values.email.split('.')[0];
       const welcomeMessage = getWelcomeMessage(firstName);
       toast({
-        title: welcomeMessage,
-      })
+        description: (
+          <div className="flex items-center gap-2">
+            <SatelliteAnimation />
+            <span className="text-white">{welcomeMessage}</span>
+          </div>
+        ),
+        className: "bg-slate-900 border-transparent",
+      });
     } catch (err) {
       if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
         setAuthError('Credenziali non valide. Riprova.');
