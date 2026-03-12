@@ -99,6 +99,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
   const calculateExpiryDate = () => {
     const validita = paymentInfo.validitaOfferta;
     if (!validita) return "";
+    // Se è già una data formattata (gg.mm.aaaa) restituiscila direttamente
+    if (/^\d{2}\.\d{2}\.\d{4}$/.test(validita)) return validita;
+    // Altrimenti calcola dalla durata in giorni
     const daysMatch = validita.match(/^(\d+)/);
     if (!daysMatch) return validita;
     const days = parseInt(daysMatch[1], 10);
@@ -287,14 +290,12 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
   // ─── Modulo: Triple Signature Block ───
   const renderModuloSignatures = () => (
     <div style={{ pageBreakInside: 'avoid' }}>
-      {/* Clausola contrattuale */}
       <div className="mb-5 p-3 border border-gray-200 rounded bg-gray-50">
         <p className="text-[10px] text-gray-700 leading-relaxed">
           Il Contratto tra il Cliente e MAC&NIL Srl si perfeziona in base alla procedura contenuta nelle Condizioni Generali di Contratto rilasciate a parte che il cliente dichiara di aver ricevuto, conoscere ed accettare.
         </p>
       </div>
 
-      {/* FIRMA 1 – Accettazione Ordine */}
       <div className="mb-5 border border-gray-300 rounded p-4" style={{ pageBreakInside: 'avoid' }}>
         <p className="text-[10px] font-semibold text-gray-700 mb-3">
           Firma del Cliente – Per accettazione della presente Copia Commissione
@@ -315,7 +316,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
       </div>
 
-      {/* FIRMA 2 – Clausole Vessatorie */}
       <div className="mb-5 border border-gray-300 rounded p-4" style={{ pageBreakInside: 'avoid' }}>
         <p className="text-[10px] font-semibold text-gray-700 mb-2">
           Approvazione specifica ai sensi degli artt. 1341 e 1342 c.c.
@@ -339,7 +339,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         </div>
       </div>
 
-      {/* FIRMA 3 – Privacy */}
       <div className="mb-5 border border-gray-300 rounded p-4" style={{ pageBreakInside: 'avoid' }}>
         <p className="text-[10px] font-semibold text-gray-700 mb-2">
           Autorizzazione al trattamento dei dati personali
@@ -399,7 +398,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         fontSize: '11px',
         padding: '0 12mm',
       }}>
-        {/* Header con logo e titolo */}
         <div className="text-center pt-4 mb-6">
           <img src={gtFleet365Logo} alt="GT Fleet 365" style={{ height: '40px', margin: '0 auto 12px' }} />
           <h1 style={{
@@ -424,7 +422,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
       fontFamily: 'Arial, Helvetica, sans-serif',
       fontSize: '11px'
     }}>
-      {/* ============ PAGINA 1 - FRONTESPIZIO ============ */}
       <div ref={headerRef} className={`transition-all duration-500 ${activeSection === 'client' ? 'ring-4 ring-primary/10 bg-blue-50/30' : ''}`} style={{
         height: '257mm',
         width: '100%',
@@ -470,12 +467,10 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         )}
       </div>
 
-      {/* ============ CONTENUTO ============ */}
       <div style={{ marginTop: 0, padding: '0 12mm', position: 'relative', boxSizing: 'border-box' }}>
         {renderEconomicTable()}
         {renderConditions()}
 
-        {/* SEZIONE 3: ESONERO RESPONSABILITÀ */}
         <div className="mb-6">
           <h3 className={sectionTitleStyle}>3. ESONERO RESPONSABILITÀ DI MACNIL</h3>
           <div className={legalTextStyle + " space-y-2"}>
@@ -506,7 +501,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           </div>
         </div>
 
-        {/* SEZIONE 4: ALTRE NORME CONTRATTUALI */}
         <div className="mb-6">
           <h3 className={sectionTitleStyle}>4. ALTRE NORME CONTRATTUALI</h3>
           <div className={legalTextStyle + " space-y-2"}>

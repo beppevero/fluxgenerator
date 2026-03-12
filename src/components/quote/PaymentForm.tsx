@@ -1,8 +1,8 @@
+import { useState, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CreditCard, FileText, Clock, CalendarDays, Zap } from "lucide-react";
+import { CreditCard, FileText, Clock, CalendarDays, Zap, ChevronLeft, ChevronRight } from "lucide-react";
 import { PaymentInfo } from "@/types/quote";
 
 export type PresetType = "STANDARD" | "RENTRI" | "INCENTIVO" | "PA" | null;
@@ -47,39 +47,200 @@ const validitaOptions = [
   { value: "10 giorni", label: "10 giorni" },
   { value: "15 giorni", label: "15 giorni" },
   { value: "30 giorni", label: "30 giorni" },
+  { value: "data-personalizzata", label: "Personalizzata" },
 ];
 
+const MESI = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
+const GIORNI_SETTIMANA = ["Lu","Ma","Me","Gi","Ve","Sa","Do"];
+
+function MiniCalendar({ onSelect, onClose }: { onSelect: (date: string) => void; onClose: () => void }) {
+  const today = new Date();
+  const [viewYear, setViewYear] = useState(today.getFullYear());
+  const [viewMonth, setViewMonth] = useState(today.getMonth());
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+
+  const firstDayOfMonth = new Date(viewYear, viewMonth, 1).getDay();
+  const startOffset = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+  const prevMonth = () => {
+    if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y - 1); }
+    else setViewMonth(m => m - 1);
+    setSelectedDay(null);
+  };
+
+  const nextMonth = () => {
+    if (viewMonth === 11) { setViewMonth(0); setViewYear(y => y + 1); }
+    else setViewMonth(m => m + 1);
+    setSelectedDay(null);
+  };
+
+  const handleDayClick = (day: number) => {
+    const d = new Date(viewYear, viewMonth, day);
+    const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    if (d < todayMidnight) return;
+    setSelectedDay(day);
+    const gg = String(day).padStart(2, '0');
+    const mm = String(viewMonth + 1).padStart(2, '0');
+    onSelect(`${gg}.${mm}.${viewYear}`);
+  };
+
+  const isToday = (day: number) => day === today.getDate() && viewMonth === today.getMonth() && viewYear === today.getFullYear();
+  const isPast = (day: number) => {
+    const d = new Date(viewYear, viewMonth, day);
+    const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    return d < todayMidnight;
+  };
+
+  const cells = [];
+  for (let i = 0; i < startOffset; i++) cells.push(null);
+  for (let i = 1; i <= daysInMonth; i++) cells.push(i);
+
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        zIndex: 1000,
+        bottom: '100%',
+        left: 0,
+        right: 0,
+        marginBottom: '4px',
+        backgroundColor: 'rgba(15, 23, 42, 0.97)',
+        backdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255,255,255,0.15)',
+        borderRadius: '16px',
+        padding: '16px',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
+      }}
+    >
+      {/* Header mese/anno */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+        <button
+          type="button"
+          onClick={prevMonth}
+          style={{ color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', padding: '4px', borderRadius: '8px' }}
+        >
+          <ChevronLeft size={16} />
+        </button>
+        <span style={{ color: 'white', fontSize: '13px', fontWeight: 600 }}>
+          {MESI[viewMonth]} {viewYear}
+        </span>
+        <button
+          type="button"
+          onClick={nextMonth}
+          style={{ color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', padding: '4px', borderRadius: '8px' }}
+        >
+          <ChevronRight size={16} />
+        </button>
+      </div>
+
+      {/* Giorni settimana */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '2px', marginBottom: '6px' }}>
+        {GIORNI_SETTIMANA.map(g => (
+          <div key={g} style={{ textAlign: 'center', fontSize: '10px', color: 'rgba(255,255,255,0.4)', fontWeight: 600, padding: '2px 0' }}>
+            {g}
+          </div>
+        ))}
+      </div>
+
+      {/* Celle giorni */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '2px' }}>
+        {cells.map((day, idx) => (
+          <div key={idx}>
+            {day ? (
+              <button
+                type="button"
+                onClick={() => handleDayClick(day)}
+                disabled={isPast(day)}
+                style={{
+                  width: '100%',
+                  aspectRatio: '1',
+                  borderRadius: '50%',
+                  border: 'none',
+                  cursor: isPast(day) ? 'not-allowed' : 'pointer',
+                  fontSize: '12px',
+                  fontWeight: selectedDay === day ? 700 : isToday(day) ? 600 : 400,
+                  transition: 'all 0.15s ease',
+                  backgroundColor: selectedDay === day
+                    ? '#0095ff'
+                    : isToday(day)
+                    ? 'rgba(0,149,255,0.2)'
+                    : 'transparent',
+                  color: isPast(day)
+                    ? 'rgba(255,255,255,0.2)'
+                    : selectedDay === day
+                    ? 'white'
+                    : isToday(day)
+                    ? '#0095ff'
+                    : 'rgba(255,255,255,0.85)',
+                }}
+              >
+                {day}
+              </button>
+            ) : <div />}
+          </div>
+        ))}
+      </div>
+
+      {/* Pulsante chiudi */}
+      <button
+        type="button"
+        onClick={onClose}
+        style={{
+          marginTop: '12px',
+          width: '100%',
+          padding: '8px',
+          borderRadius: '10px',
+          border: '1px solid rgba(255,255,255,0.15)',
+          background: 'rgba(255,255,255,0.06)',
+          color: 'rgba(255,255,255,0.6)',
+          fontSize: '12px',
+          cursor: 'pointer',
+        }}
+      >
+        Annulla
+      </button>
+    </div>
+  );
+}
+
+const selectClassName = "w-full h-10 px-3 rounded-xl text-sm text-white border border-white/20 cursor-pointer backdrop-blur-sm outline-none focus:border-[rgba(0,149,255,0.5)] focus:shadow-[0_0_0_2px_rgba(0,149,255,0.2)]";
+const selectStyle = { backgroundColor: 'rgba(255,255,255,0.08)', transition: 'border-color 0.2s ease, box-shadow 0.2s ease' };
+
 export function PaymentForm({ paymentInfo, onChange, activePreset, onPresetChange }: PaymentFormProps) {
-  // Check if current text is a preset text (not manually written)
-  const isPresetText = (text: string) => {
-    return Object.values(PRESET_DATA).some(p => p.testo === text);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const calendarRef = useRef<HTMLDivElement>(null);
+
+  const isPresetText = (text: string) => Object.values(PRESET_DATA).some(p => p.testo === text);
+  const isCustomDate = !validitaOptions.slice(0, -1).some(o => o.value === paymentInfo.validitaOfferta);
+
+  const handleValiditaChange = (value: string) => {
+    if (value === "data-personalizzata") {
+      setShowCalendar(true);
+    } else {
+      setShowCalendar(false);
+      onChange({ ...paymentInfo, validitaOfferta: value });
+    }
+  };
+
+  const handleDateSelect = (formatted: string) => {
+    onChange({ ...paymentInfo, validitaOfferta: formatted });
+    setShowCalendar(false);
   };
 
   const handlePresetClick = (presetKey: Exclude<PresetType, null>) => {
     if (activePreset === presetKey) {
-      // Deselect: clear condizioniFornitura, reset durata to 24
       onPresetChange(null);
-      onChange({
-        ...paymentInfo,
-        condizioniFornitura: "",
-        durataContrattuale: "24",
-      });
+      onChange({ ...paymentInfo, condizioniFornitura: "", durataContrattuale: "24" });
     } else {
-      // If notes field has custom text (non-empty and not a preset), ask confirmation
       const currentText = paymentInfo.condizioniFornitura.trim();
       if (currentText && !isPresetText(currentText)) {
-        const confirmed = window.confirm(
-          "Il campo 'Condizioni di Fornitura' contiene testo personalizzato. Vuoi sovrascriverlo con il preset?"
-        );
+        const confirmed = window.confirm("Il campo 'Condizioni di Fornitura' contiene testo personalizzato. Vuoi sovrascriverlo con il preset?");
         if (!confirmed) return;
       }
       const data = PRESET_DATA[presetKey];
       onPresetChange(presetKey);
-      onChange({
-        ...paymentInfo,
-        condizioniFornitura: data.testo,
-        durataContrattuale: data.durata,
-      });
+      onChange({ ...paymentInfo, condizioniFornitura: data.testo, durataContrattuale: data.durata });
     }
   };
 
@@ -89,9 +250,8 @@ export function PaymentForm({ paymentInfo, onChange, activePreset, onPresetChang
         <CreditCard className="w-4 h-4 text-accent" />
         Condizioni e Note
       </h3>
-      
+
       <div className="space-y-4">
-        {/* Preset Buttons */}
         <div className="space-y-2">
           <Label className="flex items-center gap-2 text-foreground/90 font-medium">
             <Zap className="w-3 h-3" />
@@ -103,13 +263,11 @@ export function PaymentForm({ paymentInfo, onChange, activePreset, onPresetChang
                 key={key}
                 type="button"
                 onClick={() => handlePresetClick(key)}
-                className={`
-                  px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 border
-                  ${activePreset === key
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 border ${
+                  activePreset === key
                     ? 'bg-accent text-accent-foreground border-accent shadow-md scale-105'
                     : 'bg-white/50 text-foreground/70 border-black/8 hover:bg-white/70 hover:border-accent/40 hover:text-foreground'
-                  }
-                `}
+                }`}
               >
                 {label}
               </button>
@@ -123,20 +281,18 @@ export function PaymentForm({ paymentInfo, onChange, activePreset, onPresetChang
               <CalendarDays className="w-3 h-3" />
               Durata
             </Label>
-            <Select
+            <select
+              id="durataContrattuale"
               value={paymentInfo.durataContrattuale}
-              onValueChange={(value) => onChange({ ...paymentInfo, durataContrattuale: value })}
+              onChange={(e) => onChange({ ...paymentInfo, durataContrattuale: e.target.value })}
+              className={selectClassName}
+              style={selectStyle}
             >
-              <SelectTrigger className="glass-input">
-                <SelectValue placeholder="Mesi" />
-              </SelectTrigger>
-              <SelectContent className="bg-white border-border z-50">
-                <SelectItem value="12">12 mesi</SelectItem>
-                <SelectItem value="24">24 mesi</SelectItem>
-                <SelectItem value="36">36 mesi</SelectItem>
-                <SelectItem value="60">60 mesi</SelectItem>
-              </SelectContent>
-            </Select>
+              <option value="12" style={{ backgroundColor: '#0b1120', color: 'white' }}>12 mesi</option>
+              <option value="24" style={{ backgroundColor: '#0b1120', color: 'white' }}>24 mesi</option>
+              <option value="36" style={{ backgroundColor: '#0b1120', color: 'white' }}>36 mesi</option>
+              <option value="60" style={{ backgroundColor: '#0b1120', color: 'white' }}>60 mesi</option>
+            </select>
           </div>
 
           <div className="space-y-2">
@@ -146,36 +302,45 @@ export function PaymentForm({ paymentInfo, onChange, activePreset, onPresetChang
             </Label>
             <Input
               id="condizioniPagamento"
-              placeholder="Es: RIBA 30gg"
+              placeholder="Es: B.B.A."
               value={paymentInfo.condizioniPagamento}
               onChange={(e) => onChange({ ...paymentInfo, condizioniPagamento: e.target.value })}
               className="glass-input"
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="validitaOfferta" className="flex items-center gap-2 text-foreground/90 font-medium">
               <Clock className="w-3 h-3" />
               Validità Offerta
             </Label>
-            <Select
-              value={paymentInfo.validitaOfferta}
-              onValueChange={(value) => onChange({ ...paymentInfo, validitaOfferta: value })}
-            >
-              <SelectTrigger className="glass-input">
-                <SelectValue placeholder="Seleziona..." />
-              </SelectTrigger>
-              <SelectContent className="bg-white border-border z-50">
+            <div ref={calendarRef} style={{ position: 'relative' }}>
+              <select
+                id="validitaOfferta"
+                value={isCustomDate ? "data-personalizzata" : paymentInfo.validitaOfferta}
+                onChange={(e) => handleValiditaChange(e.target.value)}
+                className={selectClassName}
+                style={selectStyle}
+              >
                 {validitaOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
+                  <option key={option.value} value={option.value} style={{ backgroundColor: '#0b1120', color: 'white' }}>
                     {option.label}
-                  </SelectItem>
+                  </option>
                 ))}
-              </SelectContent>
-            </Select>
+              </select>
+              {isCustomDate && !showCalendar && (
+                <p className="text-xs text-accent/80 font-medium px-1 mt-1">{paymentInfo.validitaOfferta}</p>
+              )}
+              {showCalendar && (
+                <MiniCalendar
+                  onSelect={handleDateSelect}
+                  onClose={() => setShowCalendar(false)}
+                />
+              )}
+            </div>
           </div>
         </div>
-        
+
         <div className="space-y-2">
           <Label htmlFor="condizioniFornitura" className="flex items-center gap-2 text-foreground/90 font-medium">
             <FileText className="w-3 h-3" />
