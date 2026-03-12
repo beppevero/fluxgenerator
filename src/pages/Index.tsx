@@ -206,10 +206,13 @@ const Index = () => {
   }, [clientData, paymentInfo, handleExportPDF]);
 
   const handleScrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
+    const viewport = document.querySelector('#form-scroll-area [data-radix-scroll-area-viewport]');
+    console.log("Attempting to scroll. Viewport element:", viewport);
+    if (viewport) {
+      viewport.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      console.error("Scroll viewport not found!");
+    }
   };
 
   const handleLogout = async () => {
@@ -261,7 +264,7 @@ const Index = () => {
           <div className="h-full rounded-[2rem] overflow-hidden flex flex-col lg:flex-row border border-white/10 shadow-2xl bg-transparent">
             {/* Left Column: Forms */}
             <div className="flex-1 lg:max-w-[45%] border-r border-white/5 bg-black/20">
-              <ScrollArea className="h-[calc(100vh-140px)]">
+              <ScrollArea id="form-scroll-area" className="h-[calc(100vh-140px)]">
                 <div className="p-8 space-y-8">
                   <div onFocus={() => triggerScroll('client')}>
                     <ClientDataForm clientData={clientData} onChange={setClientData} />
