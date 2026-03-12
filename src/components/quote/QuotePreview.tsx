@@ -56,13 +56,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
     setDragIndex(null);
     setDragOverIndex(null);
   }, []);
-  const isModulo = clientData.documentType === 'modulo';
-  const lr = clientData.legaleRappresentante;
-  const da = clientData.datiAzienda;
-  
-  const headerRef = useRef<HTMLDivElement>(null);
-  const economicTableRef = useRef<HTMLTableElement>(null);
-  const conditionsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const scrollOptions: ScrollIntoViewOptions = { behavior: 'smooth', block: 'center' };
