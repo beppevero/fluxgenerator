@@ -24,6 +24,9 @@ const formSchema = z.object({
   password: z.string().min(1, { message: 'La password è obbligatoria' }),
 });
 
+// Lista di nomi femminili comuni in azienda
+const femaleNames = ['addolorata', 'giulia', 'antonella', 'roberta', 'cinzia', 'angelica', 'anna'];
+
 const LoginPage = () => {
   const { user, loading, login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
@@ -38,14 +41,24 @@ const LoginPage = () => {
     },
   });
 
+  const getWelcomeMessage = (name: string) => {
+    const lowerCaseName = name.toLowerCase();
+    if (femaleNames.includes(lowerCaseName)) {
+      return `Benvenuta ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+    } else if (name.toLowerCase().endsWith('a')) {
+        return `Benvenuta ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+    }
+    return `Benvenuto ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+  };
+
   const onSubmit = async (values) => {
     setAuthError(null);
     try {
       await login(values.email, values.password);
       const firstName = values.email.split('.')[0];
-      const capitalizedFirstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+      const welcomeMessage = getWelcomeMessage(firstName);
       toast({
-        title: `Benvenuto ${capitalizedFirstName}`,
+        title: welcomeMessage,
       })
     } catch (err) {
       if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
