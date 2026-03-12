@@ -130,7 +130,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
   };
 
   
-  const AUTO_MANAGED_IDS = ['carta-aziendale', 'centrale-ondemand-annuale'];
+  const AUTO_MANAGED_IDS = ['carta-aziendale'];
   const isAutoManaged = (id: string) => AUTO_MANAGED_IDS.includes(id);
 
   return (
