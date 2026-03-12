@@ -1,13 +1,15 @@
-import { forwardRef, useEffect, useRef } from "react";
-import { QuoteData } from "@/types/quote";
+import { forwardRef, useEffect, useRef, useState, useCallback } from "react";
+import { QuoteData, SelectedService } from "@/types/quote";
 import fluxLogo from "@/assets/flux-logo.png";
 import gtFleet365Logo from "@/assets/gt-fleet-365-logo.png";
 import macnilLogo from "@/assets/macnil-logo.png";
+import { GripVertical } from "lucide-react";
 
 interface QuotePreviewProps {
   quoteData: QuoteData;
   highlightServiceId?: string | null;
   activeSection?: string | null;
+  onReorderServices?: (services: SelectedService[]) => void;
 }
 
 function roundToNearestTen(value: number): number {
