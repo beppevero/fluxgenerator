@@ -534,5 +534,4 @@ export const categorieLabels: Record<string, string> = {
   software: 'Software Development',
   servizi_aggiuntivi: 'Servizi Aggiuntivi',
   centrale_operativa: 'Servizi Esterni - The Guardian',
-  accessori: 'Accessori & Servizi',
 };

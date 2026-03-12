@@ -58,7 +58,6 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
     'software',
     'servizi_aggiuntivi',
     'centrale_operativa',
-    'accessori',
   ];
 
   const groupedServices = useMemo(() => {

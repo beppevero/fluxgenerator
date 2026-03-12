@@ -176,6 +176,12 @@ const Index = () => {
               <Trash2 className="w-4 h-4" /> Pulisci
             </button>
             <button
+              disabled={!clientData.emailCliente?.trim()}
+              className={`px-5 py-2 rounded-lg bg-[#0066b3] text-white text-sm flex items-center gap-2 ${!clientData.emailCliente?.trim() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#005299]'}`}
+            >
+              <Send className="w-4 h-4" /> Invia
+            </button>
+            <button
               onClick={handleExportPDF}
               disabled={!canExport}
               className={`px-5 py-2 rounded-lg bg-[#EF4444] text-white text-sm flex items-center gap-2 ${!canExport ? 'opacity-50 cursor-not-allowed' : ''}`}
