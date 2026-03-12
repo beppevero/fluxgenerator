@@ -449,7 +449,7 @@ export const servicesList: Service[] = [
     id: 'attivazione-gt-fleet',
     nome: 'ATTIVAZIONE GT FLEET 365',
     descrizione: 'Attivazione piattaforma GT FLEET 365',
-    categoria: 'accessori',
+    categoria: 'servizi_aggiuntivi',
     prezzoListino: 80.00,
     prezzoRiservato: 50.00,
     periodo: 'U.T.',
@@ -458,7 +458,7 @@ export const servicesList: Service[] = [
     id: 'carta-aziendale',
     nome: 'CARTA AZIENDALE CRONO (25 MEZZI)',
     descrizione: 'Copia carta aziendale crono (ogni 25 mezzi)',
-    categoria: 'accessori',
+    categoria: 'servizi_aggiuntivi',
     prezzoListino: 192.00,
     prezzoRiservato: 120.00,
     periodo: 'ANNUALE',
@@ -534,5 +534,4 @@ export const categorieLabels: Record<string, string> = {
   software: 'Software Development',
   servizi_aggiuntivi: 'Servizi Aggiuntivi',
   centrale_operativa: 'Servizi Esterni - The Guardian',
-  accessori: 'Accessori & Servizi',
 };

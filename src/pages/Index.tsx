@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, X, Trash2 } from "lucide-react";
+import { FileText, X, Trash2, Send } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
@@ -174,6 +174,12 @@ const Index = () => {
           <div className="flex items-center gap-3">
             <button onClick={handleClearAll} className="px-4 py-2 rounded-lg bg-gray-200 text-gray-800 text-sm font-medium hover:bg-gray-300 flex items-center gap-2">
               <Trash2 className="w-4 h-4" /> Pulisci
+            </button>
+            <button
+              disabled={!clientData.emailCliente?.trim()}
+              className={`px-5 py-2 rounded-lg bg-[#0066b3] text-white text-sm flex items-center gap-2 ${!clientData.emailCliente?.trim() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#005299]'}`}
+            >
+              <Send className="w-4 h-4" /> Invia
             </button>
             <button
               onClick={handleExportPDF}

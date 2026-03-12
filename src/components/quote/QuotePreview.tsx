@@ -416,6 +416,15 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         }}>
           {ragioneSociale}
         </p>
+        {clientData.partitaIva && (
+          <p style={{
+            fontSize: '11pt', color: '#555', textAlign: 'center',
+            fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+            marginTop: '8px',
+          }}>
+            P.IVA {clientData.partitaIva}
+          </p>
+        )}
       </div>
 
       {/* ============ CONTENUTO ============ */}

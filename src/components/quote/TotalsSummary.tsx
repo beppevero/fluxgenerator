@@ -31,22 +31,10 @@ function AnimatedPrice({ value, smartRounding }: { value: number, smartRounding:
 export function TotalsSummary({ totals, smartRounding, onRoundingChange }: TotalsSummaryProps) {
   return (
     <div className="form-section">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="form-section-title mb-0">
-          <Calculator className="w-4 h-4 text-accent" />
-          Riepilogo Economico
-        </h3>
-        <div className="flex items-center space-x-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-          <Switch 
-            id="smart-rounding" 
-            checked={smartRounding}
-            onCheckedChange={onRoundingChange}
-          />
-          <Label htmlFor="smart-rounding" className="text-[10px] uppercase tracking-wider text-white/60 cursor-pointer">
-            Arrotondamento Chiusura
-          </Label>
-        </div>
-      </div>
+      <h3 className="form-section-title">
+        <Calculator className="w-4 h-4 text-accent" />
+        Riepilogo Economico
+      </h3>
       
       <div className="grid grid-cols-3 gap-3">
         <div className="glass-card-intense rounded-2xl p-4 text-center">
