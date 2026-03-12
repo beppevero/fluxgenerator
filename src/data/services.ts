@@ -449,7 +449,7 @@ export const servicesList: Service[] = [
     id: 'attivazione-gt-fleet',
     nome: 'ATTIVAZIONE GT FLEET 365',
     descrizione: 'Attivazione piattaforma GT FLEET 365',
-    categoria: 'accessori',
+    categoria: 'servizi_aggiuntivi',
     prezzoListino: 80.00,
     prezzoRiservato: 50.00,
     periodo: 'U.T.',
