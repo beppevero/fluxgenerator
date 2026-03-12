@@ -20,8 +20,42 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
   quoteData,
   highlightServiceId,
   activeSection,
+  onReorderServices,
 }, ref) => {
   const { clientData, paymentInfo, selectedServices, totals, smartRounding } = quoteData;
+  const isModulo = clientData.documentType === 'modulo';
+  const lr = clientData.legaleRappresentante;
+  const da = clientData.datiAzienda;
+  
+  const headerRef = useRef<HTMLDivElement>(null);
+  const economicTableRef = useRef<HTMLTableElement>(null);
+  const conditionsRef = useRef<HTMLDivElement>(null);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+
+  const handleDragStart = useCallback((idx: number) => {
+    setDragIndex(idx);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent, idx: number) => {
+    e.preventDefault();
+    setDragOverIndex(idx);
+  }, []);
+
+  const handleDrop = useCallback((idx: number) => {
+    if (dragIndex === null || dragIndex === idx || !onReorderServices) return;
+    const reordered = [...selectedServices];
+    const [moved] = reordered.splice(dragIndex, 1);
+    reordered.splice(idx, 0, moved);
+    onReorderServices(reordered);
+    setDragIndex(null);
+    setDragOverIndex(null);
+  }, [dragIndex, selectedServices, onReorderServices]);
+
+  const handleDragEnd = useCallback(() => {
+    setDragIndex(null);
+    setDragOverIndex(null);
+  }, []);
   const isModulo = clientData.documentType === 'modulo';
   const lr = clientData.legaleRappresentante;
   const da = clientData.datiAzienda;
