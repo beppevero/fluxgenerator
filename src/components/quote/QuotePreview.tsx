@@ -136,12 +136,19 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                 const isUnaTantum = service.periodo === 'U.T.';
                 const durataLabel = paymentInfo.durataContrattuale ? `${paymentInfo.durataContrattuale} mesi` : '—';
                 const isHighlighted = highlightServiceId === service.id;
+                const isDragging = dragIndex === idx;
+                const isDragOver = dragOverIndex === idx;
                 
                 return (
                   <tr 
-                    key={service.id} 
-                    className={`${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} ${isHighlighted ? 'animate-pulse bg-blue-100 ring-2 ring-primary/20' : ''}`} 
-                    style={{ pageBreakInside: 'avoid', transition: 'all 0.5s ease' }}
+                    key={service.id}
+                    draggable={!!onReorderServices}
+                    onDragStart={() => handleDragStart(idx)}
+                    onDragOver={(e) => handleDragOver(e, idx)}
+                    onDrop={() => handleDrop(idx)}
+                    onDragEnd={handleDragEnd}
+                    className={`${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} ${isHighlighted ? 'animate-pulse bg-blue-100 ring-2 ring-primary/20' : ''} ${isDragging ? 'opacity-40' : ''} ${isDragOver ? 'border-t-2 border-t-blue-500' : ''} ${onReorderServices ? 'cursor-grab active:cursor-grabbing' : ''}`} 
+                    style={{ pageBreakInside: 'avoid', transition: 'all 0.15s ease' }}
                   >
                     <td className="p-2 border border-gray-200 align-middle">
                       <div className="font-medium text-gray-900 text-[9px]">
