@@ -17,6 +17,7 @@ import { Input } from '../components/ui/input';
 import AnimatedBackground from '../components/ui/AnimatedBackground';
 import { Eye, EyeOff } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
+import { useToast } from '../components/ui/use-toast';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -27,6 +28,7 @@ const LoginPage = () => {
   const { user, loading, login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState(null);
+  const { toast } = useToast();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -40,7 +42,11 @@ const LoginPage = () => {
     setAuthError(null);
     try {
       await login(values.email, values.password);
-      // Navigation is now handled declaratively based on the `user` state
+      const firstName = values.email.split('.')[0];
+      const capitalizedFirstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+      toast({
+        title: `Benvenuto ${capitalizedFirstName}`,
+      })
     } catch (err) {
       if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
         setAuthError('Credenziali non valide. Riprova.');
@@ -50,8 +56,6 @@ const LoginPage = () => {
     }
   };
 
-  // While the auth state is being determined, show a loading screen.
-  // This prevents the login form from flashing on page load for already logged-in users.
   if (loading) {
     return (
       <div className="relative flex items-center justify-center min-h-screen">
@@ -61,12 +65,10 @@ const LoginPage = () => {
     );
   }
 
-  // If auth state is determined and the user is logged in, redirect them.
   if (user) {
     return <Navigate to="/" replace />;
   }
 
-  // If auth state is determined and there is no user, render the login form.
   return (
     <div className="relative flex items-center justify-center min-h-screen">
       <AnimatedBackground />

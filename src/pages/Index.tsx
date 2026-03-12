@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, X, Trash2, Send } from "lucide-react";
+import { FileText, X, Trash2, Send, ArrowUp, LogOut } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
@@ -11,7 +12,9 @@ import { emptyClientData } from "@/data/defaults";
 import { PresetType } from "@/components/quote/PaymentForm";
 import { MEZZI_PER_CARTA, servicesList } from "@/data/services";
 import html2pdf from "html2pdf.js";
-import AnimatedBackground from "@/components/ui/AnimatedBackground"; // Importa il nuovo sfondo
+import AnimatedBackground from "@/components/ui/AnimatedBackground";
+import { useAuth } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button";
 
 const CARTA_AZIENDALE_ID = 'carta-aziendale';
 const SHADOW_ID = 'dispositivo-shadow';
@@ -36,6 +39,8 @@ const Index = () => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const lastEditedServiceId = useRef<string | null>(null);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const triggerScroll = useCallback((section: string) => {
     if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
@@ -200,6 +205,23 @@ const Index = () => {
     handleExportPDF();
   }, [clientData, paymentInfo, handleExportPDF]);
 
+  const handleScrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error("Failed to log out: ", error);
+      // Optionally, show a toast or message to the user
+    }
+  };
+
   return (
     <div className="relative min-h-screen">
       <AnimatedBackground />
@@ -282,7 +304,32 @@ const Index = () => {
         <footer className="p-4 text-center text-[10px] text-white/20 uppercase tracking-[0.2em]">
           QUOTY &copy; 2024 • Smart Quote Generator
         </footer>
+        
       </div>
+
+        {/* Floating Action Buttons */}
+        <div className="fixed bottom-6 left-6 z-50">
+            <Button
+            onClick={handleScrollToTop}
+            variant="outline"
+            size="icon"
+            className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white rounded-full h-12 w-12"
+            >
+            <ArrowUp className="h-6 w-6" />
+            </Button>
+        </div>
+
+        <div className="fixed bottom-6 right-6 z-50">
+            <Button
+            onClick={handleLogout}
+            variant="destructive"
+            size="icon"
+            className="bg-red-500/80 backdrop-blur-sm hover:bg-red-500/90 text-white rounded-full h-12 w-12"
+            >
+            <LogOut className="h-6 w-6" />
+            </Button>
+        </div>
+
     </div>
   );
 };
