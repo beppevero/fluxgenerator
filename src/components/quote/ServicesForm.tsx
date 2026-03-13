@@ -3,6 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { ListChecks, Info, Search, Check, Lock } from "lucide-react";
 import { Service, SelectedService } from "@/types/quote";
 import { servicesList, categorieLabels } from "@/data/services";
