@@ -201,7 +201,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
 
   // ─── Shared: Conditions ───
   const renderConditions = () => (
-    <div ref={conditionsRef} className={`mb-6 transition-all duration-500 rounded-lg p-2 ${activeSection === 'payment' ? 'ring-4 ring-primary/10 bg-blue-50/30' : ''}`}>
+    <div ref={conditionsRef} className={`mb-6 transition-all duration-500 rounded-lg p-2 ${activeSection === 'payment' ? 'ring-4 ring-primary/10 bg-blue-50/30' : ''}`} style={{ pageBreakInside: 'avoid' }}> {/* Titolo + condizioni insieme: evita titolo isolato */}
       <h3 className={sectionTitleStyle}>2. CONDIZIONI DI FORNITURA</h3>
       <div className="border border-gray-200 rounded p-3 min-h-[80px]">
         {paymentInfo.condizioniPagamento || paymentInfo.validitaOfferta || paymentInfo.condizioniFornitura || paymentInfo.durataContrattuale ? (
@@ -471,7 +471,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         {renderEconomicTable()}
         {renderConditions()}
 
-        <div className="mb-6">
+        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}> {/* Sezione 3: titolo + contenuto non separati */}
           <h3 className={sectionTitleStyle}>3. ESONERO RESPONSABILITÀ DI MACNIL</h3>
           <div className={legalTextStyle + " space-y-2"}>
             <p>Premesso che il prodotto installato sul mezzo dell'Abbonato è adibito esclusivamente alla registrazione ed all'invio di dati verso la piattaforma telematica MACNIL e/o all'invio di notifiche di allarme per tentativo di furto (se previsto) o effrazione verso la piattaforma software di centrale operativa (se previsto), resta inteso che né MACNIL, né soggetti ad essa collegati e/o da questa incaricati saranno ritenuti responsabili, se non per documentate ipotesi di dolo o colpa grave, per:</p>
@@ -501,7 +501,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           </div>
         </div>
 
-        <div className="mb-6">
+        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}> {/* Sezione 4: titolo + contenuto non separati */}
           <h3 className={sectionTitleStyle}>4. ALTRE NORME CONTRATTUALI</h3>
           <div className={legalTextStyle + " space-y-2"}>
             <p>Il Contratto avrà la durata stabilita a decorrere dall'accettazione da parte del cliente intendendosi per tale la consegna del Dispositivo di Bordo al Richiedente. Alla scadenza il Contratto si intenderà tacitamente rinnovato, e così per le successive scadenze, salvo disdetta di una delle Parti da comunicarsi per iscritto, con un preavviso di almeno 30 giorni rispetto alla scadenza, mediante raccomandata A/R.</p>
