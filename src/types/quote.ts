@@ -57,6 +57,7 @@ export interface SelectedService extends Service {
   quantita: number;
   prezzoUnitario: number;
   customTitle?: string;
+  customDescription?: string;
 }
 
 export interface QuoteData {

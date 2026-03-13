@@ -3,6 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { ListChecks, Info, Search, Check, Lock } from "lucide-react";
 import { Service, SelectedService } from "@/types/quote";
 import { servicesList, categorieLabels } from "@/data/services";
@@ -111,9 +112,14 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
   };
 
   const updatePrezzoUnitario = (serviceId: string, prezzo: number) => {
-    onChange(selectedServices.map(s => 
-      s.id === serviceId ? { ...s, prezzoUnitario: prezzo } : s
-    ));
+    onChange(selectedServices.map(s => {
+      if (s.id !== serviceId) return s;
+      // Per software-development e custom-service, calcola prezzoListino come +60%
+      if (s.id === 'software-development' || s.id === 'custom-service') {
+        return { ...s, prezzoUnitario: prezzo, prezzoListino: Math.round(prezzo * 1.6 * 100) / 100 };
+      }
+      return { ...s, prezzoUnitario: prezzo };
+    }));
   };
 
   const formatPrice = (price: number) => 
@@ -265,7 +271,10 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                           </div>
                           <div className="flex flex-wrap items-center gap-2 mt-1.5">
                             <span className="text-xs text-muted-foreground">
-                              Listino: {formatPrice(service.prezzoListino)}
+                              Listino: {(() => {
+                                const listino = selected?.prezzoListino ?? service.prezzoListino;
+                                return listino === 0 ? '—' : formatPrice(listino);
+                              })()}
                             </span>
                             <span className="text-xs font-medium text-accent">
                               Riservato: {formatPrice(service.prezzoRiservato)}
@@ -276,6 +285,23 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                           </div>
                         </div>
                       </div>
+                      
+                      {/* Descrizione personalizzata per servizio custom */}
+                      {service.id === 'custom-service' && isChecked && selected && (
+                        <div className="mt-2">
+                          <Textarea
+                            placeholder="Descrizione del servizio personalizzato..."
+                            value={selected.customDescription || ""}
+                            onChange={(e) => {
+                              onChange(selectedServices.map(s => 
+                                s.id === service.id ? { ...s, customDescription: e.target.value } : s
+                              ));
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-sm glass-input min-h-[60px]"
+                          />
+                        </div>
+                      )}
                       
                       {/* Campi editabili quando selezionato */}
                       {isChecked && selected && (
