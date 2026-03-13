@@ -183,3 +183,26 @@
     animation: spin-slow 3s linear infinite;
   }
 }
+
+/* MODIFIED START */
+@keyframes sonner-fade-in {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sonner-fade-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-12px); }
+}
+
+@keyframes satellite-bob {
+  0%, 100% { transform: translateY(-2px); }
+  50% { transform: translateY(2px); }
+}
+
+@keyframes radio-waves {
+  0%, 100% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 1; }
+  80% { transform: scale(1); }
+}
+/* MODIFIED END */

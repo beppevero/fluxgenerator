@@ -1,5 +1,4 @@
 
-import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -14,8 +13,16 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
+      <Sonner
+        toastOptions={{
+          classNames: {
+            toast:
+              'bg-black/20 backdrop-blur-lg border border-white/10 shadow-lg rounded-xl text-foreground [&[data-state=opening]]:animate-[sonner-fade-in_400ms_cubic-bezier(0.16,1,0.3,1)] [&[data-state=closing]]:animate-[sonner-fade-out_300ms_ease-in_forwards]',
+            title: 'text-foreground font-semibold',
+            description: 'text-muted-foreground',
+          },
+        }}
+      />
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
