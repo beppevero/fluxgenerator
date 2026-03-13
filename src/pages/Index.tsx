@@ -36,6 +36,7 @@ const Index = () => {
   const [selectedServices, setSelectedServices] = useState<SelectedService[]>([]);
   const [activePreset, setActivePreset] = useState<PresetType>(null);
   const [smartRounding, setSmartRounding] = useState(false);
+  const [showTotals, setShowTotals] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const lastEditedServiceId = useRef<string | null>(null);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -128,7 +129,7 @@ const Index = () => {
     return { mensile, annuale, unaTantum, carteAziendaSuggerite };
   }, [selectedServices]);
 
-  const quoteData: QuoteData = { clientData, paymentInfo, selectedServices, totals, smartRounding };
+  const quoteData: QuoteData = { clientData, paymentInfo, selectedServices, totals, smartRounding, showTotals };
   const canExport = clientData.ragioneSociale.trim().length > 0 && selectedServices.length > 0;
 
   const handleExportPDF = useCallback(() => {
@@ -270,7 +271,14 @@ const Index = () => {
                     <ClientDataForm clientData={clientData} onChange={setClientData} />
                   </div>
                   <div onFocus={() => triggerScroll('payment')} onClick={() => triggerScroll('payment')}>
-                    <PaymentForm paymentInfo={paymentInfo} onChange={setPaymentInfo} activePreset={activePreset} onPresetChange={(p) => { setActivePreset(p); triggerScroll('payment'); }} />
+                    <PaymentForm 
+                      paymentInfo={paymentInfo} 
+                      onChange={setPaymentInfo} 
+                      activePreset={activePreset} 
+                      onPresetChange={(p) => { setActivePreset(p); triggerScroll('payment'); }}
+                      showTotals={showTotals}
+                      onShowTotalsChange={setShowTotals}
+                    />
                   </div>
                   <div onFocus={() => triggerScroll('services')} onClick={() => triggerScroll('services')}>
                     <ServicesForm selectedServices={selectedServices} onChange={handleServicesChange} />
