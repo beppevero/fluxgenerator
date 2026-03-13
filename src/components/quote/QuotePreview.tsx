@@ -201,7 +201,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
 
   // ─── Shared: Conditions ───
   const renderConditions = () => (
-    <div ref={conditionsRef} className={`mb-6 transition-all duration-500 rounded-lg p-2 ${activeSection === 'payment' ? 'ring-4 ring-primary/10 bg-blue-50/30' : ''}`}>
+    <div ref={conditionsRef} className={`mb-6 transition-all duration-500 rounded-lg p-2 ${activeSection === 'payment' ? 'ring-4 ring-primary/10 bg-blue-50/30' : ''}`} style={{ pageBreakInside: 'avoid' }}> {/* Titolo + condizioni insieme: evita titolo isolato */}
       <h3 className={sectionTitleStyle}>2. CONDIZIONI DI FORNITURA</h3>
       <div className="border border-gray-200 rounded p-3 min-h-[80px]">
         {paymentInfo.condizioniPagamento || paymentInfo.validitaOfferta || paymentInfo.condizioniFornitura || paymentInfo.durataContrattuale ? (
