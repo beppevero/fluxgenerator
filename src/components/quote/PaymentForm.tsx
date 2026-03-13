@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { CreditCard, FileText, Clock, CalendarDays, Zap, ChevronLeft, ChevronRight } from "lucide-react";
 import { PaymentInfo } from "@/types/quote";
@@ -12,6 +13,8 @@ interface PaymentFormProps {
   onChange: (info: PaymentInfo) => void;
   activePreset: PresetType;
   onPresetChange: (preset: PresetType) => void;
+  showTotals: boolean;
+  onShowTotalsChange: (show: boolean) => void;
 }
 
 const PRESET_DATA: Record<Exclude<PresetType, null>, { testo: string; durata: string }> = {
@@ -207,7 +210,7 @@ function MiniCalendar({ onSelect, onClose }: { onSelect: (date: string) => void;
 const selectClassName = "w-full h-10 px-3 rounded-xl text-sm text-white border border-white/20 cursor-pointer backdrop-blur-sm outline-none focus:border-[rgba(0,149,255,0.5)] focus:shadow-[0_0_0_2px_rgba(0,149,255,0.2)]";
 const selectStyle = { backgroundColor: 'rgba(255,255,255,0.08)', transition: 'border-color 0.2s ease, box-shadow 0.2s ease' };
 
-export function PaymentForm({ paymentInfo, onChange, activePreset, onPresetChange }: PaymentFormProps) {
+export function PaymentForm({ paymentInfo, onChange, activePreset, onPresetChange, showTotals, onShowTotalsChange }: PaymentFormProps) {
   const [showCalendar, setShowCalendar] = useState(false);
   const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -246,10 +249,22 @@ export function PaymentForm({ paymentInfo, onChange, activePreset, onPresetChang
 
   return (
     <div className="form-section">
-      <h3 className="form-section-title">
-        <CreditCard className="w-4 h-4 text-accent" />
-        Condizioni e Note
-      </h3>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="form-section-title !mb-0">
+          <CreditCard className="w-4 h-4 text-accent" />
+          Condizioni e Note
+        </h3>
+        <div className="flex items-center gap-2">
+          <Label htmlFor="show-totals-toggle" className="text-sm font-medium text-foreground/80 cursor-pointer">
+            Mostra totali nel PDF
+          </Label>
+          <Switch
+            id="show-totals-toggle"
+            checked={showTotals}
+            onCheckedChange={onShowTotalsChange}
+          />
+        </div>
+      </div>
 
       <div className="space-y-4">
         <div className="space-y-2">
@@ -350,7 +365,12 @@ export function PaymentForm({ paymentInfo, onChange, activePreset, onPresetChang
             id="condizioniFornitura"
             placeholder="Inserisci note logistiche e clausole contrattuali estese..."
             value={paymentInfo.condizioniFornitura}
-            onChange={(e) => onChange({ ...paymentInfo, condizioniFornitura: e.target.value })}
+            onChange={(e) => {
+              onChange({ ...paymentInfo, condizioniFornitura: e.target.value });
+              if (activePreset && PRESET_DATA[activePreset].testo !== e.target.value) {
+                onPresetChange(null);
+              }
+            }}
             rows={4}
             className="resize-none glass-input"
           />

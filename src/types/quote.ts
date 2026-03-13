@@ -65,6 +65,7 @@ export interface QuoteData {
   paymentInfo: PaymentInfo;
   selectedServices: SelectedService[];
   smartRounding: boolean;
+  showTotals: boolean;
   totals: {
     mensile: number;
     annuale: number;

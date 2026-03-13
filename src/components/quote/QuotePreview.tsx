@@ -22,7 +22,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
   activeSection,
   onReorderServices,
 }, ref) => {
-  const { clientData, paymentInfo, selectedServices, totals, smartRounding } = quoteData;
+  const { clientData, paymentInfo, selectedServices, totals, smartRounding, showTotals } = quoteData; // MODIFIED
   const isModulo = clientData.documentType === 'modulo';
   const lr = clientData.legaleRappresentante;
   const da = clientData.datiAzienda;
@@ -99,9 +99,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
   const calculateExpiryDate = () => {
     const validita = paymentInfo.validitaOfferta;
     if (!validita) return "";
-    // Se è già una data formattata (gg.mm.aaaa) restituiscila direttamente
     if (/^\d{2}\.\d{2}\.\d{4}$/.test(validita)) return validita;
-    // Altrimenti calcola dalla durata in giorni
     const daysMatch = validita.match(/^(\d+)/);
     if (!daysMatch) return validita;
     const days = parseInt(daysMatch[1], 10);
@@ -110,11 +108,58 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
     return `${String(expiryDate.getDate()).padStart(2, '0')}.${String(expiryDate.getMonth() + 1).padStart(2, '0')}.${expiryDate.getFullYear()}`;
   };
 
+  // ADDED START: Totals calculation and rendering logic
+  const { imponibile, iva, totaleComplessivo } = (() => {
+    if (!showTotals) return { imponibile: 0, iva: 0, totaleComplessivo: 0 };
+
+    const imp = selectedServices.reduce((acc, service) => {
+      const { prezzoUnitario, quantita, periodo } = service;
+      if (periodo === 'MENSILE') {
+        return acc + (prezzoUnitario * quantita * 2);
+      }
+      if (periodo === 'ANNUALE' || periodo === 'U.T.') {
+        return acc + (prezzoUnitario * quantita);
+      }
+      return acc;
+    }, 0);
+
+    const tax = imp * 0.22;
+    const total = imp + tax;
+
+    return { imponibile: imp, iva: tax, totaleComplessivo: total };
+  })();
+
+  const formatTotalCurrency = (price: number) => {
+    return new Intl.NumberFormat("it-IT", {
+      style: "currency",
+      currency: "EUR"
+    }).format(price);
+  };
+
+  const renderTotalsBlock = () => (
+    <div style={{ pageBreakInside: 'avoid', marginTop: '12px' }}>
+      <div style={{ width: '45%', marginLeft: 'auto', fontSize: '10px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '4px' }}>
+          <span>Imponibile</span>
+          <span>{formatTotalCurrency(imponibile)}</span>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '4px' }}>
+          <span>IVA (22%)</span>
+          <span>{formatTotalCurrency(iva)}</span>
+        </div>
+        <div style={{ borderTop: '0.5px solid #aaaaaa', paddingTop: '4px', marginTop: '4px', display: 'flex', justifyContent: 'space-between', fontWeight: 'bold' }}>
+          <span>Totale Complessivo</span>
+          <span>{formatTotalCurrency(totaleComplessivo)}</span>
+        </div>
+      </div>
+    </div>
+  );
+  // ADDED END
+
   const ragioneSociale = clientData.ragioneSociale || "RAGIONE SOCIALE AZIENDA";
   const sectionTitleStyle = "text-sm font-bold text-[#0066b3] mb-3";
   const legalTextStyle = "text-[10px] text-gray-600 leading-relaxed pdf-text-flow";
 
-  // ─── Shared: Economic Table ───
   const renderEconomicTable = () => (
     <div className="mb-6">
       <h3 className={sectionTitleStyle}>
@@ -190,6 +235,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           <p className="text-[10px] text-gray-600 italic mt-2">
             Nota: L'installazione dei dispositivi è a carico del cliente.
           </p>
+          {showTotals && renderTotalsBlock()} {/* ADDED */}
         </>
       ) : (
         <div className="text-center py-8 text-gray-400 border-2 border-dashed border-gray-200 rounded">
@@ -199,9 +245,8 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
     </div>
   );
 
-  // ─── Shared: Conditions ───
   const renderConditions = () => (
-    <div ref={conditionsRef} className={`mb-6 transition-all duration-500 rounded-lg p-2 ${activeSection === 'payment' ? 'ring-4 ring-primary/10 bg-blue-50/30' : ''}`} style={{ pageBreakInside: 'avoid' }}> {/* Titolo + condizioni insieme: evita titolo isolato */}
+    <div ref={conditionsRef} className={`mb-6 transition-all duration-500 rounded-lg p-2 ${activeSection === 'payment' ? 'ring-4 ring-primary/10 bg-blue-50/30' : ''}`} style={{ pageBreakInside: 'avoid' }}>
       <h3 className={sectionTitleStyle}>2. CONDIZIONI DI FORNITURA</h3>
       <div className="border border-gray-200 rounded p-3 min-h-[80px]">
         {paymentInfo.condizioniPagamento || paymentInfo.validitaOfferta || paymentInfo.condizioniFornitura || paymentInfo.durataContrattuale ? (
@@ -245,7 +290,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
     </div>
   );
 
-  // ─── Standard: Date + Signatures ───
   const renderStandardSignatures = () => (
     <>
       <div className="mb-6 text-[11px]">
@@ -287,7 +331,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
     </>
   );
 
-  // ─── Modulo: Triple Signature Block ───
   const renderModuloSignatures = () => (
     <div style={{ pageBreakInside: 'avoid' }}>
       <div className="mb-5 p-3 border border-gray-200 rounded bg-gray-50">
@@ -361,7 +404,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
     </div>
   );
 
-  // ─── Modulo: Representative Data Block ───
   const renderModuloHeader = () => {
     const nomeCompleto = [lr.nome, lr.cognome].filter(Boolean).join(' ') || '_______________';
     const luogoNascita = lr.luogoDiNascita || '_______________';
@@ -390,7 +432,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
     );
   };
 
-  // ═══════ RENDER ═══════
   if (isModulo) {
     return (
       <div ref={ref} className="bg-white text-gray-900 min-h-full" style={{
@@ -416,7 +457,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
     );
   }
 
-  // ═══════ STANDARD ═══════
   return (
     <div ref={ref} className="bg-white text-gray-900 min-h-full" style={{
       fontFamily: 'Arial, Helvetica, sans-serif',
@@ -471,7 +511,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         {renderEconomicTable()}
         {renderConditions()}
 
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}> {/* Sezione 3: titolo + contenuto non separati */}
+        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
           <h3 className={sectionTitleStyle}>3. ESONERO RESPONSABILITÀ DI MACNIL</h3>
           <div className={legalTextStyle + " space-y-2"}>
             <p>Premesso che il prodotto installato sul mezzo dell'Abbonato è adibito esclusivamente alla registrazione ed all'invio di dati verso la piattaforma telematica MACNIL e/o all'invio di notifiche di allarme per tentativo di furto (se previsto) o effrazione verso la piattaforma software di centrale operativa (se previsto), resta inteso che né MACNIL, né soggetti ad essa collegati e/o da questa incaricati saranno ritenuti responsabili, se non per documentate ipotesi di dolo o colpa grave, per:</p>
@@ -501,7 +541,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           </div>
         </div>
 
-        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}> {/* Sezione 4: titolo + contenuto non separati */}
+        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}>
           <h3 className={sectionTitleStyle}>4. ALTRE NORME CONTRATTUALI</h3>
           <div className={legalTextStyle + " space-y-2"}>
             <p>Il Contratto avrà la durata stabilita a decorrere dall'accettazione da parte del cliente intendendosi per tale la consegna del Dispositivo di Bordo al Richiedente. Alla scadenza il Contratto si intenderà tacitamente rinnovato, e così per le successive scadenze, salvo disdetta di una delle Parti da comunicarsi per iscritto, con un preavviso di almeno 30 giorni rispetto alla scadenza, mediante raccomandata A/R.</p>
