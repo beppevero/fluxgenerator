@@ -271,7 +271,10 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                           </div>
                           <div className="flex flex-wrap items-center gap-2 mt-1.5">
                             <span className="text-xs text-muted-foreground">
-                              Listino: {service.prezzoListino === 0 ? '—' : formatPrice(service.prezzoListino)}
+                              Listino: {(() => {
+                                const listino = selected?.prezzoListino ?? service.prezzoListino;
+                                return listino === 0 ? '—' : formatPrice(listino);
+                              })()}
                             </span>
                             <span className="text-xs font-medium text-accent">
                               Riservato: {formatPrice(service.prezzoRiservato)}
