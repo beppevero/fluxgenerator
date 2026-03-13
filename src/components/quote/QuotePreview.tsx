@@ -116,7 +116,9 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
 
   // ─── Shared: Economic Table ───
   const renderEconomicTable = () => (
-    <div className="mb-6">
+    <div className="mb-6" style={{ pageBreakInside: 'auto' }}>
+      {/* Titolo + header tabella insieme: evita titolo isolato a fondo pagina */}
+      <div style={{ pageBreakInside: 'avoid' }}>
       <h3 className={sectionTitleStyle}>
         1. VALORIZZAZIONE ECONOMICA DELLA FORNITURA GT FLEET 365
       </h3>
