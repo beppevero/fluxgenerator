@@ -5,9 +5,9 @@ import { auth } from '../firebase';
 
 // Create a context with a sensible default value to avoid null checks
 const AuthContext = createContext({
-  user: null,
+  user: null as any,
   loading: true,
-  login: async (email, password) => {},
+  login: async (_email: any, _password: any): Promise<any> => {},
   logout: async () => {},
 });
 

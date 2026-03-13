@@ -501,7 +501,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
           </div>
         </div>
 
-        <div className="mb-6">
+        <div className="mb-6" style={{ pageBreakInside: 'avoid' }}> {/* Sezione 4: titolo + contenuto non separati */}
           <h3 className={sectionTitleStyle}>4. ALTRE NORME CONTRATTUALI</h3>
           <div className={legalTextStyle + " space-y-2"}>
             <p>Il Contratto avrà la durata stabilita a decorrere dall'accettazione da parte del cliente intendendosi per tale la consegna del Dispositivo di Bordo al Richiedente. Alla scadenza il Contratto si intenderà tacitamente rinnovato, e così per le successive scadenze, salvo disdetta di una delle Parti da comunicarsi per iscritto, con un preavviso di almeno 30 giorni rispetto alla scadenza, mediante raccomandata A/R.</p>
