@@ -174,7 +174,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                     <td className="p-2 border border-gray-200 text-center font-medium align-middle">{service.quantita}</td>
                     <td className="p-2 border border-gray-200 text-center align-middle">{!isUnaTantum ? durataLabel : '—'}</td>
                     <td className="p-2 border border-gray-200 text-right align-middle">
-                      <span className="text-gray-600">{formatPrice(service.prezzoListino)}</span>
+                      <span className="text-gray-600">{service.prezzoListino === 0 ? '—' : formatPrice(service.prezzoListino)}</span>
                     </td>
                     <td className="p-2 border border-gray-200 text-right align-middle">
                       {!isUnaTantum ? <span className="font-semibold">{formatPrice(service.prezzoUnitario)}</span> : '—'}
