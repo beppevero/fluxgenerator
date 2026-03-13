@@ -111,9 +111,14 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
   };
 
   const updatePrezzoUnitario = (serviceId: string, prezzo: number) => {
-    onChange(selectedServices.map(s => 
-      s.id === serviceId ? { ...s, prezzoUnitario: prezzo } : s
-    ));
+    onChange(selectedServices.map(s => {
+      if (s.id !== serviceId) return s;
+      // Per software-development e custom-service, calcola prezzoListino come +60%
+      if (s.id === 'software-development' || s.id === 'custom-service') {
+        return { ...s, prezzoUnitario: prezzo, prezzoListino: Math.round(prezzo * 1.6 * 100) / 100 };
+      }
+      return { ...s, prezzoUnitario: prezzo };
+    }));
   };
 
   const formatPrice = (price: number) => 
