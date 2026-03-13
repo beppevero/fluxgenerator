@@ -283,6 +283,23 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                         </div>
                       </div>
                       
+                      {/* Descrizione personalizzata per servizio custom */}
+                      {service.id === 'custom-service' && isChecked && selected && (
+                        <div className="mt-2">
+                          <Textarea
+                            placeholder="Descrizione del servizio personalizzato..."
+                            value={selected.customDescription || ""}
+                            onChange={(e) => {
+                              onChange(selectedServices.map(s => 
+                                s.id === service.id ? { ...s, customDescription: e.target.value } : s
+                              ));
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-sm glass-input min-h-[60px]"
+                          />
+                        </div>
+                      )}
+                      
                       {/* Campi editabili quando selezionato */}
                       {isChecked && selected && (
                         <div className="mt-3 pt-3 border-t border-border/20 grid grid-cols-3 gap-3">
