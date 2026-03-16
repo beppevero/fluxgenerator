@@ -1,13 +1,14 @@
+
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, X, Trash2, Send, ArrowUp, LogOut } from "lucide-react";
+import { FileText, Trash2, Send, ArrowUp, LogOut, Archive } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
 import { QuotePreview } from "@/components/quote/QuotePreview";
 import { TotalsSummary } from "@/components/quote/TotalsSummary";
-import { ClientData, PaymentInfo, SelectedService, QuoteData } from "@/types/quote";
+import { ClientData, PaymentInfo, SelectedService, QuoteData, Offerta } from "@/types/quote";
 import { emptyClientData } from "@/data/defaults";
 import { PresetType } from "@/components/quote/PaymentForm";
 import { MEZZI_PER_CARTA, servicesList } from "@/data/services";
@@ -15,6 +16,9 @@ import html2pdf from "html2pdf.js";
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
+import { Timestamp } from "firebase/firestore";
+import { toast } from "sonner";
+import { saveOfferta, updateOfferta, uploadPDF } from "@/firebase";
 
 const CARTA_AZIENDALE_ID = 'carta-aziendale';
 const SHADOW_ID = 'dispositivo-shadow';
@@ -40,8 +44,33 @@ const Index = () => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const lastEditedServiceId = useRef<string | null>(null);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const [offertaCorrenteId, setOffertaCorrenteId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (location.state && location.state.offertaDaRiaprire) {
+      const offerta: Offerta = location.state.offertaDaRiaprire;
+      setClientData(prev => ({
+        ...prev,
+        ragioneSociale: offerta.cliente.azienda,
+        nomeReferente: offerta.cliente.nome,
+        emailCliente: offerta.cliente.email,
+        mezziTrattativa: offerta.cliente.nMezzi.toString(),
+      }));
+      setPaymentInfo({
+        condizioniPagamento: offerta.condizioni.pagamento,
+        validitaOfferta: offerta.condizioni.validitaOfferta,
+        durataContrattuale: offerta.condizioni.durata,
+        condizioniFornitura: offerta.condizioni.note,
+      });
+      setSelectedServices(offerta.servizi);
+      setActivePreset(offerta.condizioni.preset as PresetType);
+      setOffertaCorrenteId(null);
+    }
+  }, [location.state]);
 
   const triggerScroll = useCallback((section: string) => {
     if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
@@ -52,12 +81,10 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    let updated = [...selectedServices];
+    const updated = [...selectedServices];
     let changed = false;
 
-    const cronoMezzi = updated
-      .filter(isCronoTrigger)
-      .reduce((sum, s) => sum + s.quantita, 0);
+    const cronoMezzi = updated.filter(isCronoTrigger).reduce((sum, s) => sum + s.quantita, 0);
     const carteNeeded = cronoMezzi > 0 ? Math.ceil(cronoMezzi / MEZZI_PER_CARTA) : 0;
     const cartaIdx = updated.findIndex(s => s.id === CARTA_AZIENDALE_ID);
 
@@ -132,7 +159,48 @@ const Index = () => {
   const quoteData: QuoteData = { clientData, paymentInfo, selectedServices, totals, smartRounding, showTotals };
   const canExport = clientData.ragioneSociale.trim().length > 0 && selectedServices.length > 0;
 
-  const handleExportPDF = useCallback(() => {
+  const saveOrUpdateOfferta = async (stato: 'bozza' | 'inviata', pdfBlob: Blob) => {
+    if (!user) return;
+
+    const pdfUrl = await uploadPDF(pdfBlob, user.uid, clientData.ragioneSociale.trim());
+
+    const dataCreazione = Timestamp.now();
+    const validitaGiorni = parseInt(paymentInfo.validitaOfferta) || 30;
+    const dataScadenza = new Date(dataCreazione.toDate());
+    dataScadenza.setDate(dataScadenza.getDate() + validitaGiorni);
+
+    const offertaData: Omit<Offerta, 'id'> = {
+      uid: user.uid,
+      cliente: {
+        nome: clientData.nomeReferente,
+        email: clientData.emailCliente,
+        azienda: clientData.ragioneSociale,
+        nMezzi: parseInt(clientData.mezziTrattativa) || 0
+      },
+      servizi: selectedServices,
+      condizioni: {
+        durata: paymentInfo.durataContrattuale,
+        pagamento: paymentInfo.condizioniPagamento,
+        validitaOfferta: paymentInfo.validitaOfferta,
+        note: paymentInfo.condizioniFornitura,
+        preset: activePreset || ''
+      },
+      totale: showTotals ? totals.annuale + totals.mensile * 12 + totals.unaTantum : 0,
+      dataCreazione: dataCreazione,
+      dataScadenza: Timestamp.fromDate(dataScadenza),
+      stato,
+      pdfUrl
+    };
+
+    if (offertaCorrenteId) {
+      await updateOfferta(offertaCorrenteId, { ...offertaData });
+    } else {
+      const newId = await saveOfferta(offertaData);
+      setOffertaCorrenteId(newId);
+    }
+  };
+
+  const handleExportPDF = useCallback(async (isSending: boolean = false) => {
     if (!previewRef.current || !canExport) return;
     const element = previewRef.current;
     const nomeAzienda = clientData.ragioneSociale.trim() || "Cliente";
@@ -155,10 +223,25 @@ const Index = () => {
       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" as const },
       pagebreak: { mode: ['css', 'legacy'] }
     };
-    html2pdf().set(opt).from(element).save().then(() => {
-      previewOnlyElements.forEach(el => (el as HTMLElement).style.display = '');
-    });
-  }, [clientData.ragioneSociale, canExport, clientData.documentType]);
+
+    const pdfBlob = await html2pdf().set(opt).from(element).output('blob');
+
+    if (!isSending) {
+      const url = URL.createObjectURL(pdfBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    }
+
+    await saveOrUpdateOfferta(isSending ? 'inviata' : 'bozza', pdfBlob);
+    toast.success(isSending ? "Offerta inviata e salvata nell'archivio" : "Offerta salvata nell'archivio");
+
+    previewOnlyElements.forEach(el => (el as HTMLElement).style.display = '');
+  }, [clientData, paymentInfo, selectedServices, canExport, offertaCorrenteId, user, activePreset, showTotals, totals]);
 
   const handleClearAll = useCallback(() => {
     setClientData({ ...emptyClientData });
@@ -171,6 +254,7 @@ const Index = () => {
     setSelectedServices([]);
     setActivePreset(null);
     lastEditedServiceId.current = null;
+    setOffertaCorrenteId(null);
   }, []);
 
   const handleSend = useCallback(() => {
@@ -203,12 +287,11 @@ const Index = () => {
     const oggetto = `Proposta Commerciale GT FLEET 365 - ${clientData.ragioneSociale}`;
     const mailtoLink = `mailto:${clientData.emailCliente}?subject=${encodeURIComponent(oggetto)}&body=${encodeURIComponent(corpo)}`;
     window.open(mailtoLink, '_blank');
-    handleExportPDF();
+    handleExportPDF(true);
   }, [clientData, paymentInfo, handleExportPDF]);
 
   const handleScrollToTop = () => {
     const viewport = document.querySelector('#form-scroll-area [data-radix-scroll-area-viewport]');
-    console.log("Attempting to scroll. Viewport element:", viewport);
     if (viewport) {
       viewport.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
@@ -222,40 +305,43 @@ const Index = () => {
       navigate('/login');
     } catch (error) {
       console.error("Failed to log out: ", error);
-      // Optionally, show a toast or message to the user
     }
   };
+  
+  const glassButtonBaseStyle = "px-5 py-2.5 text-sm font-medium rounded-xl flex items-center justify-center gap-2 transition-all duration-200 ease-in-out shadow-lg backdrop-filter backdrop-blur-lg border hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg";
 
   return (
     <div className="relative min-h-screen">
       <AnimatedBackground />
-      
       <div className="relative z-10 max-w-[1600px] mx-auto min-h-screen flex flex-col">
-        {/* Header */}
         <header className="p-6 flex items-center justify-between bg-transparent">
           <h1 className="text-2xl font-bold text-white">QUOTY</h1>
-
-          <div className="flex items-center gap-3">
-            <button onClick={handleClearAll} className="px-4 py-2 rounded-lg bg-gray-200 text-gray-800 text-sm font-medium hover:bg-gray-300 flex items-center gap-2">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={handleClearAll}
+              className={`${glassButtonBaseStyle} bg-white/20 border-white/30 hover:bg-white/30 text-white`}
+            >
               <Trash2 className="w-4 h-4" /> Pulisci
             </button>
             <button
               onClick={handleSend}
               disabled={!clientData.emailCliente?.trim() || !clientData.mezziTrattativa?.trim()}
-              className={`px-5 py-2 rounded-lg bg-[#0066b3] text-white text-sm flex items-center gap-2 ${
-                !clientData.emailCliente?.trim() || !clientData.mezziTrattativa?.trim()
-                  ? 'opacity-50 cursor-not-allowed'
-                  : 'hover:bg-[#005299]'
-              }`}
+              className={`${glassButtonBaseStyle} bg-blue-500/50 border-blue-400/50 hover:bg-blue-500/70 text-white`}
             >
               <Send className="w-4 h-4" /> Invia
             </button>
             <button
-              onClick={handleExportPDF}
+              onClick={() => handleExportPDF(false)}
               disabled={!canExport}
-              className={`px-5 py-2 rounded-lg bg-[#EF4444] text-white text-sm flex items-center gap-2 ${!canExport ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`${glassButtonBaseStyle} bg-red-500/50 border-red-400/50 hover:bg-red-500/70 text-white`}
             >
               <FileText className="w-4 h-4" /> Esporta
+            </button>
+            <button
+              onClick={() => navigate('/archivio')}
+              className={`${glassButtonBaseStyle} bg-yellow-400/50 border-yellow-300/50 hover:bg-yellow-400/70 text-yellow-100`}
+            >
+              <Archive className="w-4 h-4" /> Archivio
             </button>
           </div>
         </header>
@@ -292,7 +378,7 @@ const Index = () => {
             <div className="flex-1 bg-black/40 relative">
               <div className="absolute inset-0 flex flex-col">
                 <div className="px-8 py-4 border-b border-white/5">
-                  {/* Spazio per la barra superiore, come richiesto */}
+                  {/* Spazio per la barra superiore */}
                 </div>
                 <div className="flex-1 overflow-hidden p-8 flex justify-center">
                   <div className="w-full max-w-[800px] h-full shadow-2xl rounded-lg overflow-hidden">
@@ -315,32 +401,30 @@ const Index = () => {
         <footer className="p-4 text-center text-[10px] text-white/20 uppercase tracking-[0.2em]">
           QUOTY &copy; 2024 • Smart Quote Generator
         </footer>
-        
       </div>
 
-        {/* Floating Action Buttons */}
-        <div className="fixed bottom-6 left-6 z-50">
-            <Button
-            onClick={handleScrollToTop}
-            variant="outline"
-            size="icon"
-            className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white rounded-full h-12 w-12"
-            >
-            <ArrowUp className="h-6 w-6" />
-            </Button>
-        </div>
+      {/* Floating Action Buttons */}
+      <div className="fixed bottom-6 left-6 z-50">
+        <Button
+          onClick={handleScrollToTop}
+          variant="outline"
+          size="icon"
+          className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white rounded-full h-12 w-12"
+        >
+          <ArrowUp className="h-6 w-6" />
+        </Button>
+      </div>
 
-        <div className="fixed bottom-6 right-6 z-50">
-            <Button
-            onClick={handleLogout}
-            variant="destructive"
-            size="icon"
-            className="bg-red-500/80 backdrop-blur-sm hover:bg-red-500/90 text-white rounded-full h-12 w-12"
-            >
-            <LogOut className="h-6 w-6" />
-            </Button>
-        </div>
-
+      <div className="fixed bottom-6 right-6 z-50">
+        <Button
+          onClick={handleLogout}
+          variant="destructive"
+          size="icon"
+          className="bg-red-500/80 backdrop-blur-sm hover:bg-red-500/90 text-white rounded-full h-12 w-12"
+        >
+          <LogOut className="h-6 w-6" />
+        </Button>
+      </div>
     </div>
   );
 };

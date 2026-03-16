@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type DocumentType = 'standard' | 'modulo';
 
 export interface LegaleRappresentante {
@@ -72,4 +74,28 @@ export interface QuoteData {
     unaTantum: number;
     carteAziendaSuggerite: number;
   };
+}
+
+export interface Offerta {
+  id?: string;
+  uid: string;
+  cliente: {
+    nome: string;
+    email: string;
+    azienda: string;
+    nMezzi: number;
+  };
+  servizi: SelectedService[];
+  condizioni: {
+    durata: string;
+    pagamento: string;
+    validitaOfferta: string;
+    note: string;
+    preset: string;
+  };
+  totale: number;
+  dataCreazione: Timestamp;
+  dataScadenza: Timestamp;
+  stato: 'bozza' | 'inviata';
+  pdfUrl: string | null;
 }
