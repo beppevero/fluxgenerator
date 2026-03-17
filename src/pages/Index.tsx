@@ -114,23 +114,18 @@ const Index = () => {
       const allOffers = await getOfferte(user.uid);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      
-      const sevenDaysFromNow = new Date(today);
-      sevenDaysFromNow.setDate(today.getDate() + 7);
 
-      const expiringToday = [];
-      const upcoming = [];
+      const expiringToday: Offerta[] = [];
 
       for (const offerta of allOffers) {
         const scadenza = offerta.dataScadenza.toDate();
         scadenza.setHours(0, 0, 0, 0);
 
-        if (scadenza.getTime() === today.getTime()) {
-          expiringToday.push(offerta);
-        }
+        const diffTime = scadenza.getTime() - today.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        if (scadenza >= today && scadenza <= sevenDaysFromNow) {
-          upcoming.push(offerta);
+        if (diffDays === 0) {
+          expiringToday.push(offerta);
         }
       }
 
@@ -141,7 +136,7 @@ const Index = () => {
       }
       
       // Badge
-      setUpcomingBadgeCount(upcoming.length);
+      setUpcomingBadgeCount(expiringToday.length);
 
       // Notifiche
       if (Notification.permission === 'granted') {

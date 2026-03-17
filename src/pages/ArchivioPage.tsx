@@ -46,12 +46,32 @@ const ArchivioPage = () => {
   const [newScadenza, setNewScadenza] = useState<Date | undefined>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [upcomingBadgeCount, setUpcomingBadgeCount] = useState(0);
 
   const fetchOfferte = useCallback(async () => {
     if (user) {
       try {
         const offerteOttenute = await getOfferte(user.uid);
         setOfferte(offerteOttenute);
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const expiringToday: Offerta[] = [];
+
+        for (const offerta of offerteOttenute) {
+          const scadenza = offerta.dataScadenza.toDate();
+          scadenza.setHours(0, 0, 0, 0);
+
+          const diffTime = scadenza.getTime() - today.getTime();
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+          if (diffDays === 0) {
+            expiringToday.push(offerta);
+          }
+        }
+        setUpcomingBadgeCount(expiringToday.length);
+
       } catch (error) {
         console.error("Errore nel recupero delle offerte: ", error);
         toast.error("Non è stato possibile caricare l'archivio.");
@@ -81,7 +101,7 @@ const ArchivioPage = () => {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) return "bg-red-700/80 hover:bg-red-700/90 border border-red-500/50";
-    if (diffDays <= 7) return "bg-yellow-600/80 hover:bg-yellow-600/90 border border-yellow-400/50";
+    if (diffDays === 0) return "bg-yellow-600/80 hover:bg-yellow-600/90 border border-yellow-400/50";
     return "bg-green-600/80 hover:bg-green-600/90 border border-green-400/50";
   };
 
