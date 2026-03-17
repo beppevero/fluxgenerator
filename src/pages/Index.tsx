@@ -2,7 +2,7 @@
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, Trash2, Send, ArrowUp, LogOut, Archive } from "lucide-react";
+import { FileText, Trash2, Send, ArrowUp, LogOut, Archive, Save } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
@@ -18,7 +18,58 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Timestamp } from "firebase/firestore";
 import { toast } from "sonner";
-import { saveOfferta, updateOfferta, uploadPDF } from "@/firebase";
+import { saveOfferta, updateOfferta } from "@/firebase";
+
+// --- Animated Toast Icons ---
+const SuccessToastIcon = () => (
+  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle 
+      cx="24" cy="24" r="22" 
+      stroke="#22C55E" stroke-width="4" 
+      stroke-dasharray="151" 
+      stroke-dashoffset="151"
+      style={{ animation: 'draw-circle 600ms ease-out forwards' }}
+    />
+    <path 
+      d="M15 24 L21 30 L33 18" 
+      stroke="white" stroke-width="4" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+      stroke-dasharray="29"
+      stroke-dashoffset="29"
+      style={{ animation: 'draw-check 400ms ease-out 400ms forwards' }}
+    />
+  </svg>
+);
+
+const ErrorToastIcon = () => (
+  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle 
+      cx="24" cy="24" r="22" 
+      stroke="#EF4444" stroke-width="4" 
+      stroke-dasharray="151" 
+      stroke-dashoffset="151"
+      style={{ animation: 'draw-circle 600ms ease-out forwards' }}
+    />
+    <path 
+      d="M16 16 L32 32" 
+      stroke="white" stroke-width="4" 
+      stroke-linecap="round" 
+      stroke-dasharray="22.6"
+      stroke-dashoffset="22.6"
+      style={{ animation: 'draw-x-first 200ms ease-out 400ms forwards' }}
+    />
+    <path 
+      d="M32 16 L16 32" 
+      stroke="white" stroke-width="4" 
+      stroke-linecap="round"
+      stroke-dasharray="22.6"
+      stroke-dashoffset="22.6"
+      style={{ animation: 'draw-x-second 200ms ease-out 400ms forwards' }}
+    />
+  </svg>
+);
+
 
 const CARTA_AZIENDALE_ID = 'carta-aziendale';
 const SHADOW_ID = 'dispositivo-shadow';
@@ -53,6 +104,8 @@ const Index = () => {
   useEffect(() => {
     if (location.state && location.state.offertaDaRiaprire) {
       const offerta: Offerta = location.state.offertaDaRiaprire;
+      const isDuplicate = location.state.isDuplicate || false;
+
       setClientData(prev => ({
         ...prev,
         ragioneSociale: offerta.cliente.azienda,
@@ -68,9 +121,16 @@ const Index = () => {
       });
       setSelectedServices(offerta.servizi);
       setActivePreset(offerta.condizioni.preset as PresetType);
-      setOffertaCorrenteId(null);
+      
+      if (isDuplicate) {
+        setOffertaCorrenteId(null);
+      } else {
+        setOffertaCorrenteId(offerta.id!);
+      }
+      // Clean up state to avoid re-triggering
+      navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [location.state]);
+  }, [location.state, navigate]);
 
   const triggerScroll = useCallback((section: string) => {
     if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
@@ -159,10 +219,8 @@ const Index = () => {
   const quoteData: QuoteData = { clientData, paymentInfo, selectedServices, totals, smartRounding, showTotals };
   const canExport = clientData.ragioneSociale.trim().length > 0 && selectedServices.length > 0;
 
-  const saveOrUpdateOfferta = async (stato: 'bozza' | 'inviata', pdfBlob: Blob) => {
-    if (!user) return;
-
-    const pdfUrl = await uploadPDF(pdfBlob, user.uid, clientData.ragioneSociale.trim());
+  const createOrUpdateOfferta = async (stato: 'bozza' | 'inviata') => {
+    if (!user) throw new Error("Utente non autenticato.");
 
     const dataCreazione = Timestamp.now();
     const validitaGiorni = parseInt(paymentInfo.validitaOfferta) || 30;
@@ -189,19 +247,26 @@ const Index = () => {
       dataCreazione: dataCreazione,
       dataScadenza: Timestamp.fromDate(dataScadenza),
       stato,
-      pdfUrl
     };
 
-    if (offertaCorrenteId) {
-      await updateOfferta(offertaCorrenteId, { ...offertaData });
-    } else {
-      const newId = await saveOfferta(offertaData);
-      setOffertaCorrenteId(newId);
+    try {
+      if (offertaCorrenteId) {
+        await updateOfferta(offertaCorrenteId, { ...offertaData });
+      } else {
+        const newId = await saveOfferta(offertaData);
+        setOffertaCorrenteId(newId);
+      }
+    } catch (error) {
+      console.error("Errore durante il salvataggio dell'offerta: ", error);
+      throw new Error("Impossibile salvare i dati dell'offerta.");
     }
   };
 
-  const handleExportPDF = useCallback(async (isSending: boolean = false) => {
-    if (!previewRef.current || !canExport) return;
+  const generatePdf = useCallback(async (options?: { download: boolean }) => {
+    if (!previewRef.current || !canExport) {
+      toast.error("Impossibile generare il PDF. Assicurati di aver compilato i campi necessari.");
+      return null;
+    }
     const element = previewRef.current;
     const nomeAzienda = clientData.ragioneSociale.trim() || "Cliente";
     const oggi = new Date();
@@ -224,24 +289,85 @@ const Index = () => {
       pagebreak: { mode: ['css', 'legacy'] }
     };
 
-    const pdfBlob = await html2pdf().set(opt).from(element).output('blob');
-
-    if (!isSending) {
-      const url = URL.createObjectURL(pdfBlob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+    if (options?.download) {
+      await html2pdf().set(opt).from(element).save();
     }
 
-    await saveOrUpdateOfferta(isSending ? 'inviata' : 'bozza', pdfBlob);
-    toast.success(isSending ? "Offerta inviata e salvata nell'archivio" : "Offerta salvata nell'archivio");
-
     previewOnlyElements.forEach(el => (el as HTMLElement).style.display = '');
-  }, [clientData, paymentInfo, selectedServices, canExport, offertaCorrenteId, user, activePreset, showTotals, totals]);
+
+  }, [clientData, canExport, previewRef]);
+
+  const handleSave = useCallback(async () => {
+    if (!canExport) return;
+    try {
+      await createOrUpdateOfferta('bozza');
+      toast.custom(() => (
+        <div className="flex items-center gap-4">
+          <SuccessToastIcon />
+          <span className="text-lg font-semibold">Proposta salvata con successo</span>
+        </div>
+      ));
+    } catch (error) {
+      console.error("Errore in handleSave: ", error);
+      toast.custom(() => (
+        <div className="flex items-center gap-4">
+          <ErrorToastIcon />
+          <span className="text-lg font-semibold">Salvataggio non riuscito</span>
+        </div>
+      ));
+    }
+  }, [createOrUpdateOfferta, canExport]);
+  
+  const handleExportPDF = useCallback(async () => {
+    try {
+      await generatePdf({ download: true });
+      await createOrUpdateOfferta('bozza');
+      toast.success("Offerta esportata e salvata come bozza.");
+
+    } catch (error) {
+      console.error("Errore in handleExportPDF: ", error);
+      toast.error((error as Error).message || "Si è verificato un errore imprevisto.");
+    }
+  }, [generatePdf, createOrUpdateOfferta]);
+
+  const handleSend = useCallback(async () => {
+    if (!clientData.emailCliente?.trim() || !clientData.mezziTrattativa?.trim()) {
+      toast.warning("Inserisci l'email del cliente e il numero di mezzi.");
+      return;
+    }
+    
+    try {
+      await createOrUpdateOfferta('inviata');
+
+      const validitaGiorni = parseInt(paymentInfo.validitaOfferta) || 30;
+      const dataScadenza = new Date();
+      dataScadenza.setDate(dataScadenza.getDate() + validitaGiorni);
+      const dataValidita = dataScadenza.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+      const nMezzi = parseInt(clientData.mezziTrattativa) || 1;
+      const mezziTesto = nMezzi === 1 ? 'mezzo' : 'mezzi';
+
+      const nome = clientData.nomeReferente?.trim();
+      const cognome = clientData.cognomeReferente?.trim();
+      const useLei = !nome && !!cognome;
+      let saluto = 'Buongiorno';
+      if (nome && cognome) saluto = `Buongiorno ${nome} ${cognome}`;
+      else if (cognome) saluto = `Buongiorno sig./sig.ra ${cognome}`;
+      else if (nome) saluto = `Buongiorno ${nome}`;
+
+      const corpo = `${saluto},\n\ncome da accordi, ${useLei ? 'Le' : 'ti'} invio la proposta commerciale calcolata su base annuale per n° ${nMezzi} ${mezziTesto}.\n\n${useLei ? 'Le' : 'Ti'} segnalo che l'offerta è valida fino al ${dataValidita} e, in caso di accettazione, il modulo d'ordine va stampato, compilato e inviato via mail.\n\nAlla lettura dell'offerta, sarebbe ottimo sentirci telefonicamente per un confronto diretto e valutare insieme ogni aspetto della proposta.\n\nResto a disposizione per qualsiasi chiarimento. A presto!`;
+
+      const oggetto = `Proposta Commerciale GT FLEET 365 - ${clientData.ragioneSociale}`;
+      const mailtoLink = `mailto:${clientData.emailCliente}?subject=${encodeURIComponent(oggetto)}&body=${encodeURIComponent(corpo)}`;
+      window.open(mailtoLink, '_blank');
+      toast.success("Offerta inviata e salvata nell'archivio");
+
+    } catch(error) {
+       console.error("Errore in handleSend: ", error);
+       toast.error((error as Error).message || "Si è verificato un errore imprevisto.");
+    }
+
+  }, [clientData, paymentInfo, createOrUpdateOfferta]);
 
   const handleClearAll = useCallback(() => {
     setClientData({ ...emptyClientData });
@@ -256,39 +382,6 @@ const Index = () => {
     lastEditedServiceId.current = null;
     setOffertaCorrenteId(null);
   }, []);
-
-  const handleSend = useCallback(() => {
-    if (!clientData.emailCliente?.trim() || !clientData.mezziTrattativa?.trim()) return;
-
-    const validitaGiorni = parseInt(paymentInfo.validitaOfferta) || 30;
-    const dataScadenza = new Date();
-    dataScadenza.setDate(dataScadenza.getDate() + validitaGiorni);
-    const gg = String(dataScadenza.getDate()).padStart(2, '0');
-    const mm = String(dataScadenza.getMonth() + 1).padStart(2, '0');
-    const aaaa = dataScadenza.getFullYear();
-    const dataValidita = `${gg}.${mm}.${aaaa}`;
-
-    const nMezzi = parseInt(clientData.mezziTrattativa) || 1;
-    const mezziTesto = nMezzi === 1 ? 'mezzo' : 'mezzi';
-
-    const nome = clientData.nomeReferente?.trim();
-    const cognome = clientData.cognomeReferente?.trim();
-    const useLei = !nome && !!cognome;
-    let saluto = '';
-    if (nome && cognome) saluto = `Buongiorno ${nome} ${cognome}`;
-    else if (cognome) saluto = `Buongiorno sig./sig.ra ${cognome}`;
-    else if (nome) saluto = `Buongiorno ${nome}`;
-    else saluto = `Buongiorno`;
-
-    const corpo = useLei
-      ? `${saluto},\n\ncome da accordi, Le invio la proposta commerciale calcolata su base annuale per n° ${nMezzi} ${mezziTesto}.\n\nLe segnalo che l'offerta è valida fino al ${dataValidita} e, in caso di accettazione, il modulo d'ordine va stampato, compilato e inviato via mail.\n\nAlla lettura dell'offerta, sarebbe ottimo sentirci telefonicamente per un confronto diretto e valutare insieme ogni aspetto della proposta.\n\nResto a disposizione per qualsiasi chiarimento. A presto!`
-      : `${saluto},\n\ncome da accordi, ti invio la proposta commerciale calcolata su base annuale per n° ${nMezzi} ${mezziTesto}.\n\nTi segnalo che l'offerta è valida fino al ${dataValidita} e, in caso di accettazione, il modulo d'ordine va stampato, compilato e inviato via mail.\n\nAlla lettura dell'offerta, sarebbe ottimo sentirci telefonicamente per un confronto diretto e valutare insieme ogni aspetto della proposta.\n\nResto a disposizione per qualsiasi chiarimento. A presto!`;
-
-    const oggetto = `Proposta Commerciale GT FLEET 365 - ${clientData.ragioneSociale}`;
-    const mailtoLink = `mailto:${clientData.emailCliente}?subject=${encodeURIComponent(oggetto)}&body=${encodeURIComponent(corpo)}`;
-    window.open(mailtoLink, '_blank');
-    handleExportPDF(true);
-  }, [clientData, paymentInfo, handleExportPDF]);
 
   const handleScrollToTop = () => {
     const viewport = document.querySelector('#form-scroll-area [data-radix-scroll-area-viewport]');
@@ -325,17 +418,24 @@ const Index = () => {
             </button>
             <button
               onClick={handleSend}
-              disabled={!clientData.emailCliente?.trim() || !clientData.mezziTrattativa?.trim()}
+              disabled={!canExport}
               className={`${glassButtonBaseStyle} bg-blue-500/50 border-blue-400/50 hover:bg-blue-500/70 text-white`}
             >
               <Send className="w-4 h-4" /> Invia
             </button>
             <button
-              onClick={() => handleExportPDF(false)}
+              onClick={handleExportPDF}
               disabled={!canExport}
               className={`${glassButtonBaseStyle} bg-red-500/50 border-red-400/50 hover:bg-red-500/70 text-white`}
             >
               <FileText className="w-4 h-4" /> Esporta
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={!canExport}
+              className={`${glassButtonBaseStyle} bg-green-500/50 border-green-400/50 hover:bg-green-500/70 text-white`}
+            >
+              <Save className="w-4 h-4" /> Salva
             </button>
             <button
               onClick={() => navigate('/archivio')}

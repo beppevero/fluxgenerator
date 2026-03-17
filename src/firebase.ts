@@ -1,17 +1,7 @@
-import { initializeApp, getApps, getApp } from "firebase/app";
+
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, Timestamp, query, where, orderBy, deleteDoc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { 
-  getFirestore, 
-  collection, 
-  addDoc, 
-  updateDoc, 
-  doc, 
-  query, 
-  where, 
-  getDocs, 
-  orderBy 
-} from "firebase/firestore";
 import { Offerta } from "./types/quote";
 
 const firebaseConfig = {
@@ -23,38 +13,36 @@ const firebaseConfig = {
   appId: "1:1057153155273:web:73901c969a2c177cd18d18"
 };
 
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const storage = getStorage(app);
 
-// Funzione per caricare il PDF su Firebase Storage
-export const uploadPDF = async (pdfBlob: Blob, uid: string, nomeCliente: string): Promise<string> => {
-  const timestamp = new Date().getTime();
-  const storageRef = ref(storage, `offerte/${uid}/${timestamp}_${nomeCliente}.pdf`);
-  await uploadBytes(storageRef, pdfBlob);
-  return getDownloadURL(storageRef);
-};
+const offerteCollection = collection(db, "offerte");
 
-// Funzione per salvare una nuova offerta su Firestore
-export const saveOfferta = async (offertaData: Omit<Offerta, 'id'>): Promise<string> => {
-  const docRef = await addDoc(collection(db, "offerte"), offertaData);
+export const saveOfferta = async (offerta: Omit<Offerta, 'id'>) => {
+  const docRef = await addDoc(offerteCollection, offerta);
   return docRef.id;
 };
 
-// Funzione per aggiornare un'offerta esistente su Firestore
-export const updateOfferta = async (offertaId: string, dataToUpdate: Partial<Offerta>): Promise<void> => {
-  const offertaRef = doc(db, "offerte", offertaId);
-  await updateDoc(offertaRef, dataToUpdate);
+export const updateOfferta = async (id: string, offerta: Partial<Offerta>) => {
+  const offertaDoc = doc(db, "offerte", id);
+  await updateDoc(offertaDoc, offerta);
 };
 
-// Funzione per recuperare le offerte di un utente
-export const getOfferteByUID = async (uid: string): Promise<Offerta[]> => {
-  const q = query(
-    collection(db, "offerte"), 
-    where("uid", "==", uid), 
-    orderBy("dataCreazione", "desc")
-  );
-  const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Offerta));
+export const getOfferte = async (uid: string): Promise<Offerta[]> => {
+  const q = query(offerteCollection, where("uid", "==", uid), orderBy("dataCreazione", "desc"));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Offerta));
+};
+
+export const deleteOfferta = async (id: string) => {
+    const offertaDoc = doc(db, "offerte", id);
+    await deleteDoc(offertaDoc);
+};
+
+export const updateDataScadenza = async (offertaId: string, nuovaData: Date) => {
+  const offertaDoc = doc(db, "offerte", offertaId);
+  await updateDoc(offertaDoc, {
+    dataScadenza: Timestamp.fromDate(nuovaData)
+  });
 };

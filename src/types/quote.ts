@@ -97,5 +97,4 @@ export interface Offerta {
   dataCreazione: Timestamp;
   dataScadenza: Timestamp;
   stato: 'bozza' | 'inviata';
-  pdfUrl: string | null;
 }
