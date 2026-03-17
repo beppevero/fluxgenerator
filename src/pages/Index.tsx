@@ -390,15 +390,14 @@ const Index = () => {
     }
   }, [generatePdf, createOrUpdateOfferta]);
 
-  const handleSend = useCallback(async () => {
+  const handleSend = useCallback(() => {
     if (!clientData.emailCliente?.trim() || !clientData.mezziTrattativa?.trim()) {
       toast.warning("Inserisci l'email del cliente e il numero di mezzi.");
       return;
     }
-    
-    try {
-      await createOrUpdateOfferta('inviata');
 
+    // --- Synchronous Part: Open Mail Client ---
+    try {
       const validitaGiorni = parseInt(paymentInfo.validitaOfferta) || 30;
       const dataScadenza = new Date();
       dataScadenza.setDate(dataScadenza.getDate() + validitaGiorni);
@@ -419,15 +418,30 @@ const Index = () => {
 
       const oggetto = `Proposta Commerciale GT FLEET 365 - ${clientData.ragioneSociale}`;
       const mailtoLink = `mailto:${clientData.emailCliente}?subject=${encodeURIComponent(oggetto)}&body=${encodeURIComponent(corpo)}`;
+      
       window.open(mailtoLink, '_blank');
-      toast.success("Offerta inviata e salvata nell'archivio");
+      toast.success("Offerta inviata! PDF in download...");
 
     } catch(error) {
-       console.error("Errore in handleSend: ", error);
-       toast.error((error as Error).message || "Si è verificato un errore imprevisto.");
+       console.error("Errore nella preparazione della mail: ", error);
+       toast.error("Impossibile aprire il client di posta.");
+       return;
     }
 
-  }, [clientData, paymentInfo, createOrUpdateOfferta]);
+    // --- Asynchronous Part: Run in Background ---
+    const runBackgroundTasks = async () => {
+        try {
+            await createOrUpdateOfferta('inviata');
+            await generatePdf({ download: true });
+        } catch (err) {
+            console.error("Errore durante le operazioni in background (invio): ", err);
+            toast.error("Errore nel salvataggio o nella generazione del PDF.");
+        }
+    };
+
+    runBackgroundTasks();
+
+  }, [clientData, paymentInfo, createOrUpdateOfferta, generatePdf]);
 
   const handleClearAll = useCallback(() => {
     setClientData({ ...emptyClientData });
