@@ -101,35 +101,51 @@ const Index = () => {
   const [offertaCorrenteId, setOffertaCorrenteId] = useState<string | null>(null);
   const [expiringOffers, setExpiringOffers] = useState<Offerta[]>([]);
   const [showExpiringBanner, setShowExpiringBanner] = useState(true);
+  const [upcomingBadgeCount, setUpcomingBadgeCount] = useState(0);
 
   useEffect(() => {
     if (!user) return;
 
-    const handleNotifications = async () => {
-      // 1. Richiesta Permessi (solo in produzione)
+    const checkOffers = async () => {
       if (import.meta.env.PROD && 'Notification' in window && Notification.permission === 'default') {
         await Notification.requestPermission();
       }
 
-      // 2. Recupero e controllo offerte
       const allOffers = await getOfferte(user.uid);
       const today = new Date();
-      const todayString = today.toISOString().split('T')[0]; // YYYY-MM-DD
+      today.setHours(0, 0, 0, 0);
+      
+      const sevenDaysFromNow = new Date(today);
+      sevenDaysFromNow.setDate(today.getDate() + 7);
 
-      const expiringToday = allOffers.filter(offerta => {
+      const expiringToday = [];
+      const upcoming = [];
+
+      for (const offerta of allOffers) {
         const scadenza = offerta.dataScadenza.toDate();
-        const scadenzaString = scadenza.toISOString().split('T')[0];
-        return scadenzaString === todayString;
-      });
+        scadenza.setHours(0, 0, 0, 0);
 
-      // 3. Aggiornamento Banner
+        if (scadenza.getTime() === today.getTime()) {
+          expiringToday.push(offerta);
+        }
+
+        if (scadenza >= today && scadenza <= sevenDaysFromNow) {
+          upcoming.push(offerta);
+        }
+      }
+
+      // Banner
       setExpiringOffers(expiringToday);
       if (expiringToday.length > 0) {
         setShowExpiringBanner(true);
       }
+      
+      // Badge
+      setUpcomingBadgeCount(upcoming.length);
 
-      // 4. Invio Notifiche (se permesso concesso)
+      // Notifiche
       if (Notification.permission === 'granted') {
+        const todayString = today.toISOString().split('T')[0];
         expiringToday.forEach(offerta => {
           const notificationKey = `notifiche_${offerta.id}_${todayString}`;
           if (!localStorage.getItem(notificationKey)) {
@@ -143,10 +159,8 @@ const Index = () => {
       }
     };
 
-    handleNotifications();
-
-  }, [user]);
-
+    checkOffers();
+  }, [user, location.state]); // Aggiorna anche al ritorno dall'archivio
 
   useEffect(() => {
     if (location.state && location.state.offertaDaRiaprire) {
@@ -174,7 +188,6 @@ const Index = () => {
       } else {
         setOffertaCorrenteId(offerta.id!);
       }
-      // Clean up state to avoid re-triggering
       navigate(location.pathname, { replace: true, state: {} });
     }
   }, [location.state, navigate]);
@@ -448,7 +461,7 @@ const Index = () => {
     }
   };
   
-  const glassButtonBaseStyle = "px-5 py-2.5 text-sm font-medium rounded-xl flex items-center justify-center gap-2 transition-all duration-200 ease-in-out shadow-lg backdrop-filter backdrop-blur-lg border hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg";
+  const glassButtonBaseStyle = "relative px-5 py-2.5 text-sm font-medium rounded-xl flex items-center justify-center gap-2 transition-all duration-200 ease-in-out shadow-lg backdrop-filter backdrop-blur-lg border hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg";
 
   return (
     <div className="relative min-h-screen">
@@ -489,6 +502,11 @@ const Index = () => {
               className={`${glassButtonBaseStyle} bg-yellow-400/50 border-yellow-300/50 hover:bg-yellow-400/70 text-yellow-100`}
             >
               <Archive className="w-4 h-4" /> Archivio
+              {upcomingBadgeCount > 0 && (
+                <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                  {upcomingBadgeCount}
+                </div>
+              )}
             </button>
           </div>
         </header>
@@ -498,7 +516,7 @@ const Index = () => {
             <div className="flex items-center gap-4">
               <AlertTriangle className="h-6 w-6 text-yellow-400" />
               <span className="font-medium">
-                ⏰ {expiringOffers.length} {expiringOffers.length === 1 ? 'offerta in' : 'offerte in'} scadenza oggi — controlla l'Archivio
+                {expiringOffers.length} {expiringOffers.length === 1 ? 'proposta in' : 'proposte in'} scadenza oggi.
               </span>
             </div>
             <div className="flex items-center gap-2">
