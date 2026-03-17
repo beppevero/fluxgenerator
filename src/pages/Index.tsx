@@ -2,7 +2,7 @@
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, Trash2, Send, ArrowUp, LogOut, Archive, Save } from "lucide-react";
+import { FileText, Trash2, Send, ArrowUp, LogOut, Archive, Save, X, AlertTriangle } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
@@ -18,7 +18,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Timestamp } from "firebase/firestore";
 import { toast } from "sonner";
-import { saveOfferta, updateOfferta } from "@/firebase";
+import { saveOfferta, updateOfferta, getOfferte } from "@/firebase";
 
 // --- Animated Toast Icons ---
 const SuccessToastIcon = () => (
@@ -70,7 +70,6 @@ const ErrorToastIcon = () => (
   </svg>
 );
 
-
 const CARTA_AZIENDALE_ID = 'carta-aziendale';
 const SHADOW_ID = 'dispositivo-shadow';
 const CENTRALE_ONDEMAND_ANNUALE_ID = 'centrale-ondemand-annuale';
@@ -100,6 +99,54 @@ const Index = () => {
   const location = useLocation();
 
   const [offertaCorrenteId, setOffertaCorrenteId] = useState<string | null>(null);
+  const [expiringOffers, setExpiringOffers] = useState<Offerta[]>([]);
+  const [showExpiringBanner, setShowExpiringBanner] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const handleNotifications = async () => {
+      // 1. Richiesta Permessi (solo in produzione)
+      if (import.meta.env.PROD && 'Notification' in window && Notification.permission === 'default') {
+        await Notification.requestPermission();
+      }
+
+      // 2. Recupero e controllo offerte
+      const allOffers = await getOfferte(user.uid);
+      const today = new Date();
+      const todayString = today.toISOString().split('T')[0]; // YYYY-MM-DD
+
+      const expiringToday = allOffers.filter(offerta => {
+        const scadenza = offerta.dataScadenza.toDate();
+        const scadenzaString = scadenza.toISOString().split('T')[0];
+        return scadenzaString === todayString;
+      });
+
+      // 3. Aggiornamento Banner
+      setExpiringOffers(expiringToday);
+      if (expiringToday.length > 0) {
+        setShowExpiringBanner(true);
+      }
+
+      // 4. Invio Notifiche (se permesso concesso)
+      if (Notification.permission === 'granted') {
+        expiringToday.forEach(offerta => {
+          const notificationKey = `notifiche_${offerta.id}_${todayString}`;
+          if (!localStorage.getItem(notificationKey)) {
+            new Notification('Quoty — Follow-up', {
+              body: `Follow-up con ${offerta.cliente.azienda} — offerta in scadenza oggi`,
+              icon: '/favicon.png'
+            });
+            localStorage.setItem(notificationKey, 'true');
+          }
+        });
+      }
+    };
+
+    handleNotifications();
+
+  }, [user]);
+
 
   useEffect(() => {
     if (location.state && location.state.offertaDaRiaprire) {
@@ -445,6 +492,21 @@ const Index = () => {
             </button>
           </div>
         </header>
+        
+        {expiringOffers.length > 0 && showExpiringBanner && (
+          <div className="mx-6 mb-4 p-4 rounded-lg bg-black/30 backdrop-blur-lg border border-yellow-500/50 text-white flex items-center justify-between shadow-lg">
+            <div className="flex items-center gap-4">
+              <AlertTriangle className="h-6 w-6 text-yellow-400" />
+              <span className="font-medium">
+                ⏰ {expiringOffers.length} {expiringOffers.length === 1 ? 'offerta in' : 'offerte in'} scadenza oggi — controlla l'Archivio
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button onClick={() => navigate('/archivio')} variant="outline" className="border-yellow-400/80 text-yellow-300 hover:bg-yellow-400/20 hover:text-yellow-200">Vai all'Archivio</Button>
+              <Button onClick={() => setShowExpiringBanner(false)} variant="ghost" size="icon"><X className="h-5 w-5" /></Button>
+            </div>
+          </div>
+        )}
 
         {/* Main Interface */}
         <main className="flex-1 p-6 pt-0 overflow-hidden">
