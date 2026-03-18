@@ -368,20 +368,10 @@ const Index = () => {
     if (!canExport) return;
     try {
       await createOrUpdateOfferta('bozza');
-      toast.custom(() => (
-        <div className="flex items-center gap-4">
-          <SuccessToastIcon />
-          <span className="text-lg font-semibold">Proposta salvata con successo</span>
-        </div>
-      ));
+      toast.success("Proposta salvata con successo.");
     } catch (error) {
       console.error("Errore in handleSave: ", error);
-      toast.custom(() => (
-        <div className="flex items-center gap-4">
-          <ErrorToastIcon />
-          <span className="text-lg font-semibold">Salvataggio non riuscito</span>
-        </div>
-      ));
+      toast.error("Salvataggio non riuscito.");
     }
   }, [createOrUpdateOfferta, canExport]);
   
@@ -389,7 +379,7 @@ const Index = () => {
     try {
       await generatePdf({ download: true });
       await createOrUpdateOfferta('bozza');
-      toast.success("Offerta esportata e salvata come bozza.");
+      toast.success("Proposta esportata e salvata come bozza.");
 
     } catch (error) {
       console.error("Errore in handleExportPDF: ", error);
@@ -437,7 +427,7 @@ const Index = () => {
       const mailtoLink = `mailto:${clientData.emailCliente}?subject=${encodeURIComponent(oggetto)}&body=${encodeURIComponent(corpo)}`;
       
       window.open(mailtoLink, '_blank');
-      toast.success("Offerta inviata! PDF in download...");
+      toast.success("Proposta inviata! PDF in download...");
 
     } catch(error) {
        console.error("Errore nella preparazione della mail: ", error);

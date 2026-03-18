@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { getOfferte, updateDataScadenza, deleteOfferta, getRevisions, saveRevision } from "../firebase";
@@ -56,7 +55,6 @@ const ArchivioPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  // Revision states
   const [revisions, setRevisions] = useState<Revision[]>([]);
   const [selectedRevision, setSelectedRevision] = useState<Revision | null>(null);
   const [isRevisionDialogOpen, setIsRevisionDialogOpen] = useState(false);
@@ -94,7 +92,6 @@ const ArchivioPage = () => {
     scadenza.setHours(0, 0, 0, 0);
     const diffTime = scadenza.getTime() - oggi.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
     if (diffDays < 0) return "bg-red-700/80 hover:bg-red-700/90 border border-red-500/50";
     if (diffDays === 0) return "bg-yellow-600/80 hover:bg-yellow-600/90 border border-yellow-400/50";
     return "bg-green-600/80 hover:bg-green-600/90 border border-green-400/50";
@@ -128,7 +125,7 @@ const ArchivioPage = () => {
     if (!offertaToDelete) return;
     try {
       await deleteOfferta(offertaToDelete.id!);
-      toast.success("Offerta eliminata con successo.");
+      toast.success("Proposta eliminata con successo.");
       fetchOfferte();
       setIsDeleteDialogOpen(false);
       setOffertaToDelete(null);
@@ -138,7 +135,16 @@ const ArchivioPage = () => {
     }
   };
 
-  const riapriOfferta = (offerta: Offerta) => {
+  // MODIFICATA: salva snapshot automatico prima di riaprire, poi naviga sempre
+  const riapriOfferta = async (offerta: Offerta) => {
+    if (offerta.id && user) {
+      try {
+        await saveRevision(offerta.id, offerta, user.uid);
+      } catch (error) {
+        console.error("Errore nel salvataggio automatico della revisione:", error);
+        toast.error("Impossibile salvare la revisione.");
+      }
+    }
     navigate("/", { state: { offertaDaRiaprire: offerta, isDuplicate: false } });
   };
 
@@ -146,28 +152,27 @@ const ArchivioPage = () => {
     navigate("/", { state: { offertaDaRiaprire: offerta, isDuplicate: true } });
   };
 
-    const handleOpenRevisions = async (offerta: Offerta) => {
+  const handleOpenRevisions = async (offerta: Offerta) => {
     if (!offerta.id) return;
     try {
-        const fetchedRevisions = await getRevisions(offerta.id);
-        setRevisions(fetchedRevisions);
-        setCurrentOffertaForRevision(offerta);
+      const fetchedRevisions = await getRevisions(offerta.id);
+      setRevisions(fetchedRevisions);
+      setCurrentOffertaForRevision(offerta);
     } catch (error) {
-        console.error("Errore nel recupero delle revisioni: ", error);
-        toast.error("Impossibile caricare lo storico delle revisioni.");
+      console.error("Errore nel recupero delle revisioni: ", error);
+      toast.error("Impossibile caricare lo storico delle revisioni.");
     }
   };
-    
+
   const handleSaveCurrentRevision = async (offerta: Offerta) => {
     if (!offerta.id || !user) return;
     try {
-        await saveRevision(offerta.id, offerta, user.uid);
-        toast.success("Revisione corrente salvata con successo!");
-        // Optionally refetch revisions to update the dropdown
-        handleOpenRevisions(offerta);
+      await saveRevision(offerta.id, offerta, user.uid);
+      toast.success("Revisione corrente salvata con successo!");
+      handleOpenRevisions(offerta);
     } catch (error) {
-        console.error("Errore nel salvataggio della revisione:", error);
-        toast.error("Salvataggio della revisione non riuscito.");
+      console.error("Errore nel salvataggio della revisione:", error);
+      toast.error("Salvataggio della revisione non riuscito.");
     }
   };
 
@@ -175,12 +180,11 @@ const ArchivioPage = () => {
     setSelectedRevision(revision);
     setIsRevisionDialogOpen(true);
   };
-    
+
   const handleDownloadIcs = (offerta: Offerta) => {
     const scadenza = offerta.dataScadenza.toDate();
     const formatDate = (date: Date) => date.toISOString().split('T')[0].replace(/-/g, '');
     const icsDate = formatDate(scadenza);
-
     const icsContent = [
       'BEGIN:VCALENDAR',
       'VERSION:2.0',
@@ -193,10 +197,8 @@ const ArchivioPage = () => {
       'END:VEVENT',
       'END:VCALENDAR'
     ].join('\n');
-
     const nomeAzienda = offerta.cliente.azienda.toLowerCase().replace(/\s+/g, '_');
     const nomeFile = `scadenza_${nomeAzienda}_${icsDate}.ics`;
-
     const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -207,23 +209,23 @@ const ArchivioPage = () => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-  
+
   const glassButtonBaseStyle = "px-5 py-2.5 text-sm font-medium rounded-xl flex items-center justify-center gap-2 transition-all duration-200 ease-in-out shadow-lg backdrop-filter backdrop-blur-lg border hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg";
 
   return (
     <TooltipProvider>
       <div className="container mx-auto p-4 text-white">
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold">Archivio Offerte</h1>
+          <h1 className="text-2xl font-bold">Archivio</h1>
           <div className="flex items-center gap-4">
             <div className="relative">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
               <Input
-                  type="text"
-                  placeholder="Cerca per azienda..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-72 pl-12 pr-4 py-2 bg-black/20 border-white/10 rounded-lg text-white placeholder:text-gray-400 focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/50"
+                type="text"
+                placeholder="Cerca..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-72 pl-12 pr-4 py-2 bg-black/20 border-white/10 rounded-lg text-white placeholder:text-gray-400 focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/50"
               />
             </div>
             <button
@@ -231,7 +233,7 @@ const ArchivioPage = () => {
               className={`${glassButtonBaseStyle} bg-white/20 border-white/30 hover:bg-white/30 text-white`}
             >
               <Home className="mr-2 h-4 w-4" />
-              Torna alla Home
+              Home
             </button>
           </div>
         </div>
@@ -239,7 +241,7 @@ const ArchivioPage = () => {
           <Table>
             <TableHeader>
               <TableRow className="border-white/10 hover:bg-white/5">
-                <TableHead className="text-white">Cliente / Azienda</TableHead>
+                <TableHead className="text-white">Azienda</TableHead>
                 <TableHead className="text-white text-center">Data Creazione</TableHead>
                 <TableHead className="text-white text-center">Data Scadenza</TableHead>
                 <TableHead className="text-white text-center">Stato</TableHead>
@@ -266,7 +268,11 @@ const ArchivioPage = () => {
                       </Tooltip>
                     </div>
                   </TableCell>
-                  <TableCell className="text-center capitalize"><Badge variant={offerta.stato === 'inviata' ? 'default' : 'secondary'}>{offerta.stato}</Badge></TableCell>
+                  <TableCell className="text-center capitalize">
+                  <Badge variant={offerta.stato === 'inviata' ? 'default' : 'secondary'}>
+  {offerta.stato === 'bozza' ? 'Salvata' : offerta.stato}
+</Badge>
+                  </TableCell>
                   <TableCell className="text-center">
                     <div className="flex items-center justify-center gap-1">
                       <Tooltip>
@@ -275,7 +281,7 @@ const ArchivioPage = () => {
                             <CalendarPlus className="h-4 w-4 text-gray-400 hover:text-teal-500 transition-colors" />
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent>Aggiungi al calendario</TooltipContent>
+                        <TooltipContent>Aggiungi al Calendario</TooltipContent>
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -283,7 +289,7 @@ const ArchivioPage = () => {
                             <Copy className="h-4 w-4 text-gray-400 hover:text-blue-500 transition-colors" />
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent>Duplica e Modifica</TooltipContent>
+                        <TooltipContent>Duplica</TooltipContent>
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -291,32 +297,32 @@ const ArchivioPage = () => {
                             <FilePenLine className="h-4 w-4 text-gray-400 hover:text-green-500 transition-colors" />
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent>Riapri e continua a modificare</TooltipContent>
+                        <TooltipContent>Modifica</TooltipContent>
                       </Tooltip>
 
                       <DropdownMenu onOpenChange={(open) => open && handleOpenRevisions(offerta)}>
                         <Tooltip>
-                            <TooltipTrigger asChild>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="icon">
-                                        <Clock className="h-4 w-4 text-gray-400 hover:text-indigo-500 transition-colors" />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                            </TooltipTrigger>
-                            <TooltipContent>Storico Revisioni</TooltipContent>
+                          <TooltipTrigger asChild>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon">
+                                <Clock className="h-4 w-4 text-gray-400 hover:text-indigo-500 transition-colors" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                          </TooltipTrigger>
+                          <TooltipContent>Storico</TooltipContent>
                         </Tooltip>
                         <DropdownMenuContent>
-                            <DropdownMenuLabel>Revisioni Salvate</DropdownMenuLabel>
-                            {revisions.map((rev, index) => (
-                                <DropdownMenuItem key={rev.id} onClick={() => handleViewRevision(rev)}>
-                                    <span>{rev.timestamp.toDate().toLocaleString('it-IT')}</span>
-                                    {index === 0 && <Badge className="ml-2">attuale</Badge>}
-                                </DropdownMenuItem>
-                            ))}
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => handleSaveCurrentRevision(offerta)}>
-                                Salva revisione corrente
+                          <DropdownMenuLabel>Revisioni Salvate</DropdownMenuLabel>
+                          {revisions.map((rev, index) => (
+                            <DropdownMenuItem key={rev.id} onClick={() => handleViewRevision(rev)}>
+                              <span>{rev.timestamp.toDate().toLocaleString('it-IT')}</span>
+                              {index === 0 && <Badge className="ml-2">attuale</Badge>}
                             </DropdownMenuItem>
+                          ))}
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => handleSaveCurrentRevision(offerta)}>
+                            Salva revisione corrente
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
 
@@ -326,7 +332,7 @@ const ArchivioPage = () => {
                             <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500 transition-colors" />
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent>Elimina Offerta</TooltipContent>
+                        <TooltipContent>Elimina</TooltipContent>
                       </Tooltip>
                     </div>
                   </TableCell>
@@ -356,7 +362,7 @@ const ArchivioPage = () => {
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                  <Button type="button" variant="ghost">Annulla</Button>
+                <Button type="button" variant="ghost">Annulla</Button>
               </DialogClose>
               <Button type="submit" onClick={handleUpdateScadenza}>Conferma</Button>
             </DialogFooter>
@@ -380,15 +386,15 @@ const ArchivioPage = () => {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-        
+
         {/* Revision History Dialog */}
         {currentOffertaForRevision && (
-            <RevisionHistoryDialog
-                isOpen={isRevisionDialogOpen}
-                onClose={() => setIsRevisionDialogOpen(false)}
-                revision={selectedRevision}
-                offerta={currentOffertaForRevision}
-            />
+          <RevisionHistoryDialog
+            isOpen={isRevisionDialogOpen}
+            onClose={() => setIsRevisionDialogOpen(false)}
+            revision={selectedRevision}
+            offerta={currentOffertaForRevision}
+          />
         )}
 
       </div>
