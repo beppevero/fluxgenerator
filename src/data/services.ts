@@ -396,7 +396,7 @@ export const servicesList: Service[] = [
   // PIATTAFORME CRONO
   {
     id: 'crono-silver',
-    nome: 'CRONO - DDD MANAGER - SILVER',
+    nome: 'DDD MANAGER - SILVER',
     descrizione: 'Piattaforma livello Silver: Accesso alla piattaforma web crono, Archivio dati e reportistica, Assistenza tecnica, Archiviazione dati 2 anni (per flotta)',
     categoria: 'piattaforme',
     prezzoListino: 960.00,
@@ -406,7 +406,7 @@ export const servicesList: Service[] = [
   },
   {
     id: 'crono-gold',
-    nome: 'CRONO - DDD MANAGER - GOLD',
+    nome: 'DDD MANAGER - GOLD',
     descrizione: "Piattaforma livello Gold: Accesso alla piattaforma web crono, Archivio dati e reportistica, Assistenza tecnica, Archiviazione dati 5 anni (per flotta), Possibilità pianificazione report automatici, N°1 terminale comodato d'uso, Scarico dati tachigrafici, Consulenza legale di prima fascia",
     categoria: 'piattaforme',
     prezzoListino: 1920.00,
@@ -483,7 +483,7 @@ export const servicesList: Service[] = [
     periodo: 'U.T.',
   },
 
-  // SERVIZI ESTERNI - THE GUARDIAN (CENTRALE OPERATIVA)
+  // CENTRALE OPERATIVA
   {
     id: 'centrale-live-annuale',
     nome: 'CENTRALE OPERATIVA LIVE',
@@ -551,5 +551,5 @@ export const categorieLabels: Record<string, string> = {
   piattaforme: 'Piattaforme Crono',
   software: 'Software Development',
   servizi_aggiuntivi: 'Servizi Aggiuntivi',
-  centrale_operativa: 'Servizi Esterni - The Guardian',
+  centrale_operativa: 'Centrale Operativa',
 };

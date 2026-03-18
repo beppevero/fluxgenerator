@@ -95,7 +95,7 @@ const LoginPage = () => {
       <div className="relative z-10 w-full max-w-md p-8 space-y-8 bg-white/10 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-lg">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-white">QUOTY</h1>
-          <p className="text-gray-400">Accedi per generare i tuoi preventivi</p>
+          <p className="text-gray-400">Quote it. Send it. Close it.</p>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -150,13 +150,13 @@ const LoginPage = () => {
         </Form>
         <div className="flex justify-between text-sm text-gray-400">
           <a
-            href={`mailto:admin@quoty.it?subject=Recupero Password Quoty - ${form.getValues('email')}`}
+            href={`mailto:giuseppe.vero@macnil.it?subject=Recupero Password Quoty - ${form.getValues('email')}`}
             className="hover:text-white"
           >
             Hai dimenticato la password?
           </a>
           <a
-            href="mailto:admin@quoty.it?subject=Richiesta Accesso Quoty"
+            href="mailto:giuseppe.vero@macnil.it?subject=Richiesta Accesso Quoty"
             className="hover:text-white"
           >
             Richiedi accesso
