@@ -1,9 +1,9 @@
 
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { getOfferte, updateDataScadenza, deleteOfferta } from "../firebase";
+import { getOfferte, updateDataScadenza, deleteOfferta, getRevisions, saveRevision } from "../firebase";
 import { useAuth } from "../context/AuthContext";
-import { Offerta } from "../types/quote";
+import { Offerta, Revision } from "../types/quote";
 import { 
   Table, 
   TableBody, 
@@ -15,13 +15,21 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Home, Pencil, Copy, Trash2, Search, FilePenLine, CalendarPlus } from 'lucide-react';
+import { Home, Pencil, Copy, Trash2, Search, FilePenLine, CalendarPlus, Clock } from 'lucide-react';
 import { 
   Tooltip, 
   TooltipContent, 
   TooltipProvider, 
   TooltipTrigger 
 } from "@/components/ui/tooltip";
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { 
   Dialog, 
   DialogContent, 
@@ -34,6 +42,7 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { Timestamp } from "firebase/firestore";
 import { toast } from "sonner";
+import { RevisionHistoryDialog } from "@/components/RevisionHistoryDialog";
 
 const ArchivioPage = () => {
   const [offerte, setOfferte] = useState<Offerta[]>([]);
@@ -46,32 +55,18 @@ const ArchivioPage = () => {
   const [newScadenza, setNewScadenza] = useState<Date | undefined>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [upcomingBadgeCount, setUpcomingBadgeCount] = useState(0);
+
+  // Revision states
+  const [revisions, setRevisions] = useState<Revision[]>([]);
+  const [selectedRevision, setSelectedRevision] = useState<Revision | null>(null);
+  const [isRevisionDialogOpen, setIsRevisionDialogOpen] = useState(false);
+  const [currentOffertaForRevision, setCurrentOffertaForRevision] = useState<Offerta | null>(null);
 
   const fetchOfferte = useCallback(async () => {
     if (user) {
       try {
         const offerteOttenute = await getOfferte(user.uid);
         setOfferte(offerteOttenute);
-
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const expiringToday: Offerta[] = [];
-
-        for (const offerta of offerteOttenute) {
-          const scadenza = offerta.dataScadenza.toDate();
-          scadenza.setHours(0, 0, 0, 0);
-
-          const diffTime = scadenza.getTime() - today.getTime();
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-          if (diffDays === 0) {
-            expiringToday.push(offerta);
-          }
-        }
-        setUpcomingBadgeCount(expiringToday.length);
-
       } catch (error) {
         console.error("Errore nel recupero delle offerte: ", error);
         toast.error("Non è stato possibile caricare l'archivio.");
@@ -151,6 +146,36 @@ const ArchivioPage = () => {
     navigate("/", { state: { offertaDaRiaprire: offerta, isDuplicate: true } });
   };
 
+    const handleOpenRevisions = async (offerta: Offerta) => {
+    if (!offerta.id) return;
+    try {
+        const fetchedRevisions = await getRevisions(offerta.id);
+        setRevisions(fetchedRevisions);
+        setCurrentOffertaForRevision(offerta);
+    } catch (error) {
+        console.error("Errore nel recupero delle revisioni: ", error);
+        toast.error("Impossibile caricare lo storico delle revisioni.");
+    }
+  };
+    
+  const handleSaveCurrentRevision = async (offerta: Offerta) => {
+    if (!offerta.id || !user) return;
+    try {
+        await saveRevision(offerta.id, offerta, user.uid);
+        toast.success("Revisione corrente salvata con successo!");
+        // Optionally refetch revisions to update the dropdown
+        handleOpenRevisions(offerta);
+    } catch (error) {
+        console.error("Errore nel salvataggio della revisione:", error);
+        toast.error("Salvataggio della revisione non riuscito.");
+    }
+  };
+
+  const handleViewRevision = (revision: Revision) => {
+    setSelectedRevision(revision);
+    setIsRevisionDialogOpen(true);
+  };
+    
   const handleDownloadIcs = (offerta: Offerta) => {
     const scadenza = offerta.dataScadenza.toDate();
     const formatDate = (date: Date) => date.toISOString().split('T')[0].replace(/-/g, '');
@@ -268,6 +293,33 @@ const ArchivioPage = () => {
                         </TooltipTrigger>
                         <TooltipContent>Riapri e continua a modificare</TooltipContent>
                       </Tooltip>
+
+                      <DropdownMenu onOpenChange={(open) => open && handleOpenRevisions(offerta)}>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon">
+                                        <Clock className="h-4 w-4 text-gray-400 hover:text-indigo-500 transition-colors" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                            </TooltipTrigger>
+                            <TooltipContent>Storico Revisioni</TooltipContent>
+                        </Tooltip>
+                        <DropdownMenuContent>
+                            <DropdownMenuLabel>Revisioni Salvate</DropdownMenuLabel>
+                            {revisions.map((rev, index) => (
+                                <DropdownMenuItem key={rev.id} onClick={() => handleViewRevision(rev)}>
+                                    <span>{rev.timestamp.toDate().toLocaleString('it-IT')}</span>
+                                    {index === 0 && <Badge className="ml-2">attuale</Badge>}
+                                </DropdownMenuItem>
+                            ))}
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => handleSaveCurrentRevision(offerta)}>
+                                Salva revisione corrente
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button variant="ghost" size="icon" onClick={() => handleOpenDeleteDialog(offerta)}>
@@ -328,6 +380,16 @@ const ArchivioPage = () => {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+        
+        {/* Revision History Dialog */}
+        {currentOffertaForRevision && (
+            <RevisionHistoryDialog
+                isOpen={isRevisionDialogOpen}
+                onClose={() => setIsRevisionDialogOpen(false)}
+                revision={selectedRevision}
+                offerta={currentOffertaForRevision}
+            />
+        )}
 
       </div>
     </TooltipProvider>

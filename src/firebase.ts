@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, Timestamp, query, where, orderBy, deleteDoc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { Offerta } from "./types/quote";
+import { Offerta, Revision } from "./types/quote";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAxaOkLqolRVhk5I1x2irwCkrla1ok6YJc",
@@ -45,4 +45,21 @@ export const updateDataScadenza = async (offertaId: string, nuovaData: Date) => 
   await updateDoc(offertaDoc, {
     dataScadenza: Timestamp.fromDate(nuovaData)
   });
+};
+
+export const getRevisions = async (offertaId: string): Promise<Revision[]> => {
+  const revisionsCollection = collection(db, `offerte/${offertaId}/revisions`);
+  const q = query(revisionsCollection, orderBy("timestamp", "desc"));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Revision));
+};
+
+export const saveRevision = async (offertaId: string, offertaCorrente: Offerta, userId: string): Promise<void> => {
+  const revisionData = {
+    timestamp: Timestamp.now(),
+    savedBy: userId,
+    snapshot: offertaCorrente,
+  };
+  const revisionsCollection = collection(db, `offerte/${offertaId}/revisions`);
+  await addDoc(revisionsCollection, revisionData);
 };

@@ -98,3 +98,10 @@ export interface Offerta {
   dataScadenza: Timestamp;
   stato: 'bozza' | 'inviata';
 }
+
+export interface Revision {
+  id: string;
+  timestamp: Timestamp;
+  savedBy: string; // uid dell'utente che ha salvato la revisione
+  snapshot: Offerta; // snapshot completo dell'offerta in quel momento
+}
