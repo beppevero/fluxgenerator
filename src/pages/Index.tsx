@@ -278,9 +278,21 @@ const Index = () => {
     if (!user) throw new Error("Utente non autenticato.");
 
     const dataCreazione = Timestamp.now();
-    const validitaGiorni = parseInt(paymentInfo.validitaOfferta) || 30;
-    const dataScadenza = new Date(dataCreazione.toDate());
-    dataScadenza.setDate(dataScadenza.getDate() + validitaGiorni);
+    let dataScadenza = new Date(dataCreazione.toDate());
+
+    const validita = paymentInfo.validitaOfferta;
+    if (validita.includes("giorni")) {
+      const giorni = parseInt(validita.split(' ')[0]);
+      if (!isNaN(giorni)) {
+        dataScadenza.setDate(dataScadenza.getDate() + giorni);
+      }
+    } else if (/^\d{2}\.\d{2}\.\d{4}$/.test(validita)) {
+      const parts = validita.split('.');
+      // Month is 0-based in JavaScript Date
+      dataScadenza = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+    } else {
+      dataScadenza.setDate(dataScadenza.getDate() + 30); // Fallback
+    }
 
     const offertaData: Omit<Offerta, 'id'> = {
       uid: user.uid,
@@ -393,9 +405,19 @@ const Index = () => {
 
     // --- Synchronous Part: Open Mail Client ---
     try {
-      const validitaGiorni = parseInt(paymentInfo.validitaOfferta) || 30;
-      const dataScadenza = new Date();
-      dataScadenza.setDate(dataScadenza.getDate() + validitaGiorni);
+      let dataScadenza = new Date();
+      const validita = paymentInfo.validitaOfferta;
+      if (validita.includes("giorni")) {
+        const giorni = parseInt(validita.split(' ')[0]);
+        if (!isNaN(giorni)) {
+          dataScadenza.setDate(dataScadenza.getDate() + giorni);
+        }
+      } else if (/^\d{2}\.\d{2}\.\d{4}$/.test(validita)) {
+        const parts = validita.split('.');
+        dataScadenza = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+      } else {
+        dataScadenza.setDate(dataScadenza.getDate() + 30); // Fallback
+      }
       const dataValidita = dataScadenza.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
       const nMezzi = parseInt(clientData.mezziTrattativa) || 1;
