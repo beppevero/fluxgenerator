@@ -39,7 +39,7 @@ const PRESET_DATA: Record<Exclude<PresetType, null>, { testo: string; durata: st
 const PRESET_LABELS: { key: Exclude<PresetType, null>; label: string }[] = [
   { key: "STANDARD", label: "STANDARD" },
   { key: "RENTRI", label: "R.E.N.T.R.I." },
-  { key: "INCENTIVO", label: "INCENTIVO 4.0/5.0" },
+  { key: "INCENTIVO", label: "INCENTIVO 4.0" },
   { key: "PA", label: "P.A." },
 ];
 
