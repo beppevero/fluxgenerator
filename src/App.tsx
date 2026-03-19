@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ArchivioPage from "./pages/ArchivioPage";
+import PageTransition from "./components/PageTransition";
 
 const queryClient = new QueryClient();
 
@@ -28,8 +29,8 @@ const App = () => (
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Index />} />
-            <Route path="/archivio" element={<ArchivioPage />} />
+            <Route path="/" element={<PageTransition><Index /></PageTransition>} />
+            <Route path="/archivio" element={<PageTransition><ArchivioPage /></PageTransition>} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
