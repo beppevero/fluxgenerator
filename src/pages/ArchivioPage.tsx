@@ -46,6 +46,7 @@ import { RevisionHistoryDialog } from "@/components/RevisionHistoryDialog";
 const ArchivioPage = () => {
   const [offerte, setOfferte] = useState<Offerta[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filtroStato, setFiltroStato] = useState<'tutti' | 'bozza' | 'inviata' | 'scaduta'>('tutti');
   const { user } = useAuth();
   const navigate = useNavigate();
   
@@ -77,13 +78,13 @@ const ArchivioPage = () => {
   }, [fetchOfferte]);
 
   const filteredOfferte = useMemo(() => {
-    if (!searchTerm.trim()) {
-      return offerte;
-    }
-    return offerte.filter(offerta => 
-      offerta.cliente.azienda.toLowerCase().includes(searchTerm.toLowerCase().trim())
-    );
-  }, [offerte, searchTerm]);
+    return offerte.filter(offerta => {
+      const matchSearch = !searchTerm.trim() || 
+        offerta.cliente.azienda.toLowerCase().includes(searchTerm.toLowerCase().trim());
+      const matchStato = filtroStato === 'tutti' || offerta.stato === filtroStato;
+      return matchSearch && matchStato;
+    });
+  }, [offerte, searchTerm, filtroStato]);
 
   const getBadgeColor = (dataScadenza: Timestamp) => {
     const oggi = new Date();
@@ -218,6 +219,21 @@ const ArchivioPage = () => {
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Archivio</h1>
           <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+              {(['tutti', 'bozza', 'inviata', 'scaduta'] as const).map((stato) => (
+                <button
+                  key={stato}
+                  onClick={() => setFiltroStato(stato)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-all duration-200 ${
+                    filtroStato === stato
+                      ? 'bg-white/30 border-white/50 text-white'
+                      : 'bg-black/20 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  {stato === 'tutti' ? 'Tutti' : stato === 'bozza' ? 'Salvato' : stato === 'inviata' ? 'Inviata' : 'Scaduta'}
+                </button>
+              ))}
+            </div>
             <div className="relative">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
               <Input

@@ -165,6 +165,7 @@ const Index = () => {
         ragioneSociale: offerta.cliente.azienda,
         nomeReferente: offerta.cliente.nome,
         emailCliente: offerta.cliente.email,
+        telefonoCliente: offerta.cliente.telefono || '',
         mezziTrattativa: offerta.cliente.nMezzi.toString(),
       }));
       setPaymentInfo({
