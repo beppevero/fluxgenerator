@@ -83,6 +83,7 @@ export interface Offerta {
   cliente: {
     nome: string;
     email: string;
+    telefono: string;
     azienda: string;
     nMezzi: number;
   };
@@ -97,7 +98,7 @@ export interface Offerta {
   totale: number;
   dataCreazione: Timestamp;
   dataScadenza: Timestamp;
-  stato: 'bozza' | 'inviata';
+  stato: 'bozza' | 'inviata' | 'scaduta';
 }
 
 export interface Revision {

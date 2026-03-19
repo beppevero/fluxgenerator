@@ -63,3 +63,18 @@ export const saveRevision = async (offertaId: string, offertaCorrente: Offerta, 
   const revisionsCollection = collection(db, `offerte/${offertaId}/revisions`);
   await addDoc(revisionsCollection, revisionData);
 };
+
+export const aggiornaProposteScadute = async (uid: string): Promise<void> => {
+  const oggi = new Date();
+  oggi.setHours(0, 0, 0, 0);
+  const offerte = await getOfferte(uid);
+  const scadute = offerte.filter(o => {
+    if (o.stato === 'scaduta') return false;
+    const scadenza = o.dataScadenza.toDate();
+    scadenza.setHours(0, 0, 0, 0);
+    return scadenza < oggi;
+  });
+  await Promise.all(
+    scadute.map(o => updateOfferta(o.id!, { stato: 'scaduta' }))
+  );
+};

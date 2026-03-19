@@ -269,8 +269,8 @@ const ArchivioPage = () => {
                     </div>
                   </TableCell>
                   <TableCell className="text-center capitalize">
-                  <Badge variant={offerta.stato === 'inviata' ? 'default' : 'secondary'}>
-  {offerta.stato === 'bozza' ? 'Salvata' : offerta.stato}
+                  <Badge variant={offerta.stato === 'inviata' ? 'default' : offerta.stato === 'scaduta' ? 'destructive' : 'secondary'}>
+  {offerta.stato === 'bozza' ? 'Salvato' : offerta.stato === 'scaduta' ? 'Scaduta' : offerta.stato}
 </Badge>
                   </TableCell>
                   <TableCell className="text-center">

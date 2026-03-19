@@ -17,7 +17,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Timestamp } from "firebase/firestore";
 import { toast } from "sonner";
-import { saveOfferta, updateOfferta, getOfferte } from "@/firebase";
+import { saveOfferta, updateOfferta, getOfferte, aggiornaProposteScadute } from "@/firebase";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 // --- Animated Toast Icons ---
@@ -111,6 +111,7 @@ const Index = () => {
         await Notification.requestPermission();
       }
 
+      await aggiornaProposteScadute(user.uid);
       const allOffers = await getOfferte(user.uid);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -295,6 +296,7 @@ const Index = () => {
       cliente: {
         nome: clientData.nomeReferente,
         email: clientData.emailCliente,
+        telefono: clientData.telefonoCliente,
         azienda: clientData.ragioneSociale,
         nMezzi: parseInt(clientData.mezziTrattativa) || 0
       },
@@ -474,6 +476,7 @@ const Index = () => {
       ? `https://wa.me/${telefono}?text=${encodeURIComponent(testo)}`
       : `https://wa.me/?text=${encodeURIComponent(testo)}`;
     window.open(waLink, '_blank');
+    toast.success("Messaggio WhatsApp pronto");
   }, [clientData, paymentInfo]);
 
   const handleClearAll = useCallback(() => {
