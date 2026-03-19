@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { getOfferte, updateDataScadenza, deleteOfferta, getRevisions, saveRevision } from "../firebase";
+import { getOfferte, updateDataScadenza, deleteOfferta, getRevisions, saveRevision, updateOfferta } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import { Offerta, Revision } from "../types/quote";
 import { 
@@ -46,7 +46,7 @@ import { RevisionHistoryDialog } from "@/components/RevisionHistoryDialog";
 const ArchivioPage = () => {
   const [offerte, setOfferte] = useState<Offerta[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filtroStato, setFiltroStato] = useState<'tutti' | 'bozza' | 'inviata' | 'scaduta' | 'persa'>('tutti');
+  const [filtroStato, setFiltroStato] = useState<'tutti' | 'bozza' | 'inviata' | 'scaduta' | 'persa' | 'vinta'>('tutti');
   const [sortKey, setSortKey] = useState<'azienda' | 'dataCreazione' | 'dataScadenza' | null>(null);
 const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
 
@@ -165,7 +165,7 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
     }
   };
 
-  const handleChangeStato = async (offerta: Offerta, nuovoStato: 'bozza' | 'inviata' | 'scaduta' | 'persa') => {
+  const handleChangeStato = async (offerta: Offerta, nuovoStato: 'bozza' | 'inviata' | 'scaduta' | 'persa' | 'vinta') => {
     if (!offerta.id) return;
     try {
       await updateOfferta(offerta.id, { stato: nuovoStato });
@@ -261,7 +261,7 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
           <h1 className="text-2xl font-bold">Archivio</h1>
           <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-          {(['tutti', 'bozza', 'inviata', 'scaduta', 'persa'] as const).map((stato) => (
+          {(['tutti', 'bozza', 'inviata', 'scaduta', 'persa', 'vinta'] as const).map((stato) => (
                 <button
                   key={stato}
                   onClick={() => setFiltroStato(stato)}
@@ -348,12 +348,14 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                             offerta.stato === 'inviata' ? 'bg-blue-600 text-white hover:bg-blue-700' :
                             offerta.stato === 'scaduta' ? 'bg-orange-600 text-white hover:bg-orange-700' :
                             offerta.stato === 'persa' ? 'bg-red-700 text-white hover:bg-red-800' :
+                            offerta.stato === 'vinta' ? 'bg-green-600 text-white hover:bg-green-700' :
                             'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                           }`}>
                             {offerta.stato === 'bozza' ? 'Salvata' :
-                             offerta.stato === 'inviata' ? 'Inviata' :
-                             offerta.stato === 'scaduta' ? 'Scaduta' :
-                             offerta.stato === 'persa' ? 'Persa' : offerta.stato}
+                           offerta.stato === 'inviata' ? 'Inviata' :
+                           offerta.stato === 'scaduta' ? 'Scaduta' :
+                           offerta.stato === 'persa' ? 'Persa' :
+                           offerta.stato === 'vinta' ? 'Vinta' : offerta.stato}
                           </Badge>
                         </button>
                       </DropdownMenuTrigger>
@@ -362,6 +364,7 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                         <DropdownMenuItem onClick={() => handleChangeStato(offerta, 'inviata')}>Inviata</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleChangeStato(offerta, 'scaduta')}>Scaduta</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleChangeStato(offerta, 'persa')}>Persa</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleChangeStato(offerta, 'vinta')}>Vinta</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
