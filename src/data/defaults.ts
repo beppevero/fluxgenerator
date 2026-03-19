@@ -28,6 +28,7 @@ export const emptyClientData: ClientData = {
   nomeReferente: "",
   cognomeReferente: "",
   emailCliente: "",
+  telefonoCliente: "",
   mezziTrattativa: "",
   documentType: "standard",
   legaleRappresentante: { ...emptyLegaleRappresentante },

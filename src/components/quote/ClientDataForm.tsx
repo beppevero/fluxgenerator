@@ -130,6 +130,17 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
             </div>
 
             <div className="space-y-1.5">
+              <Label htmlFor="telefonoCliente" className="text-white/90 font-medium">Telefono / WhatsApp</Label>
+              <Input
+                id="telefonoCliente"
+                type="tel"
+                placeholder="es. +39 333 1234567"
+                value={clientData.telefonoCliente}
+                onChange={(e) => onChange({ ...clientData, telefonoCliente: e.target.value })}
+                className="glass-input border-white/20"
+              />
+            </div>
+            <div className="space-y-1.5">
               <Label htmlFor="mezziTrattativa" className="text-white/90 font-medium">N° Mezzi Trattativa</Label>
               <Input
                 id="mezziTrattativa"

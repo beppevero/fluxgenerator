@@ -30,6 +30,7 @@ export interface ClientData {
   nomeReferente: string;
   cognomeReferente: string;
   emailCliente: string;
+  telefonoCliente: string;
   mezziTrattativa: string;
   documentType: DocumentType;
   legaleRappresentante: LegaleRappresentante;

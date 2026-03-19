@@ -469,7 +469,10 @@ const Index = () => {
     else if (nome) saluto = `Ciao ${nome}`;
     else if (cognome) saluto = `Ciao ${cognome}`;
     const testo = `${saluto}, come da accordi ti invio la proposta commerciale per n° ${nMezzi} ${mezziTesto}, valida fino al ${dataValidita}. Resto a disposizione per un confronto. A presto!`;
-    const waLink = `https://wa.me/?text=${encodeURIComponent(testo)}`;
+    const telefono = clientData.telefonoCliente?.trim().replace(/\s+/g, '').replace(/^\+/, '');
+    const waLink = telefono
+      ? `https://wa.me/${telefono}?text=${encodeURIComponent(testo)}`
+      : `https://wa.me/?text=${encodeURIComponent(testo)}`;
     window.open(waLink, '_blank');
   }, [clientData, paymentInfo]);
 
