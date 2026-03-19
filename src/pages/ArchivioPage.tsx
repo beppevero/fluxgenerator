@@ -46,7 +46,7 @@ import { RevisionHistoryDialog } from "@/components/RevisionHistoryDialog";
 const ArchivioPage = () => {
   const [offerte, setOfferte] = useState<Offerta[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filtroStato, setFiltroStato] = useState<'tutti' | 'bozza' | 'inviata' | 'scaduta'>('tutti');
+  const [filtroStato, setFiltroStato] = useState<'tutti' | 'bozza' | 'inviata' | 'scaduta' | 'persa'>('tutti');
   const [sortKey, setSortKey] = useState<'azienda' | 'dataCreazione' | 'dataScadenza' | null>(null);
 const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
 
@@ -165,6 +165,18 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
     }
   };
 
+  const handleChangeStato = async (offerta: Offerta, nuovoStato: 'bozza' | 'inviata' | 'scaduta' | 'persa') => {
+    if (!offerta.id) return;
+    try {
+      await updateOfferta(offerta.id, { stato: nuovoStato });
+      toast.success("Stato aggiornato.");
+      fetchOfferte();
+    } catch (error) {
+      console.error("Errore aggiornamento stato:", error);
+      toast.error("Aggiornamento stato non riuscito.");
+    }
+  };
+
   // MODIFICATA: salva snapshot automatico prima di riaprire, poi naviga sempre
   const riapriOfferta = async (offerta: Offerta) => {
     if (offerta.id && user) {
@@ -249,7 +261,7 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
           <h1 className="text-2xl font-bold">Archivio</h1>
           <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-              {(['tutti', 'bozza', 'inviata', 'scaduta'] as const).map((stato) => (
+          {(['tutti', 'bozza', 'inviata', 'scaduta', 'persa'] as const).map((stato) => (
                 <button
                   key={stato}
                   onClick={() => setFiltroStato(stato)}
@@ -259,7 +271,7 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                       : 'bg-black/20 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white'
                   }`}
                 >
-                  {stato === 'tutti' ? 'Tutti' : stato === 'bozza' ? 'Salvato' : stato === 'inviata' ? 'Inviata' : 'Scaduta'}
+                  {stato === 'tutti' ? 'Tutti' : stato === 'bozza' ? 'Salvata' : stato === 'inviata' ? 'Inviata' : stato === 'scaduta' ? 'Scaduta' : 'Persa'}
                 </button>
               ))}
             </div>
@@ -328,10 +340,28 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                       </Tooltip>
                     </div>
                   </TableCell>
-                  <TableCell className="text-center capitalize">
-                  <Badge variant={offerta.stato === 'inviata' ? 'default' : offerta.stato === 'scaduta' ? 'destructive' : 'secondary'}>
-  {offerta.stato === 'bozza' ? 'Salvato' : offerta.stato === 'scaduta' ? 'Scaduta' : offerta.stato}
-</Badge>
+                  <TableCell className="text-center">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Badge className={`cursor-pointer ${
+                          offerta.stato === 'inviata' ? 'bg-blue-600 text-white hover:bg-blue-700' :
+                          offerta.stato === 'scaduta' ? 'bg-orange-600 text-white hover:bg-orange-700' :
+                          offerta.stato === 'persa' ? 'bg-red-700 text-white hover:bg-red-800' :
+                          'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                        }`}>
+                          {offerta.stato === 'bozza' ? 'Salvata' :
+                           offerta.stato === 'inviata' ? 'Inviata' :
+                           offerta.stato === 'scaduta' ? 'Scaduta' :
+                           offerta.stato === 'persa' ? 'Persa' : offerta.stato}
+                        </Badge>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="center">
+                        <DropdownMenuItem onClick={() => handleChangeStato(offerta, 'bozza')}>Salvata</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleChangeStato(offerta, 'inviata')}>Inviata</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleChangeStato(offerta, 'scaduta')}>Scaduta</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleChangeStato(offerta, 'persa')}>Persa</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                   <TableCell className="text-center">
                     <div className="flex items-center justify-center gap-1">

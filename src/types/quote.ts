@@ -98,7 +98,7 @@ export interface Offerta {
   totale: number;
   dataCreazione: Timestamp;
   dataScadenza: Timestamp;
-  stato: 'bozza' | 'inviata' | 'scaduta';
+  stato: 'bozza' | 'inviata' | 'scaduta' | 'persa';
 }
 
 export interface Revision {
