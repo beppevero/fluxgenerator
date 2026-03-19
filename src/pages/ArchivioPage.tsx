@@ -47,6 +47,17 @@ const ArchivioPage = () => {
   const [offerte, setOfferte] = useState<Offerta[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filtroStato, setFiltroStato] = useState<'tutti' | 'bozza' | 'inviata' | 'scaduta'>('tutti');
+  const [sortKey, setSortKey] = useState<'azienda' | 'dataCreazione' | 'dataScadenza' | null>(null);
+const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
+
+const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
+  if (sortKey === key) {
+    setSortDir(prev => prev === 'asc' ? 'desc' : 'asc');
+  } else {
+    setSortKey(key);
+    setSortDir('asc');
+  }
+};
   const { user } = useAuth();
   const navigate = useNavigate();
   
@@ -78,13 +89,31 @@ const ArchivioPage = () => {
   }, [fetchOfferte]);
 
   const filteredOfferte = useMemo(() => {
-    return offerte.filter(offerta => {
+    const filtered = offerte.filter(offerta => {
       const matchSearch = !searchTerm.trim() || 
         offerta.cliente.azienda.toLowerCase().includes(searchTerm.toLowerCase().trim());
       const matchStato = filtroStato === 'tutti' || offerta.stato === filtroStato;
       return matchSearch && matchStato;
     });
-  }, [offerte, searchTerm, filtroStato]);
+    if (!sortKey) return filtered;
+    return [...filtered].sort((a, b) => {
+      let valA: string | number;
+      let valB: string | number;
+      if (sortKey === 'azienda') {
+        valA = a.cliente.azienda.toLowerCase();
+        valB = b.cliente.azienda.toLowerCase();
+      } else if (sortKey === 'dataCreazione') {
+        valA = a.dataCreazione.toMillis();
+        valB = b.dataCreazione.toMillis();
+      } else {
+        valA = a.dataScadenza.toMillis();
+        valB = b.dataScadenza.toMillis();
+      }
+      if (valA < valB) return sortDir === 'asc' ? -1 : 1;
+      if (valA > valB) return sortDir === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [offerte, searchTerm, filtroStato, sortKey, sortDir]);
 
   const getBadgeColor = (dataScadenza: Timestamp) => {
     const oggi = new Date();
@@ -256,10 +285,25 @@ const ArchivioPage = () => {
         <div className="rounded-lg border border-white/10 bg-black/20 p-4 shadow-lg backdrop-blur-lg">
           <Table>
             <TableHeader>
-              <TableRow className="border-white/10 hover:bg-white/5">
-                <TableHead className="text-white">Azienda</TableHead>
-                <TableHead className="text-white text-center">Data Creazione</TableHead>
-                <TableHead className="text-white text-center">Data Scadenza</TableHead>
+            <TableRow className="border-white/10 hover:bg-white/5">
+                <TableHead
+                  className="text-white cursor-pointer hover:text-white/70 transition-colors select-none"
+                  onClick={() => handleSort('azienda')}
+                >
+                  Cliente / Azienda {sortKey === 'azienda' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
+                </TableHead>
+                <TableHead
+                  className="text-white text-center cursor-pointer hover:text-white/70 transition-colors select-none"
+                  onClick={() => handleSort('dataCreazione')}
+                >
+                  Data Creazione {sortKey === 'dataCreazione' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
+                </TableHead>
+                <TableHead
+                  className="text-white text-center cursor-pointer hover:text-white/70 transition-colors select-none"
+                  onClick={() => handleSort('dataScadenza')}
+                >
+                  Data Scadenza {sortKey === 'dataScadenza' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
+                </TableHead>
                 <TableHead className="text-white text-center">Stato</TableHead>
                 <TableHead className="text-white text-center">Azioni</TableHead>
               </TableRow>
