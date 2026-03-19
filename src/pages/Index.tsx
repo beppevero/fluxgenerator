@@ -1,8 +1,7 @@
-
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, Trash2, Send, ArrowUp, LogOut, Archive, Save, X, AlertTriangle } from "lucide-react";
+import { FileText, Trash2, Send, ArrowUp, LogOut, Archive, Save, X, AlertTriangle, Share2 } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
@@ -19,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Timestamp } from "firebase/firestore";
 import { toast } from "sonner";
 import { saveOfferta, updateOfferta, getOfferte } from "@/firebase";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 // --- Animated Toast Icons ---
 const SuccessToastIcon = () => (
@@ -129,16 +129,13 @@ const Index = () => {
         }
       }
 
-      // Banner
       setExpiringOffers(expiringToday);
       if (expiringToday.length > 0) {
         setShowExpiringBanner(true);
       }
       
-      // Badge
       setUpcomingBadgeCount(expiringToday.length);
 
-      // Notifiche
       if (Notification.permission === 'granted') {
         const todayString = today.toISOString().split('T')[0];
         expiringToday.forEach(offerta => {
@@ -155,7 +152,7 @@ const Index = () => {
     };
 
     checkOffers();
-  }, [user, location.state]); // Aggiorna anche al ritorno dall'archivio
+  }, [user, location.state]);
 
   useEffect(() => {
     if (location.state && location.state.offertaDaRiaprire) {
@@ -288,10 +285,9 @@ const Index = () => {
       }
     } else if (/^\d{2}\.\d{2}\.\d{4}$/.test(validita)) {
       const parts = validita.split('.');
-      // Month is 0-based in JavaScript Date
       dataScadenza = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
     } else {
-      dataScadenza.setDate(dataScadenza.getDate() + 30); // Fallback
+      dataScadenza.setDate(dataScadenza.getDate() + 30);
     }
 
     const offertaData: Omit<Offerta, 'id'> = {
@@ -380,7 +376,6 @@ const Index = () => {
       await generatePdf({ download: true });
       await createOrUpdateOfferta('bozza');
       toast.success("Proposta esportata e salvata come bozza.");
-
     } catch (error) {
       console.error("Errore in handleExportPDF: ", error);
       toast.error((error as Error).message || "Si è verificato un errore imprevisto.");
@@ -393,7 +388,6 @@ const Index = () => {
       return;
     }
 
-    // --- Synchronous Part: Open Mail Client ---
     try {
       let dataScadenza = new Date();
       const validita = paymentInfo.validitaOfferta;
@@ -406,7 +400,7 @@ const Index = () => {
         const parts = validita.split('.');
         dataScadenza = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
       } else {
-        dataScadenza.setDate(dataScadenza.getDate() + 30); // Fallback
+        dataScadenza.setDate(dataScadenza.getDate() + 30);
       }
       const dataValidita = dataScadenza.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
@@ -435,7 +429,6 @@ const Index = () => {
        return;
     }
 
-    // --- Asynchronous Part: Run in Background ---
     const runBackgroundTasks = async () => {
         try {
             await createOrUpdateOfferta('inviata');
@@ -449,6 +442,36 @@ const Index = () => {
     runBackgroundTasks();
 
   }, [clientData, paymentInfo, createOrUpdateOfferta, generatePdf]);
+
+  const handleWhatsApp = useCallback(() => {
+    if (!clientData.mezziTrattativa?.trim()) {
+      toast.warning("Inserisci il numero di mezzi.");
+      return;
+    }
+    let dataScadenza = new Date();
+    const validita = paymentInfo.validitaOfferta;
+    if (validita.includes("giorni")) {
+      const giorni = parseInt(validita.split(' ')[0]);
+      if (!isNaN(giorni)) dataScadenza.setDate(dataScadenza.getDate() + giorni);
+    } else if (/^\d{2}\.\d{2}\.\d{4}$/.test(validita)) {
+      const parts = validita.split('.');
+      dataScadenza = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+    } else {
+      dataScadenza.setDate(dataScadenza.getDate() + 30);
+    }
+    const dataValidita = dataScadenza.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const nMezzi = parseInt(clientData.mezziTrattativa) || 1;
+    const mezziTesto = nMezzi === 1 ? 'mezzo' : 'mezzi';
+    const nome = clientData.nomeReferente?.trim();
+    const cognome = clientData.cognomeReferente?.trim();
+    let saluto = 'Ciao';
+    if (nome && cognome) saluto = `Ciao ${nome} ${cognome}`;
+    else if (nome) saluto = `Ciao ${nome}`;
+    else if (cognome) saluto = `Ciao ${cognome}`;
+    const testo = `${saluto}, come da accordi ti invio la proposta commerciale per n° ${nMezzi} ${mezziTesto}, valida fino al ${dataValidita}. Resto a disposizione per un confronto. A presto!`;
+    const waLink = `https://wa.me/?text=${encodeURIComponent(testo)}`;
+    window.open(waLink, '_blank');
+  }, [clientData, paymentInfo]);
 
   const handleClearAll = useCallback(() => {
     setClientData({ ...emptyClientData });
@@ -504,13 +527,28 @@ const Index = () => {
             >
               <Send className="w-4 h-4" /> Invia
             </button>
-            <button
-              onClick={handleExportPDF}
-              disabled={!canExport}
-              className={`${glassButtonBaseStyle} bg-red-500/50 border-red-400/50 hover:bg-red-500/70 text-white`}
-            >
-              <FileText className="w-4 h-4" /> Esporta
-            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  disabled={!canExport}
+                  className={`${glassButtonBaseStyle} bg-red-500/50 border-red-400/50 hover:bg-red-500/70 text-white`}
+                >
+                  <Share2 className="w-4 h-4" /> Condividi
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleExportPDF}>
+                  <FileText className="w-4 h-4 mr-2" /> Esporta PDF
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleWhatsApp}>
+                  <svg viewBox="0 0 24 24" className="w-4 h-4 mr-2 fill-green-500" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.529 5.845L.057 23.979l6.304-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.371l-.36-.214-3.733.979 1.004-3.651-.233-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
+                  </svg>
+                  Invia su WhatsApp
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <button
               onClick={handleSave}
               disabled={!canExport}
@@ -547,10 +585,8 @@ const Index = () => {
           </div>
         )}
 
-        {/* Main Interface */}
         <main className="flex-1 p-6 pt-0 overflow-hidden">
           <div className="h-full rounded-[2rem] overflow-hidden flex flex-col lg:flex-row border border-white/10 shadow-2xl bg-transparent">
-            {/* Left Column: Forms */}
             <div className="flex-1 lg:max-w-[45%] border-r border-white/5 bg-black/20">
               <ScrollArea id="form-scroll-area" className="h-[calc(100vh-140px)]">
                 <div className="p-8 space-y-8">
@@ -575,11 +611,9 @@ const Index = () => {
               </ScrollArea>
             </div>
 
-            {/* Right Column: Preview */}
             <div className="flex-1 bg-black/40 relative">
               <div className="absolute inset-0 flex flex-col">
                 <div className="px-8 py-4 border-b border-white/5">
-                  {/* Spazio per la barra superiore */}
                 </div>
                 <div className="flex-1 overflow-hidden p-8 flex justify-center">
                   <div className="w-full max-w-[800px] h-full shadow-2xl rounded-lg overflow-hidden">
@@ -604,7 +638,6 @@ const Index = () => {
         </footer>
       </div>
 
-      {/* Floating Action Buttons */}
       <div className="fixed bottom-6 left-6 z-50">
         <Button
           onClick={handleScrollToTop}
