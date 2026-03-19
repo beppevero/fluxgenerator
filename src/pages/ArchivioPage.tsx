@@ -342,18 +342,20 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                   </TableCell>
                   <TableCell className="text-center">
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Badge className={`cursor-pointer ${
-                          offerta.stato === 'inviata' ? 'bg-blue-600 text-white hover:bg-blue-700' :
-                          offerta.stato === 'scaduta' ? 'bg-orange-600 text-white hover:bg-orange-700' :
-                          offerta.stato === 'persa' ? 'bg-red-700 text-white hover:bg-red-800' :
-                          'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                        }`}>
-                          {offerta.stato === 'bozza' ? 'Salvata' :
-                           offerta.stato === 'inviata' ? 'Inviata' :
-                           offerta.stato === 'scaduta' ? 'Scaduta' :
-                           offerta.stato === 'persa' ? 'Persa' : offerta.stato}
-                        </Badge>
+                    <DropdownMenuTrigger asChild>
+                        <button className="focus:outline-none">
+                          <Badge className={`cursor-pointer ${
+                            offerta.stato === 'inviata' ? 'bg-blue-600 text-white hover:bg-blue-700' :
+                            offerta.stato === 'scaduta' ? 'bg-orange-600 text-white hover:bg-orange-700' :
+                            offerta.stato === 'persa' ? 'bg-red-700 text-white hover:bg-red-800' :
+                            'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                          }`}>
+                            {offerta.stato === 'bozza' ? 'Salvata' :
+                             offerta.stato === 'inviata' ? 'Inviata' :
+                             offerta.stato === 'scaduta' ? 'Scaduta' :
+                             offerta.stato === 'persa' ? 'Persa' : offerta.stato}
+                          </Badge>
+                        </button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="center">
                         <DropdownMenuItem onClick={() => handleChangeStato(offerta, 'bozza')}>Salvata</DropdownMenuItem>
