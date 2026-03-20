@@ -82,6 +82,7 @@ export interface Offerta {
   uid: string;
   cliente: {
     nome: string;
+    cognome: string;
     email: string;
     telefono: string;
     azienda: string;

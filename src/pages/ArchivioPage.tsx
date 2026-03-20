@@ -278,7 +278,7 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                       : 'bg-black/20 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white'
                   }`}
                 >
-                  {stato === 'tutti' ? 'Tutti' : stato === 'bozza' ? 'Salvata' : stato === 'inviata' ? 'Inviata' : stato === 'scaduta' ? 'Scaduta' : 'Persa'}
+                  {stato === 'tutti' ? 'Tutte' : stato === 'bozza' ? 'Salvata' : stato === 'inviata' ? 'Inviata' : stato === 'scaduta' ? 'Scaduta' : stato === 'persa' ? 'Persa' : 'Vinta'}
                 </button>
               ))}
             </div>

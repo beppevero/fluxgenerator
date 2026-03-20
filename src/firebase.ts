@@ -68,13 +68,24 @@ export const aggiornaProposteScadute = async (uid: string): Promise<void> => {
   const oggi = new Date();
   oggi.setHours(0, 0, 0, 0);
   const offerte = await getOfferte(uid);
-  const scadute = offerte.filter(o => {
-    if (o.stato === 'scaduta') return false;
+
+  const daAggiornare = offerte.filter(o => {
+    if (o.stato === 'persa' || o.stato === 'vinta') return false;
     const scadenza = o.dataScadenza.toDate();
     scadenza.setHours(0, 0, 0, 0);
     return scadenza < oggi;
   });
+
   await Promise.all(
-    scadute.map(o => updateOfferta(o.id!, { stato: 'scaduta' }))
+    daAggiornare.map(o => {
+      const scadenza = o.dataScadenza.toDate();
+      scadenza.setHours(0, 0, 0, 0);
+      const diffDays = Math.ceil((oggi.getTime() - scadenza.getTime()) / (1000 * 60 * 60 * 24));
+      if (diffDays > 5) {
+        return updateOfferta(o.id!, { stato: 'persa' });
+      } else {
+        return updateOfferta(o.id!, { stato: 'scaduta' });
+      }
+    })
   );
 };

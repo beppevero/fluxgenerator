@@ -165,6 +165,7 @@ const Index = () => {
         ragioneSociale: offerta.cliente.azienda,
         partitaIva: offerta.cliente.partitaIva || '',
         nomeReferente: offerta.cliente.nome,
+        cognomeReferente: offerta.cliente.cognome || '',
         emailCliente: offerta.cliente.email,
         telefonoCliente: offerta.cliente.telefono || '',
         mezziTrattativa: offerta.cliente.nMezzi.toString(),
@@ -304,6 +305,7 @@ const Index = () => {
       uid: user.uid,
       cliente: {
         nome: clientData.nomeReferente,
+        cognome: clientData.cognomeReferente,
         email: clientData.emailCliente,
         telefono: clientData.telefonoCliente,
         azienda: clientData.ragioneSociale,
