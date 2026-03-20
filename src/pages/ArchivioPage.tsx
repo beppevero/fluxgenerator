@@ -329,15 +329,23 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
             </TableHeader>
             <TableBody>
               {filteredOfferte.map((offerta) => (
-                <TableRow key={offerta.id} className="border-white/10 hover:bg-black/10">
-                  <TableCell className="font-medium">
-  <button
-    onClick={() => handleOpenStorico(offerta.cliente.azienda)}
-    className="hover:text-blue-400 transition-colors text-left"
-  >
-    {offerta.cliente.azienda}
-  </button>
-</TableCell>
+                <TableRow key={offerta.id} className={`border-white/10 hover:bg-white/10 transition-colors ${filteredOfferte.indexOf(offerta) % 2 === 0 ? 'bg-white/5' : 'bg-transparent'}`}>
+                <TableCell className="font-medium">
+                <div className="flex items-center gap-2">
+                  {(() => {
+                    const oggi = new Date();
+                    const creazione = offerta.dataCreazione.toDate();
+                    const isOggi = creazione.toDateString() === oggi.toDateString();
+                    return isOggi ? <span className="w-2 h-2 rounded-full bg-green-400 shrink-0" /> : null;
+                  })()}
+                  <button
+                    onClick={() => handleOpenStorico(offerta.cliente.azienda)}
+                    className="hover:text-blue-400 transition-colors text-left"
+                  >
+                    {offerta.cliente.azienda}
+                  </button>
+                </div>
+              </TableCell>
                   <TableCell className="text-center">{offerta.dataCreazione.toDate().toLocaleDateString("it-IT")}</TableCell>
                   <TableCell className="text-center">
                     <div className="flex items-center justify-center gap-2">
