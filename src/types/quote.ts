@@ -85,6 +85,7 @@ export interface Offerta {
     email: string;
     telefono: string;
     azienda: string;
+    partitaIva: string;
     nMezzi: number;
   };
   servizi: SelectedService[];

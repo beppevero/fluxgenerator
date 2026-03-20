@@ -163,6 +163,7 @@ const Index = () => {
       setClientData(prev => ({
         ...prev,
         ragioneSociale: offerta.cliente.azienda,
+        partitaIva: offerta.cliente.partitaIva || '',
         nomeReferente: offerta.cliente.nome,
         emailCliente: offerta.cliente.email,
         telefonoCliente: offerta.cliente.telefono || '',
@@ -170,7 +171,14 @@ const Index = () => {
       }));
       setPaymentInfo({
         condizioniPagamento: offerta.condizioni.pagamento,
-        validitaOfferta: offerta.condizioni.validitaOfferta,
+        validitaOfferta: (() => {
+          const raw = offerta.dataScadenza;
+          const d = typeof raw.toDate === 'function' ? raw.toDate() : new Date(raw.seconds * 1000);
+          const gg = String(d.getDate()).padStart(2, '0');
+          const mm = String(d.getMonth() + 1).padStart(2, '0');
+          const aaaa = d.getFullYear();
+          return `${gg}.${mm}.${aaaa}`;
+        })(),
         durataContrattuale: offerta.condizioni.durata,
         condizioniFornitura: offerta.condizioni.note,
       });
@@ -299,6 +307,7 @@ const Index = () => {
         email: clientData.emailCliente,
         telefono: clientData.telefonoCliente,
         azienda: clientData.ragioneSociale,
+        partitaIva: clientData.partitaIva,
         nMezzi: parseInt(clientData.mezziTrattativa) || 0
       },
       servizi: selectedServices,
