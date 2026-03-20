@@ -324,7 +324,8 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                   Data Scadenza {sortKey === 'dataScadenza' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
                 </TableHead>
                 <TableHead className="text-white text-center">Stato</TableHead>
-                <TableHead className="text-white text-center">Azioni</TableHead>
+<TableHead className="text-white text-center">Valore</TableHead>
+<TableHead className="text-white text-center">Azioni</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -362,6 +363,7 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                       </Tooltip>
                     </div>
                   </TableCell>
+
                   <TableCell className="text-center">
                     <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -378,6 +380,7 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                            offerta.stato === 'scaduta' ? 'Scaduta' :
                            offerta.stato === 'persa' ? 'Persa' :
                            offerta.stato === 'vinta' ? 'Vinta' : offerta.stato}
+                          
                           </Badge>
                         </button>
                       </DropdownMenuTrigger>
@@ -389,6 +392,11 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                         <DropdownMenuItem onClick={() => handleChangeStato(offerta, 'vinta')}>Vinta</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
+                  </TableCell>
+                  <TableCell className="text-center text-sm">
+                    {offerta.totale > 0
+                      ? `€ ${offerta.totale.toLocaleString('it-IT', { minimumFractionDigits: 2 })}`
+                      : '—'}
                   </TableCell>
                   <TableCell className="text-center">
                     <div className="flex items-center justify-center gap-1">
