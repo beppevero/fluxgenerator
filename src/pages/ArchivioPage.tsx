@@ -304,7 +304,7 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
         <div className="rounded-lg border border-white/10 bg-black/20 p-4 shadow-lg backdrop-blur-lg">
           <Table>
             <TableHeader>
-            <TableRow className="border-white/10 hover:bg-white/5">
+            <TableRow className="border-white/10 hover:bg-white/5 bg-white/5">
                 <TableHead
                   className="text-white cursor-pointer hover:text-white/70 transition-colors select-none"
                   onClick={() => handleSort('azienda')}
