@@ -71,6 +71,8 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
   const [selectedRevision, setSelectedRevision] = useState<Revision | null>(null);
   const [isRevisionDialogOpen, setIsRevisionDialogOpen] = useState(false);
   const [currentOffertaForRevision, setCurrentOffertaForRevision] = useState<Offerta | null>(null);
+  const [clienteStorico, setClienteStorico] = useState<string | null>(null);
+  const [isStoricoClienteOpen, setIsStoricoClienteOpen] = useState(false);
 
   const fetchOfferte = useCallback(async () => {
     if (user) {
@@ -175,6 +177,11 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
       console.error("Errore aggiornamento stato:", error);
       toast.error("Aggiornamento stato non riuscito.");
     }
+  };
+
+  const handleOpenStorico = (azienda: string) => {
+    setClienteStorico(azienda);
+    setIsStoricoClienteOpen(true);
   };
 
   // MODIFICATA: salva snapshot automatico prima di riaprire, poi naviga sempre
@@ -323,7 +330,14 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
             <TableBody>
               {filteredOfferte.map((offerta) => (
                 <TableRow key={offerta.id} className="border-white/10 hover:bg-black/10">
-                  <TableCell className="font-medium">{offerta.cliente.azienda}</TableCell>
+                  <TableCell className="font-medium">
+  <button
+    onClick={() => handleOpenStorico(offerta.cliente.azienda)}
+    className="hover:text-blue-400 transition-colors text-left"
+  >
+    {offerta.cliente.azienda}
+  </button>
+</TableCell>
                   <TableCell className="text-center">{offerta.dataCreazione.toDate().toLocaleDateString("it-IT")}</TableCell>
                   <TableCell className="text-center">
                     <div className="flex items-center justify-center gap-2">
@@ -492,6 +506,59 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
           />
         )}
 
+{/* Dialog Storico Cliente */}
+<Dialog open={isStoricoClienteOpen} onOpenChange={setIsStoricoClienteOpen}>
+          <DialogContent className="sm:max-w-[600px] bg-gray-900/80 border-gray-700/50 backdrop-blur-lg text-white">
+            <DialogHeader>
+              <DialogTitle>Storico — {clienteStorico}</DialogTitle>
+              <DialogDescription className="text-gray-400">
+                Tutte le proposte per questo cliente
+              </DialogDescription>
+            </DialogHeader>
+            <div className="mt-4 space-y-2 max-h-[400px] overflow-y-auto pr-1">
+              {offerte
+                .filter(o => o.cliente.azienda === clienteStorico)
+                .sort((a, b) => b.dataCreazione.toMillis() - a.dataCreazione.toMillis())
+                .map(o => (
+                  <div key={o.id} className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-sm text-gray-300">
+                        {o.dataCreazione.toDate().toLocaleDateString('it-IT')}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        Scadenza: {o.dataScadenza.toDate().toLocaleDateString('it-IT')}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {o.totale > 0 && (
+                        <span className="text-sm font-medium text-white">
+                          € {o.totale.toLocaleString('it-IT', { minimumFractionDigits: 2 })}
+                        </span>
+                      )}
+                      <Badge className={
+                        o.stato === 'inviata' ? 'bg-blue-600 text-white' :
+                        o.stato === 'scaduta' ? 'bg-orange-600 text-white' :
+                        o.stato === 'persa' ? 'bg-red-700 text-white' :
+                        o.stato === 'vinta' ? 'bg-green-600 text-white' :
+                        'bg-secondary text-secondary-foreground'
+                      }>
+                        {o.stato === 'bozza' ? 'Salvata' :
+                         o.stato === 'inviata' ? 'Inviata' :
+                         o.stato === 'scaduta' ? 'Scaduta' :
+                         o.stato === 'persa' ? 'Persa' :
+                         o.stato === 'vinta' ? 'Vinta' : o.stato}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+            </div>
+            <DialogFooter className="mt-4">
+              <DialogClose asChild>
+                <Button variant="ghost">Chiudi</Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </TooltipProvider>
   );
