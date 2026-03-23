@@ -320,7 +320,7 @@ const Index = () => {
         note: paymentInfo.condizioniFornitura,
         preset: activePreset || ''
       },
-      totale: showTotals ? totals.annuale + totals.mensile * 12 + totals.unaTantum : 0,
+      totale: totals.annuale + totals.mensile * 12 + totals.unaTantum,
       dataCreazione: dataCreazione,
       dataScadenza: Timestamp.fromDate(dataScadenza),
       stato,
@@ -580,9 +580,9 @@ const Index = () => {
             >
               <Archive className="w-4 h-4" /> Archivio
               {upcomingBadgeCount > 0 && (
-                <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
-                  {upcomingBadgeCount}
-                </div>
+                <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white animate-pulse">
+                {upcomingBadgeCount}
+              </div>
               )}
             </button>
           </div>
