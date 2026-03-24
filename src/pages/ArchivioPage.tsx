@@ -350,9 +350,9 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                   <TableCell className="text-center">{offerta.dataCreazione.toDate().toLocaleDateString("it-IT")}</TableCell>
                   <TableCell className="text-center">
                     <div className="flex items-center justify-center gap-2">
-                      <Badge className={`${getBadgeColor(offerta.dataScadenza)} text-white`}>
-                        {offerta.dataScadenza.toDate().toLocaleDateString("it-IT")}
-                      </Badge>
+                    <Badge className={`${offerta.stato === 'vinta' || offerta.stato === 'persa' ? 'bg-gray-600/80 border border-gray-500/50' : getBadgeColor(offerta.dataScadenza)} text-white`}>
+  {offerta.dataScadenza.toDate().toLocaleDateString("it-IT")}
+</Badge>
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button variant="ghost" size="icon" onClick={() => handleOpenModal(offerta)} className="h-6 w-6 group">
