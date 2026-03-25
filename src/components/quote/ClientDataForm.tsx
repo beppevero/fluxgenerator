@@ -69,7 +69,7 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
           <Label htmlFor="ragioneSociale" className="text-white/90 font-medium">Ragione Sociale *</Label>
           <Input
             id="ragioneSociale"
-            placeholder="Inserisci ragione sociale"
+            placeholder="Inserisci Ragione Sociale"
             value={clientData.ragioneSociale}
             onChange={(e) => onChange({ ...clientData, ragioneSociale: e.target.value })}
             className="glass-input font-medium border-white/20"
@@ -99,7 +99,7 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
                 <Label htmlFor="nomeReferente" className="text-white/90 font-medium">Nome Referente</Label>
                 <Input
                   id="nomeReferente"
-                  placeholder="Nome"
+                  placeholder="es. Mario"
                   value={clientData.nomeReferente}
                   onChange={(e) => onChange({ ...clientData, nomeReferente: e.target.value })}
                   className="glass-input border-white/20"
@@ -109,7 +109,7 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
                 <Label htmlFor="cognomeReferente" className="text-white/90 font-medium">Cognome Referente</Label>
                 <Input
                   id="cognomeReferente"
-                  placeholder="Cognome"
+                  placeholder="es. Rossi"
                   value={clientData.cognomeReferente}
                   onChange={(e) => onChange({ ...clientData, cognomeReferente: e.target.value })}
                   className="glass-input border-white/20"
@@ -145,7 +145,7 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
               <Input
                 id="mezziTrattativa"
                 type="number"
-                placeholder="N° mezzi"
+                placeholder="Inserisci quantità mezzi"
                 value={clientData.mezziTrattativa}
                 onChange={(e) => onChange({ ...clientData, mezziTrattativa: e.target.value })}
                 className="glass-input border-white/20"
@@ -178,7 +178,7 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
                 </div>
                 <div className="space-y-1">
                   <Label className="text-foreground/60 text-[11px]">Data di Nascita</Label>
-                  <Input placeholder="GG/MM/AAAA" value={lr.dataDiNascita} onChange={(e) => updateLR('dataDiNascita', e.target.value)} className="glass-input h-8 text-xs" />
+                  <Input placeholder="GG.MM.AAAA" value={lr.dataDiNascita} onChange={(e) => updateLR('dataDiNascita', e.target.value)} className="glass-input h-8 text-xs" />
                 </div>
               </div>
               <div className="space-y-1">
