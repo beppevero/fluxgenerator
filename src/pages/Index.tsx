@@ -545,6 +545,7 @@ const Index = () => {
               style={{ maxWidth: menuOpen ? '800px' : '0px', opacity: menuOpen ? 1 : 0 }}
             >
               <button
+                id="tour-invia"
                 onClick={handleSend}
                 disabled={!canExport}
                 className={`${glassButtonBaseStyle} bg-blue-500/50 border-blue-400/50 hover:bg-blue-500/70 text-white whitespace-nowrap`}
@@ -553,7 +554,8 @@ const Index = () => {
               </button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button
+                <button
+                    id="tour-condividi"
                     disabled={!canExport}
                     className={`${glassButtonBaseStyle} bg-red-500/50 border-red-400/50 hover:bg-red-500/70 text-white whitespace-nowrap`}
                   >
@@ -574,6 +576,7 @@ const Index = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
               <button
+              id="tour-salva"
                 onClick={handleSave}
                 disabled={!canExport}
                 className={`${glassButtonBaseStyle} bg-green-500/50 border-green-400/50 hover:bg-green-500/70 text-white whitespace-nowrap`}
@@ -581,6 +584,7 @@ const Index = () => {
                 <Save className="w-4 h-4" /> Salva
               </button>
               <button
+              id="tour-archivio"
                 onClick={() => navigate('/archivio')}
                 className={`${glassButtonBaseStyle} bg-yellow-400/50 border-yellow-300/50 hover:bg-yellow-400/70 text-yellow-100 whitespace-nowrap`}
               >
@@ -643,7 +647,7 @@ const Index = () => {
             <div className="flex-1 lg:max-w-[45%] border-r border-white/5 bg-black/20">
               <ScrollArea id="form-scroll-area" className="h-[calc(100vh-140px)]">
                 <div className="p-8 space-y-8">
-                  <div onFocus={() => triggerScroll('client')}>
+                <div id="tour-form" onFocus={() => triggerScroll('client')}>
                     <ClientDataForm clientData={clientData} onChange={setClientData} />
                   </div>
                   <div onFocus={() => triggerScroll('payment')} onClick={() => triggerScroll('payment')}>
@@ -669,7 +673,7 @@ const Index = () => {
                 <div className="px-8 py-4 border-b border-white/5">
                 </div>
                 <div className="flex-1 overflow-hidden p-8 flex justify-center">
-                  <div className="w-full max-w-[800px] h-full shadow-2xl rounded-lg overflow-hidden">
+                <div id="tour-preview" className="w-full max-w-[800px] h-full shadow-2xl rounded-lg overflow-hidden">
                     <ScrollArea className="h-full bg-white">
                       <QuotePreview 
                         ref={previewRef} 

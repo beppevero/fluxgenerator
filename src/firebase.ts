@@ -1,6 +1,6 @@
 
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, Timestamp, query, where, orderBy, deleteDoc, getDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, Timestamp, query, where, orderBy, deleteDoc, getDoc, setDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { Offerta, Revision } from "./types/quote";
 
@@ -88,4 +88,15 @@ export const aggiornaProposteScadute = async (uid: string): Promise<void> => {
       }
     })
   );
+};
+export const getOnboardingCompletato = async (uid: string): Promise<boolean> => {
+  const docRef = doc(db, 'utenti', uid);
+  const docSnap = await getDoc(docRef);
+  if (!docSnap.exists()) return false;
+  return docSnap.data()?.onboardingCompletato === true;
+};
+
+export const segnaOnboardingCompletato = async (uid: string): Promise<void> => {
+  const docRef = doc(db, 'utenti', uid);
+  await setDoc(docRef, { onboardingCompletato: true }, { merge: true });
 };
