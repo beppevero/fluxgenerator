@@ -125,6 +125,7 @@ const LoginPage = () => {
                   <FormControl>
                     <div className="relative">
                       <Input
+                      placeholder="**********"
                         type={showPassword ? 'text' : 'password'}
                         {...field}
                         className="bg-transparent text-white border-gray-600 focus:ring-sky-500 focus:border-sky-500"
@@ -153,13 +154,12 @@ const LoginPage = () => {
             href={`mailto:giuseppe.vero@macnil.it?subject=Recupero Password Quoty - ${form.getValues('email')}`}
             className="hover:text-white"
           >
-            Hai dimenticato la password?
+            Password dimenticata?
           </a>
           <a
             href="mailto:giuseppe.vero@macnil.it?subject=Richiesta Accesso Quoty"
             className="hover:text-white"
           >
-            Richiedi accesso
           </a>
         </div>
       </div>
