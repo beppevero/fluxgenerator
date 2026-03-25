@@ -609,14 +609,7 @@ const Index = () => {
 
             {/* Hamburger — tondo */}
             <Button
-              onClick={() => {
-                setMenuOpen(prev => {
-                  if (!prev) {
-                    setTimeout(() => setMenuOpen(false), 5000);
-                  }
-                  return !prev;
-                });
-              }}
+              onClick={() => setMenuOpen(prev => !prev)}
               variant="outline"
               size="icon"
               className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white rounded-full h-12 w-12 border-white/20"
