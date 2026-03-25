@@ -683,8 +683,8 @@ const Index = () => {
           </div>
         </main>
 
-        <footer className="p-4 text-center text-[10px] text-white/20 uppercase tracking-[0.2em]">
-          QUOTY &copy; 2024 • Smart Quote Generator
+        <footer className="p-4 text-center text-[10px] text-white/40 uppercase tracking-[0.2em]">
+          QUOTY &copy; 2024 • Monkey Studio
         </footer>
       </div>
 
