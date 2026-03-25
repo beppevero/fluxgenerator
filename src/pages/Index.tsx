@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, Trash2, Send, ArrowUp, LogOut, Archive, Save, X, AlertTriangle, Share2 } from "lucide-react";
+import { FileText, Trash2, Send, ArrowUp, LogOut, Archive, Save, X, AlertTriangle, Share2, Menu } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
@@ -102,6 +102,7 @@ const Index = () => {
   const [expiringOffers, setExpiringOffers] = useState<Offerta[]>([]);
   const [showExpiringBanner, setShowExpiringBanner] = useState(true);
   const [upcomingBadgeCount, setUpcomingBadgeCount] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -188,6 +189,11 @@ const Index = () => {
       
       if (isDuplicate) {
         setOffertaCorrenteId(null);
+        // Clone intelligente: resetta validità a 30 giorni
+        setPaymentInfo(prev => ({
+          ...prev,
+          validitaOfferta: "30 giorni",
+        }));
       } else {
         setOffertaCorrenteId(offerta.id!);
       }
@@ -529,62 +535,86 @@ const Index = () => {
     <div className="relative min-h-screen">
       <AnimatedBackground />
       <div className="relative z-10 max-w-[1600px] mx-auto min-h-screen flex flex-col">
-        <header className="p-6 flex items-center justify-between bg-transparent">
+      <header className="p-6 flex items-center justify-between bg-transparent">
           <h1 className="text-2xl font-bold text-white">QUOTY</h1>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+
+            {/* Pulsante Pulisci — sempre visibile */}
             <button
               onClick={handleClearAll}
               className={`${glassButtonBaseStyle} bg-white/20 border-white/30 hover:bg-white/30 text-white`}
             >
               <Trash2 className="w-4 h-4" /> Pulisci
             </button>
-            <button
-              onClick={handleSend}
-              disabled={!canExport}
-              className={`${glassButtonBaseStyle} bg-blue-500/50 border-blue-400/50 hover:bg-blue-500/70 text-white`}
+
+            {/* Pulsanti scorrevoli */}
+            <div className="flex items-center gap-3 overflow-hidden transition-all duration-500 ease-in-out"
+              style={{ maxWidth: menuOpen ? '800px' : '0px', opacity: menuOpen ? 1 : 0 }}
             >
-              <Send className="w-4 h-4" /> Invia Mail
-            </button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  disabled={!canExport}
-                  className={`${glassButtonBaseStyle} bg-red-500/50 border-red-400/50 hover:bg-red-500/70 text-white`}
-                >
-                  <Share2 className="w-4 h-4" /> Condividi
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleExportPDF}>
-                  <FileText className="w-4 h-4 mr-2" /> Esporta 
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleWhatsApp}>
-                  <svg viewBox="0 0 24 24" className="w-4 h-4 mr-2 fill-green-500" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.529 5.845L.057 23.979l6.304-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.371l-.36-.214-3.733.979 1.004-3.651-.233-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
-                  </svg>
-                  Invia WhatsApp
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              <button
+                onClick={handleSend}
+                disabled={!canExport}
+                className={`${glassButtonBaseStyle} bg-blue-500/50 border-blue-400/50 hover:bg-blue-500/70 text-white whitespace-nowrap`}
+              >
+                <Send className="w-4 h-4" /> Invia Mail
+              </button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    disabled={!canExport}
+                    className={`${glassButtonBaseStyle} bg-red-500/50 border-red-400/50 hover:bg-red-500/70 text-white whitespace-nowrap`}
+                  >
+                    <Share2 className="w-4 h-4" /> Condividi
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={handleExportPDF}>
+                    <FileText className="w-4 h-4 mr-2" /> Esporta
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleWhatsApp}>
+                    <svg viewBox="0 0 24 24" className="w-4 h-4 mr-2 fill-green-500" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.529 5.845L.057 23.979l6.304-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.371l-.36-.214-3.733.979 1.004-3.651-.233-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
+                    </svg>
+                    Invia WhatsApp
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <button
+                onClick={handleSave}
+                disabled={!canExport}
+                className={`${glassButtonBaseStyle} bg-green-500/50 border-green-400/50 hover:bg-green-500/70 text-white whitespace-nowrap`}
+              >
+                <Save className="w-4 h-4" /> Salva
+              </button>
+              <button
+                onClick={() => navigate('/archivio')}
+                className={`${glassButtonBaseStyle} bg-yellow-400/50 border-yellow-300/50 hover:bg-yellow-400/70 text-yellow-100 whitespace-nowrap`}
+              >
+                <Archive className="w-4 h-4" /> Archivio
+                {upcomingBadgeCount > 0 && (
+                  <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white animate-pulse">
+                    {upcomingBadgeCount}
+                  </div>
+                )}
+              </button>
+            </div>
+
+            {/* Hamburger */}
             <button
-              onClick={handleSave}
-              disabled={!canExport}
-              className={`${glassButtonBaseStyle} bg-green-500/50 border-green-400/50 hover:bg-green-500/70 text-white`}
+              onClick={() => {
+                setMenuOpen(prev => {
+                  if (!prev) {
+                    setTimeout(() => setMenuOpen(false), 5000);
+                  }
+                  return !prev;
+                });
+              }}
+              className={`${glassButtonBaseStyle} bg-white/20 border-white/30 hover:bg-white/30 text-white px-3`}
             >
-              <Save className="w-4 h-4" /> Salva
+              <Menu className="w-4 h-4" />
             </button>
-            <button
-              onClick={() => navigate('/archivio')}
-              className={`${glassButtonBaseStyle} bg-yellow-400/50 border-yellow-300/50 hover:bg-yellow-400/70 text-yellow-100`}
-            >
-              <Archive className="w-4 h-4" /> Archivio
-              {upcomingBadgeCount > 0 && (
-                <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white animate-pulse">
-                {upcomingBadgeCount}
-              </div>
-              )}
-            </button>
+
           </div>
         </header>
         
