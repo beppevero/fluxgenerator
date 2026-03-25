@@ -539,16 +539,9 @@ const Index = () => {
           <h1 className="text-2xl font-bold text-white">QUOTY</h1>
           <div className="flex items-center gap-3">
 
-            {/* Pulsante Pulisci — sempre visibile */}
-            <button
-              onClick={handleClearAll}
-              className={`${glassButtonBaseStyle} bg-white/20 border-white/30 hover:bg-white/30 text-white`}
-            >
-              <Trash2 className="w-4 h-4" /> Pulisci
-            </button>
-
             {/* Pulsanti scorrevoli */}
-            <div className="flex items-center gap-3 overflow-hidden transition-all duration-500 ease-in-out"
+            <div
+              className="flex items-center gap-3 overflow-hidden transition-all duration-500 ease-in-out"
               style={{ maxWidth: menuOpen ? '800px' : '0px', opacity: menuOpen ? 1 : 0 }}
             >
               <button
@@ -600,8 +593,18 @@ const Index = () => {
               </button>
             </div>
 
-            {/* Hamburger */}
-            <button
+            {/* Pulisci — tondo con solo icona */}
+            <Button
+              onClick={handleClearAll}
+              variant="outline"
+              size="icon"
+              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white rounded-full h-12 w-12 border-white/20"
+            >
+              <Trash2 className="h-5 w-5" />
+            </Button>
+
+            {/* Hamburger — tondo */}
+            <Button
               onClick={() => {
                 setMenuOpen(prev => {
                   if (!prev) {
@@ -610,10 +613,12 @@ const Index = () => {
                   return !prev;
                 });
               }}
-              className={`${glassButtonBaseStyle} bg-white/20 border-white/30 hover:bg-white/30 text-white px-3`}
+              variant="outline"
+              size="icon"
+              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white rounded-full h-12 w-12 border-white/20"
             >
-              <Menu className="w-4 h-4" />
-            </button>
+              <Menu className="h-5 w-5" />
+            </Button>
 
           </div>
         </header>
