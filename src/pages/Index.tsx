@@ -17,7 +17,8 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Timestamp } from "firebase/firestore";
 import { toast } from "sonner";
-import { saveOfferta, updateOfferta, getOfferte, aggiornaProposteScadute } from "@/firebase";
+import { saveOfferta, updateOfferta, getOfferte, aggiornaProposteScadute, getOnboardingCompletato, segnaOnboardingCompletato } from "@/firebase";
+import OnboardingTour from "@/components/OnboardingTour";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 // --- Animated Toast Icons ---
@@ -103,7 +104,15 @@ const Index = () => {
   const [showExpiringBanner, setShowExpiringBanner] = useState(true);
   const [upcomingBadgeCount, setUpcomingBadgeCount] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showTour, setShowTour] = useState(false);
 
+  // Check onboarding status
+  useEffect(() => {
+    if (!user) return;
+    getOnboardingCompletato(user.uid).then(completato => {
+      if (!completato) setShowTour(true);
+    });
+  }, [user]);
   useEffect(() => {
     if (!user) return;
 
@@ -609,6 +618,7 @@ const Index = () => {
 
             {/* Hamburger — tondo */}
             <Button
+              id="tour-hamburger"
               onClick={() => setMenuOpen(prev => !prev)}
               variant="outline"
               size="icon"
@@ -709,6 +719,16 @@ const Index = () => {
           <LogOut className="h-6 w-6" />
         </Button>
       </div>
+      {showTour && (
+        <OnboardingTour
+          onComplete={() => {
+            setShowTour(false);
+            setMenuOpen(false);
+            if (user) segnaOnboardingCompletato(user.uid);
+          }}
+          onRequestMenuOpen={setMenuOpen}
+        />
+      )}
     </div>
   );
 };
