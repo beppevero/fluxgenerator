@@ -720,10 +720,14 @@ const Index = () => {
         </Button>
       </div>
       {showTour && (
-        <OnboardingTour onComplete={() => {
-          setShowTour(false);
-          if (user) segnaOnboardingCompletato(user.uid);
-        }} />
+        <OnboardingTour
+          onComplete={() => {
+            setShowTour(false);
+            setMenuOpen(false);
+            if (user) segnaOnboardingCompletato(user.uid);
+          }}
+          onRequestMenuOpen={setMenuOpen}
+        />
       )}
     </div>
   );

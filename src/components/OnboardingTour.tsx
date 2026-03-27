@@ -55,14 +55,21 @@ const OnboardingTour = ({ onComplete, onRequestMenuOpen }: OnboardingTourProps) 
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
 
   useEffect(() => {
-    const el = document.getElementById(steps[currentStep].targetId);
+    const step = steps[currentStep];
+    // Open menu for steps that target menu items
+    const menuStepIds = ['tour-invia', 'tour-condividi', 'tour-salva', 'tour-archivio'];
+    if (onRequestMenuOpen) {
+      onRequestMenuOpen(menuStepIds.includes(step.targetId));
+    }
+
+    const el = document.getElementById(step.targetId);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setTimeout(() => {
         setTargetRect(el.getBoundingClientRect());
-      }, 300);
+      }, 400);
     }
-  }, [currentStep]);
+  }, [currentStep, onRequestMenuOpen]);
 
   useEffect(() => {
     const handleResize = () => {
