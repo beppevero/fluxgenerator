@@ -103,7 +103,7 @@ const Index = () => {
   const [expiringOffers, setExpiringOffers] = useState<Offerta[]>([]);
   const [showExpiringBanner, setShowExpiringBanner] = useState(true);
   const [upcomingBadgeCount, setUpcomingBadgeCount] = useState(0);
-  const [menuOpen, setMenuOpen] = useState(false);
+  
   const [showTour, setShowTour] = useState(false);
 
   // Check onboarding status
