@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, Trash2, Send, ArrowUp, LogOut, Archive, Save, X, AlertTriangle, Share2, Menu } from "lucide-react";
+import { FileText, Trash2, Send, ArrowUp, LogOut, Archive, Save, X, AlertTriangle, Share2 } from "lucide-react";
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
@@ -103,7 +103,7 @@ const Index = () => {
   const [expiringOffers, setExpiringOffers] = useState<Offerta[]>([]);
   const [showExpiringBanner, setShowExpiringBanner] = useState(true);
   const [upcomingBadgeCount, setUpcomingBadgeCount] = useState(0);
-  const [menuOpen, setMenuOpen] = useState(false);
+  
   const [showTour, setShowTour] = useState(false);
 
   // Check onboarding status
@@ -547,12 +547,6 @@ const Index = () => {
       <header className="p-6 flex items-center justify-between bg-transparent">
           <h1 className="text-2xl font-bold text-white">QUOTY</h1>
           <div className="flex items-center gap-3">
-
-            {/* Pulsanti scorrevoli */}
-            <div
-              className="flex items-center gap-3 overflow-hidden transition-all duration-500 ease-in-out"
-              style={{ maxWidth: menuOpen ? '800px' : '0px', opacity: menuOpen ? 1 : 0 }}
-            >
               <button
                 id="tour-invia"
                 onClick={handleSend}
@@ -604,7 +598,6 @@ const Index = () => {
                   </div>
                 )}
               </button>
-            </div>
 
             {/* Pulisci — tondo con solo icona */}
             <Button
@@ -614,17 +607,6 @@ const Index = () => {
               className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white rounded-full h-12 w-12 border-white/20"
             >
               <Trash2 className="h-5 w-5" />
-            </Button>
-
-            {/* Hamburger — tondo */}
-            <Button
-              id="tour-hamburger"
-              onClick={() => setMenuOpen(prev => !prev)}
-              variant="outline"
-              size="icon"
-              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white rounded-full h-12 w-12 border-white/20"
-            >
-              <Menu className="h-5 w-5" />
             </Button>
 
           </div>
@@ -723,10 +705,9 @@ const Index = () => {
         <OnboardingTour
           onComplete={() => {
             setShowTour(false);
-            setMenuOpen(false);
             if (user) segnaOnboardingCompletato(user.uid);
           }}
-          onRequestMenuOpen={setMenuOpen}
+          onRequestMenuOpen={() => {}}
         />
       )}
     </div>
