@@ -25,6 +25,7 @@ export function RevisionHistoryDialog({ isOpen, onClose, revision, offerta }: Re
         nomeReferente: revision.snapshot.cliente.nome,
         cognomeReferente: "",
         emailCliente: revision.snapshot.cliente.email,
+        telefonoCliente: revision.snapshot.cliente.telefono || "",
         mezziTrattativa: revision.snapshot.cliente.nMezzi.toString(),
         documentType: 'standard',
         legaleRappresentante: { cognome: "", nome: "", luogoDiNascita: "", dataDiNascita: "", codiceFiscale: "" },
