@@ -104,7 +104,15 @@ const Index = () => {
   const [showExpiringBanner, setShowExpiringBanner] = useState(true);
   const [upcomingBadgeCount, setUpcomingBadgeCount] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showTour, setShowTour] = useState(false);
 
+  // Check onboarding status
+  useEffect(() => {
+    if (!user) return;
+    getOnboardingCompletato(user.uid).then(completato => {
+      if (!completato) setShowTour(true);
+    });
+  }, [user]);
   useEffect(() => {
     if (!user) return;
 
