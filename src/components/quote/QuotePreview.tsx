@@ -463,7 +463,6 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
       fontSize: '11px'
     }}>
       <div ref={headerRef} className={`transition-all duration-500 ${activeSection === 'client' ? 'ring-4 ring-primary/10 bg-blue-50/30' : ''}`} style={{
-        height: '257mm',
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
