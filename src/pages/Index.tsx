@@ -718,6 +718,12 @@ const Index = () => {
           <LogOut className="h-6 w-6" />
         </Button>
       </div>
+      {showTour && (
+        <OnboardingTour onComplete={() => {
+          setShowTour(false);
+          if (user) segnaOnboardingCompletato(user.uid);
+        }} />
+      )}
     </div>
   );
 };
