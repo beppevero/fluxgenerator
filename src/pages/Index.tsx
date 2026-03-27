@@ -618,6 +618,7 @@ const Index = () => {
 
             {/* Hamburger — tondo */}
             <Button
+              id="tour-hamburger"
               onClick={() => setMenuOpen(prev => !prev)}
               variant="outline"
               size="icon"

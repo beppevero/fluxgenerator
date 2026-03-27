@@ -47,9 +47,10 @@ const steps: TourStep[] = [
 
 interface OnboardingTourProps {
   onComplete: () => void;
+  onRequestMenuOpen?: (open: boolean) => void;
 }
 
-const OnboardingTour = ({ onComplete }: OnboardingTourProps) => {
+const OnboardingTour = ({ onComplete, onRequestMenuOpen }: OnboardingTourProps) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
 
