@@ -507,6 +507,59 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
         )}
       </div>
 
+      {/* PAGINA 2: Introduzione e Benefici */}
+      <div style={{
+        minHeight: '257mm',
+        width: '100%',
+        boxSizing: 'border-box',
+        padding: '20mm 12mm 15mm 12mm',
+        pageBreakBefore: 'always',
+      }}>
+        <h3 className={sectionTitleStyle} style={{ fontSize: '13px', marginBottom: '12px' }}>INTRODUZIONE</h3>
+        <p className="text-[10px] text-gray-700 leading-relaxed mb-5">
+          Il Presente documento illustra la proposta di MACNIL al Cliente per la fornitura della soluzione <strong>GT FLEET 365</strong> – Piattaforma Software Avanzata per Localizzazione, Gestione, Controllo, Telematica e Sicurezza mezzi aziendali e asset.
+        </p>
+
+        <h3 className={sectionTitleStyle} style={{ fontSize: '13px', marginBottom: '12px' }}>ESIGENZE DEL CLIENTE, BENEFICI E RITORNI AZIENDALI</h3>
+        <p className="text-[10px] text-gray-700 leading-relaxed mb-3">
+          GT FLEET 365 è una piattaforma software avanzata per la mobilità e per la gestione, il controllo, la telematica e la sicurezza di mezzi aziendali, asset e persone, che contribuisce alla <strong>Digital Transformation delle aziende</strong>. Grazie a un dispositivo GSM/GPS/4G, interfacciato con l'elettronica di bordo del mezzo, è in grado di rilevare dati di localizzazione satellitare GPS.
+        </p>
+        <p className="text-[10px] text-gray-700 leading-relaxed mb-3">
+          Il sistema prevede la possibilità di localizzare il mezzo e di visualizzarlo su mappe cartografiche satellitari. Il sistema inoltre prevede la registrazione puntuale di velocità, percorsi, soste del mezzo con riferimenti temporali, anche grazie alla telematica di bordo: una "<strong>scatola nera del mezzo</strong>" che permette di analizzare anche le abitudini di guida dei driver. I dati sono visionabili attraverso <strong>Web</strong> e <strong>App</strong>, utilizzando opportune credenziali di accesso e autorizzazioni.
+        </p>
+        <p className="text-[10px] text-gray-700 leading-relaxed mb-5">
+          È possibile gestire gli Utenti abilitati all'utilizzo del Sistema, con relative autorizzazioni (<strong>sotto accessi</strong>), in base a mezzi e dati da analizzare.
+        </p>
+
+        <p className="text-[10px] font-semibold text-gray-800 mb-3">Principali benefici legati all'introduzione di GT FLEET 365:</p>
+        <div className="space-y-3 text-[10px] text-gray-700 leading-relaxed">
+          <div className="pl-3 border-l-2 border-[#0066b3]">
+            <p className="font-semibold text-gray-800 mb-1">Riduzione dei costi per aumento di produttività ed efficienza</p>
+            <p>L'applicazione consente di scambiare dati in modo automatico, quindi senza impegnare tempo del personale operativo che si può così concentrare su altre attività.</p>
+          </div>
+          <div className="pl-3 border-l-2 border-[#0066b3]">
+            <p className="font-semibold text-gray-800 mb-1">Riduzione dei costi del personale</p>
+            <p>Il controllo sui punti di sosta e/o parcheggio consente un controllo a posteriori o in tempo reale sull'attività svolta dai driver e quindi la possibilità di ridurre gli sprechi di tempo e ottimizzare l'attività lavorativa.</p>
+          </div>
+          <div className="pl-3 border-l-2 border-[#0066b3]">
+            <p className="font-semibold text-gray-800 mb-1">Riduzione dei costi per multe di eccesso velocità</p>
+            <p>Possibilità di controllare a posteriori o in tempo reale, attraverso notifiche personalizzate, la velocità del mezzo per perseguire azioni di persuasione all'educazione stradale e quindi evitare multe per eccesso di velocità. La possibilità di verificare multe per soste non consentite.</p>
+          </div>
+          <div className="pl-3 border-l-2 border-[#0066b3]">
+            <p className="font-semibold text-gray-800 mb-1">Aumento dei Ricavi per miglioramento della Soddisfazione dei Clienti</p>
+            <p>Il monitoraggio in tempo reale delle attività contribuisce ad incrementare il livello di servizio offerto al committente dell'azienda, supportando la gestione di eventuali situazioni critiche (legati per esempio a ritardi, furti...) e più tipicamente la comunicazione frequente dello stato di avanzamento della spedizione o dell'assistenza.</p>
+          </div>
+          <div className="pl-3 border-l-2 border-[#0066b3]">
+            <p className="font-semibold text-gray-800 mb-1">Aumento dell'Immagine Aziendale</p>
+            <p>L'adozione di applicazioni di questo tipo influisce positivamente sull'immagine percepita da clienti e fornitori circa la qualità e l'affidabilità del servizio fornito.</p>
+          </div>
+          <div className="pl-3 border-l-2 border-[#0066b3]">
+            <p className="font-semibold text-gray-800 mb-1">Aumento della Sicurezza dei Mezzi</p>
+            <p>Possibilità di poter individuare su mappa in tempo reale un mezzo in panne o incidentato per richiedere intervento SOS, possibilità di poter pedinare o localizzare un mezzo a seguito di furto o rapina.</p>
+          </div>
+        </div>
+      </div>
+
       <div style={{ marginTop: 0, padding: '0 12mm', position: 'relative', boxSizing: 'border-box' }}>
         {renderEconomicTable()}
         {renderConditions()}
