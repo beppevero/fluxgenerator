@@ -705,10 +705,9 @@ const Index = () => {
         <OnboardingTour
           onComplete={() => {
             setShowTour(false);
-            setMenuOpen(false);
             if (user) segnaOnboardingCompletato(user.uid);
           }}
-          onRequestMenuOpen={setMenuOpen}
+          onRequestMenuOpen={() => {}}
         />
       )}
     </div>
