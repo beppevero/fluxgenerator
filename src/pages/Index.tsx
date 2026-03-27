@@ -17,7 +17,8 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Timestamp } from "firebase/firestore";
 import { toast } from "sonner";
-import { saveOfferta, updateOfferta, getOfferte, aggiornaProposteScadute } from "@/firebase";
+import { saveOfferta, updateOfferta, getOfferte, aggiornaProposteScadute, getOnboardingCompletato, segnaOnboardingCompletato } from "@/firebase";
+import OnboardingTour from "@/components/OnboardingTour";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 // --- Animated Toast Icons ---
