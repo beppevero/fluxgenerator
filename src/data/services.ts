@@ -137,10 +137,10 @@ export const servicesList: Service[] = [
     periodo: 'MENSILE',
   },
 
-  // GT FLEET 365 TRUCK CRONO
+  // GT FLEET 365 TRUCK CRONO BASE
   {
     id: 'crono-base-annuale',
-    nome: 'GT FLEET 365 TRUCK CRONO',
+    nome: 'GT FLEET 365 TRUCK CRONO BASE',
     descrizione: "Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità con possibilità di visualizzazione del traffico, Stato del mezzo (in sosta, in fermata, in movimento), Consumo carburante (stimato), Km percorsi da GPS, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Reportistica, Cronotachigrafo Digitale - Scarico File DDD, Report Truck Base: Lettere di infrazione e attività dell'autista, Dati tempi di guida autista Real Time, Formazione, Assistenza",
     categoria: 'crono',
     prezzoListino: 290.00,
@@ -150,7 +150,7 @@ export const servicesList: Service[] = [
   },
   {
     id: 'crono-base-mensile',
-    nome: 'GT FLEET 365 TRUCK CRONO',
+    nome: 'GT FLEET 365 TRUCK CRONO BASE',
     descrizione: "Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità con possibilità di visualizzazione del traffico, Stato del mezzo (in sosta, in fermata, in movimento), Consumo carburante (stimato), Km percorsi da GPS, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Reportistica, Cronotachigrafo Digitale - Scarico File DDD, Report Truck Base: Lettere di infrazione e attività dell'autista, Dati tempi di guida autista Real Time, Formazione, Assistenza",
     categoria: 'crono',
     prezzoListino: 29.00,
@@ -181,10 +181,10 @@ export const servicesList: Service[] = [
     isCrono: true,
   },
 
-  // GT FLEET 365 TRUCK CRONO TELEMATICA
+  // GT FLEET 365 TRUCK CRONO GOLD
   {
     id: 'crono-telematica-annuale',
-    nome: 'GT FLEET 365 TRUCK CRONO TELEMATICA',
+    nome: 'GT FLEET 365 TRUCK CRONO GOLD',
     descrizione: "Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità con possibilità di visualizzazione del traffico, Stato del mezzo (in sosta, in fermata, in movimento), Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Funzione Veicolo in Officina, Reportistica, Km percorsi da odometro con telematica (se fornita dal mezzo), Consumo Carburante con telematica (se fornita dal mezzo), Cronotachigrafo Digitale - Scarico File DDD, Report Truck Base: Lettere di infrazione e attività dell'autista, Dati tempi di guida autista Real Time, Formazione, Assistenza",
     categoria: 'crono_telematica',
     prezzoListino: 350.00,
@@ -194,7 +194,7 @@ export const servicesList: Service[] = [
   },
   {
     id: 'crono-telematica-mensile',
-    nome: 'GT FLEET 365 TRUCK CRONO TELEMATICA',
+    nome: 'GT FLEET 365 TRUCK CRONO GOLD',
     descrizione: "Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità con possibilità di visualizzazione del traffico, Stato del mezzo (in sosta, in fermata, in movimento), Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Funzione Veicolo in Officina, Reportistica, Km percorsi da odometro con telematica (se fornita dal mezzo), Consumo Carburante con telematica (se fornita dal mezzo), Cronotachigrafo Digitale - Scarico File DDD, Report Truck Base: Lettere di infrazione e attività dell'autista, Dati tempi di guida autista Real Time, Formazione, Assistenza",
     categoria: 'crono_telematica',
     prezzoListino: 34.00,
@@ -589,9 +589,9 @@ export const categorieLabels: Record<string, string> = {
   fleet_gold: 'GT Fleet 365 Gold',
   fleet_plus: 'GT Fleet 365 Plus',
   fleet_premium: 'GT Fleet 365 Premium',
-  crono: 'GT Fleet 365 Truck Crono',
+  crono: 'GT Fleet 365 Truck Crono Base',
   crono_plus: 'GT Fleet 365 Truck Crono Plus',
-  crono_telematica: 'GT Fleet 365 Truck Crono Telematica',
+  crono_telematica: 'GT Fleet 365 Truck Crono Gold',
   crono_premium: 'GT Fleet 365 Truck Crono Premium',
   servizio_rimorchi: 'GT Fleet 365 Servizio Rimorchi',
   tractor: 'GT Fleet 365 Tractor',
