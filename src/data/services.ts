@@ -159,6 +159,28 @@ export const servicesList: Service[] = [
     isCrono: true,
   },
 
+  // GT FLEET 365 TRUCK CRONO PLUS
+  {
+    id: 'crono-plus-annuale',
+    nome: 'GT FLEET 365 TRUCK CRONO PLUS',
+    descrizione: "Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità con possibilità di visualizzazione del traffico, Stato del mezzo (in sosta, in fermata, in movimento), Consumo carburante (stimato), Km percorsi da GPS, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Reportistica, Allarme Taglio Cavi e Distacco Batteria, Antijammer, Blocco Avviamento da Remoto, Parking Protection, Gestione Referenti Allarmi e Notifiche, Funzione Veicolo in Officina, Tasto SOS, Cronotachigrafo Digitale - Scarico File DDD, Report Truck Base: Lettere di infrazione e attività dell'autista, Dati tempi di guida autista Real Time, Formazione, Assistenza",
+    categoria: 'crono_plus',
+    prezzoListino: 340.00,
+    prezzoRiservato: 210.00,
+    periodo: 'ANNUALE',
+    isCrono: true,
+  },
+  {
+    id: 'crono-plus-mensile',
+    nome: 'GT FLEET 365 TRUCK CRONO PLUS',
+    descrizione: "Localizzazione Real Time, Percorsi, Soste via WEB, App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Infomobilità con possibilità di visualizzazione del traffico, Stato del mezzo (in sosta, in fermata, in movimento), Consumo carburante (stimato), Km percorsi da GPS, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione Avvisi Scadenze, Gestione Manutenzioni (per km e per data), Gestione Referenti Notifiche, Reportistica, Allarme Taglio Cavi e Distacco Batteria, Antijammer, Blocco Avviamento da Remoto, Parking Protection, Gestione Referenti Allarmi e Notifiche, Funzione Veicolo in Officina, Tasto SOS, Cronotachigrafo Digitale - Scarico File DDD, Report Truck Base: Lettere di infrazione e attività dell'autista, Dati tempi di guida autista Real Time, Formazione, Assistenza",
+    categoria: 'crono_plus',
+    prezzoListino: 32.00,
+    prezzoRiservato: 20.00,
+    periodo: 'MENSILE',
+    isCrono: true,
+  },
+
   // GT FLEET 365 TRUCK CRONO TELEMATICA
   {
     id: 'crono-telematica-annuale',
@@ -392,6 +414,15 @@ export const servicesList: Service[] = [
     prezzoRiservato: 5.00,
     periodo: 'MENSILE',
   },
+  {
+    id: 'gt-50-app-annuale',
+    nome: 'GT FLEET 365 - GT 5.0.APP',
+    descrizione: 'App con Funzione Dispositivo GPS per Tracciare Persone con Smartphone, Funzione Riconoscimento Operatore o Personale in Mobilità',
+    categoria: 'driver',
+    prezzoListino: 96.00,
+    prezzoRiservato: 60.00,
+    periodo: 'ANNUALE',
+  },
 
   // PIATTAFORME CRONO
   {
@@ -474,6 +505,24 @@ export const servicesList: Service[] = [
     isCrono: true,
   },
   {
+    id: 'servizio-mappe-truck-annuale',
+    nome: 'SERVIZIO MAPPE TRUCK',
+    descrizione: "Funzione Calcolo e Ottimizzazione Percorsi utilizzando Mappe Track, Gestione Ponti Bassi, Strettoie e Ponti con limitazione di Peso, Trasmissione piano attività dal Web all'App Driver, Gestione delle attività attraverso l'App Driver",
+    categoria: 'servizi_aggiuntivi',
+    prezzoListino: 304.00,
+    prezzoRiservato: 190.00,
+    periodo: 'ANNUALE',
+  },
+  {
+    id: 'servizio-manutenzioni-scadenze-annuale',
+    nome: 'SERVIZIO MANUTENZIONI E SCADENZE',
+    descrizione: 'Gestione Avvisi Scadenze (Bolli, Assicurazioni, Patenti, Documenti, ...), Gestione Manutenzioni (per KM, per DATA, per Ore Lavoro Motore), Gestione Referenti Notifiche, Reportistica Avanzata Personalizzata',
+    categoria: 'servizi_aggiuntivi',
+    prezzoListino: 192.00,
+    prezzoRiservato: 120.00,
+    periodo: 'ANNUALE',
+  },
+  {
     id: 'custom-service',
     nome: 'SERVIZIO PERSONALIZZATO',
     descrizione: 'Voce di spesa personalizzabile',
@@ -541,6 +590,7 @@ export const categorieLabels: Record<string, string> = {
   fleet_plus: 'GT Fleet 365 Plus',
   fleet_premium: 'GT Fleet 365 Premium',
   crono: 'GT Fleet 365 Truck Crono',
+  crono_plus: 'GT Fleet 365 Truck Crono Plus',
   crono_telematica: 'GT Fleet 365 Truck Crono Telematica',
   crono_premium: 'GT Fleet 365 Truck Crono Premium',
   servizio_rimorchi: 'GT Fleet 365 Servizio Rimorchi',

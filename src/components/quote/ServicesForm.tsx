@@ -48,6 +48,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
     'fleet_plus',
     'fleet_premium',
     'crono',
+    'crono_plus',
     'crono_telematica',
     'crono_premium',
     'servizio_rimorchi',
