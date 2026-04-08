@@ -48,7 +48,7 @@ export interface Service {
   id: string;
   nome: string;
   descrizione: string;
-  categoria: 'dispositivi' | 'fleet_base' | 'fleet_gold' | 'fleet_plus' | 'fleet_premium' | 'crono' | 'crono_telematica' | 'crono_premium' | 'servizio_rimorchi' | 'tractor' | 'asset' | 'piattaforme' | 'servizi_aggiuntivi' | 'centrale_operativa' | 'accessori' | 'software' | 'cold' | 'driver';
+  categoria: 'dispositivi' | 'fleet_base' | 'fleet_gold' | 'fleet_plus' | 'fleet_premium' | 'crono' | 'crono_plus' | 'crono_telematica' | 'crono_premium' | 'servizio_rimorchi' | 'tractor' | 'asset' | 'piattaforme' | 'servizi_aggiuntivi' | 'centrale_operativa' | 'accessori' | 'software' | 'cold' | 'driver';
   prezzoListino: number;
   prezzoScontato?: number;
   prezzoRiservato: number;
