@@ -609,7 +609,7 @@ export const categorieLabels: Record<string, string> = {
   fleet_premium: 'GT Fleet 365 Premium',
   crono: 'GT Fleet 365 Truck Crono Base',
   crono_plus: 'GT Fleet 365 Truck Crono Plus',
-  crono_telematica: 'GT Fleet 365 Truck Crono Gold',
+  crono_gold: 'GT Fleet 365 Truck Crono Gold',
   crono_premium: 'GT Fleet 365 Truck Crono Premium',
   servizio_rimorchi: 'GT Fleet 365 Servizio Rimorchi',
   tractor: 'GT Fleet 365 Tractor',
