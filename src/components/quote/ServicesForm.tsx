@@ -216,11 +216,6 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                       }`}
                     >
                       {/* Check / Lock icon */}
-                      {isChecked && (
-                        <div className="absolute top-2 right-2 w-5 h-5 bg-accent rounded-full flex items-center justify-center">
-                          {managed ? <Lock className="w-3 h-3 text-white" /> : <Check className="w-3 h-3 text-white" />}
-                        </div>
-                      )}
                       
                       <div 
                         className={`flex items-start gap-3 ${managed && isChecked ? 'cursor-default' : 'cursor-pointer'}`}
