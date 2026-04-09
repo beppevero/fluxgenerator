@@ -216,22 +216,15 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                       }`}
                     >
                       {/* Check / Lock icon */}
-                      {isChecked && (
-                        <div className="absolute top-2 right-2 w-5 h-5 bg-accent rounded-full flex items-center justify-center">
-                          {managed ? <Lock className="w-3 h-3 text-white" /> : <Check className="w-3 h-3 text-white" />}
-                        </div>
-                      )}
                       
                       <div 
                         className={`flex items-start gap-3 ${managed && isChecked ? 'cursor-default' : 'cursor-pointer'}`}
                         onClick={() => !managed && toggleService(service)}
                       >
-                        <Checkbox
-                          id={service.id}
-                          checked={isChecked}
-                          disabled={managed}
-                          className="mt-0.5 h-5 w-5 border-2 border-accent/60 data-[state=checked]:bg-accent data-[state=checked]:border-accent"
-                        />
+                        <div className="mt-0.5 h-5 w-5 rounded border-2 border-accent/60 flex items-center justify-center shrink-0">
+                          {isChecked && !managed && <Check className="w-3 h-3 text-accent" />}
+                          {isChecked && managed && <Lock className="w-3 h-3 text-accent" />}
+                        </div>
                         <div className="flex-1 min-w-0 pr-6">
                           <div className="flex items-center gap-2">
                             {service.id === 'custom-service' ? (
