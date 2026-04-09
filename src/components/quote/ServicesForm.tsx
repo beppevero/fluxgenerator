@@ -1,5 +1,4 @@
-import { useState, useMemo } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useState, useMemo, useCallback } from "react";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -18,16 +17,58 @@ interface ServicesFormProps {
   onChange: (services: SelectedService[]) => void;
 }
 
+// Detect if a service has a paired annuale/mensile counterpart
+function getPairedId(id: string): string | null {
+  if (id.endsWith('-annuale')) return id.replace('-annuale', '-mensile');
+  if (id.endsWith('-mensile')) return id.replace('-mensile', '-annuale');
+  return null;
+}
+
+function getBaseId(id: string): string {
+  return id.replace(/-annuale$/, '').replace(/-mensile$/, '');
+}
+
 export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [periodoFilter, setPeriodoFilter] = useState<string | null>(null);
+  // Track which periodo the user picked per paired service (keyed by base id)
+  const [periodoOverrides, setPeriodoOverrides] = useState<Record<string, 'ANNUALE' | 'MENSILE'>>({});
+
+  // Build a map of paired services for quick lookup
+  const pairedServiceMap = useMemo(() => {
+    const map = new Map<string, Service>();
+    servicesList.forEach(s => map.set(s.id, s));
+    return map;
+  }, []);
+
+  // Identify which service IDs are the "mensile" half of a pair
+  const mensileOfPair = useMemo(() => {
+    const set = new Set<string>();
+    servicesList.forEach(s => {
+      if (s.id.endsWith('-mensile')) {
+        const annualeId = s.id.replace('-mensile', '-annuale');
+        if (pairedServiceMap.has(annualeId)) {
+          set.add(s.id);
+        }
+      }
+    });
+    return set;
+  }, [pairedServiceMap]);
 
   // Filter services based on search query and periodo filter
   const filteredServices = useMemo(() => {
     let result = servicesList;
     
+    // Remove mensile duplicates of paired services (they'll be accessible via toggle)
+    result = result.filter(s => !mensileOfPair.has(s.id));
+    
     if (periodoFilter) {
-      result = result.filter(service => service.periodo === periodoFilter);
+      result = result.filter(service => {
+        // For paired services, don't filter by periodo since they support both
+        const pairedId = getPairedId(service.id);
+        if (pairedId && pairedServiceMap.has(pairedId)) return true;
+        return service.periodo === periodoFilter;
+      });
     }
     
     if (searchQuery.trim()) {
@@ -39,7 +80,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
     }
     
     return result;
-  }, [searchQuery, periodoFilter]);
+  }, [searchQuery, periodoFilter, mensileOfPair, pairedServiceMap]);
 
   const categoryOrder = [
     'dispositivi',
@@ -84,15 +125,93 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
   const getSelectedService = (serviceId: string) =>
     selectedServices.find(s => s.id === serviceId);
 
+  // Check if either variant of a paired service is selected
+  const isPairSelected = (serviceId: string) => {
+    if (isSelected(serviceId)) return true;
+    const pairedId = getPairedId(serviceId);
+    return pairedId ? isSelected(pairedId) : false;
+  };
+
+  const getSelectedPairService = (serviceId: string): SelectedService | undefined => {
+    const sel = getSelectedService(serviceId);
+    if (sel) return sel;
+    const pairedId = getPairedId(serviceId);
+    return pairedId ? getSelectedService(pairedId) : undefined;
+  };
+
+  // Get the currently active periodo for a paired service
+  const getActivePeriodo = useCallback((service: Service): 'ANNUALE' | 'MENSILE' => {
+    const baseId = getBaseId(service.id);
+    // If user has overridden, use that
+    if (periodoOverrides[baseId]) return periodoOverrides[baseId];
+    // If one variant is selected, use its periodo
+    const pairedId = getPairedId(service.id);
+    if (isSelected(service.id)) return service.periodo as 'ANNUALE' | 'MENSILE';
+    if (pairedId && isSelected(pairedId)) {
+      const paired = pairedServiceMap.get(pairedId);
+      return (paired?.periodo as 'ANNUALE' | 'MENSILE') || 'ANNUALE';
+    }
+    return 'ANNUALE';
+  }, [periodoOverrides, selectedServices, pairedServiceMap]);
+
+  // Get the active service variant for a paired service
+  const getActiveServiceVariant = useCallback((service: Service): Service => {
+    const pairedId = getPairedId(service.id);
+    if (!pairedId || !pairedServiceMap.has(pairedId)) return service;
+    
+    const activePeriodo = getActivePeriodo(service);
+    if (service.periodo === activePeriodo) return service;
+    const paired = pairedServiceMap.get(pairedId);
+    return paired || service;
+  }, [getActivePeriodo, pairedServiceMap]);
+
+  const hasPair = (serviceId: string): boolean => {
+    const pairedId = getPairedId(serviceId);
+    return !!pairedId && pairedServiceMap.has(pairedId);
+  };
+
   const toggleService = (service: Service) => {
-    if (isSelected(service.id)) {
-      onChange(selectedServices.filter(s => s.id !== service.id));
+    // For paired services, use the active variant
+    const activeService = getActiveServiceVariant(service);
+    const pairSelected = isPairSelected(service.id);
+    
+    if (pairSelected) {
+      // Remove whichever variant is selected
+      const pairedId = getPairedId(service.id);
+      onChange(selectedServices.filter(s => s.id !== service.id && s.id !== pairedId));
     } else {
       onChange([...selectedServices, { 
-        ...service, 
+        ...activeService, 
         quantita: 1,
-        prezzoUnitario: service.prezzoRiservato
+        prezzoUnitario: activeService.prezzoRiservato
       }]);
+    }
+  };
+
+  const handlePeriodoToggle = (service: Service, newPeriodo: 'ANNUALE' | 'MENSILE') => {
+    const baseId = getBaseId(service.id);
+    setPeriodoOverrides(prev => ({ ...prev, [baseId]: newPeriodo }));
+
+    // If a variant is currently selected, swap it
+    const currentSelectedId = isSelected(service.id) ? service.id : getPairedId(service.id);
+    if (currentSelectedId && isSelected(currentSelectedId)) {
+      const targetId = newPeriodo === 'ANNUALE' 
+        ? baseId + '-annuale' 
+        : baseId + '-mensile';
+      const targetService = pairedServiceMap.get(targetId);
+      if (targetService && targetId !== currentSelectedId) {
+        onChange(selectedServices.map(s => {
+          if (s.id !== currentSelectedId) return s;
+          return {
+            ...targetService,
+            quantita: s.quantita,
+            prezzoUnitario: targetService.prezzoRiservato,
+            prezzoListino: Math.round(targetService.prezzoRiservato * 1.6 * 100) / 100,
+            customTitle: s.customTitle,
+            customDescription: s.customDescription,
+          };
+        }));
+      }
     }
   };
 
@@ -132,7 +251,6 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
     }
   };
 
-  
   const AUTO_MANAGED_IDS = ['carta-aziendale'];
   const isAutoManaged = (id: string) => AUTO_MANAGED_IDS.includes(id);
 
@@ -197,9 +315,12 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
               
               <div className="space-y-2">
                 {services.map((service) => {
-                  const selected = getSelectedService(service.id);
-                  const isChecked = isSelected(service.id);
-                  const managed = isAutoManaged(service.id);
+                  const isPaired = hasPair(service.id);
+                  const activeVariant = isPaired ? getActiveServiceVariant(service) : service;
+                  const activePeriodo = isPaired ? getActivePeriodo(service) : null;
+                  const selected = isPaired ? getSelectedPairService(service.id) : getSelectedService(service.id);
+                  const isChecked = isPaired ? isPairSelected(service.id) : isSelected(service.id);
+                  const managed = isAutoManaged(service.id) || (isPaired && (isAutoManaged(service.id) || isAutoManaged(getPairedId(service.id) || '')));
                   
                   return (
                     <div
@@ -212,8 +333,6 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                           : 'border-black/6 bg-white/50 hover:border-accent/30'
                       }`}
                     >
-                      {/* Check / Lock icon */}
-                      
                       <div 
                         className={`flex items-start gap-3 ${managed && isChecked ? 'cursor-default' : 'cursor-pointer'}`}
                         onClick={() => !managed && toggleService(service)}
@@ -265,16 +384,47 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                           <div className="flex flex-wrap items-center gap-2 mt-1.5">
                             <span className="text-xs text-muted-foreground">
                               Listino: {(() => {
-                                const listino = selected?.prezzoListino ?? service.prezzoListino;
+                                const listino = selected?.prezzoListino ?? activeVariant.prezzoListino;
                                 return listino === 0 ? '—' : formatPrice(listino);
                               })()}
                             </span>
                             <span className="text-xs font-medium text-accent">
-                              Riservato: {formatPrice(service.prezzoRiservato)}
+                              Riservato: {formatPrice(activeVariant.prezzoRiservato)}
                             </span>
-                            <Badge variant="secondary" className="text-xs bg-black/5 border-black/8">
-                              {getPeriodoLabel(service.periodo)}
-                            </Badge>
+                            {/* Periodo toggle for paired services */}
+                            {isPaired && activePeriodo ? (
+                              <div 
+                                className="inline-flex rounded-full border border-black/10 overflow-hidden"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <button
+                                  type="button"
+                                  onClick={() => handlePeriodoToggle(service, 'ANNUALE')}
+                                  className={`px-2 py-0.5 text-xs font-medium transition-all ${
+                                    activePeriodo === 'ANNUALE'
+                                      ? 'bg-accent text-white'
+                                      : 'bg-white/50 text-foreground/60 hover:bg-white/80'
+                                  }`}
+                                >
+                                  Annuale
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handlePeriodoToggle(service, 'MENSILE')}
+                                  className={`px-2 py-0.5 text-xs font-medium transition-all ${
+                                    activePeriodo === 'MENSILE'
+                                      ? 'bg-accent text-white'
+                                      : 'bg-white/50 text-foreground/60 hover:bg-white/80'
+                                  }`}
+                                >
+                                  Mensile
+                                </button>
+                              </div>
+                            ) : (
+                              <Badge variant="secondary" className="text-xs bg-black/5 border-black/8">
+                                {getPeriodoLabel(service.periodo)}
+                              </Badge>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -311,8 +461,8 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                                 inputMode="numeric"
                                 pattern="[0-9]*"
                                 value={selected.quantita === 0 ? '' : selected.quantita}
-                                onChange={(e) => updateQuantita(service.id, e.target.value)}
-                                onBlur={(e) => handleQuantitaBlur(service.id, e.target.value)}
+                                onChange={(e) => updateQuantita(selected.id, e.target.value)}
+                                onBlur={(e) => handleQuantitaBlur(selected.id, e.target.value)}
                                 onClick={(e) => e.stopPropagation()}
                                 className="h-8 text-sm glass-input"
                               />
@@ -325,7 +475,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                               step="0.01"
                               min={0}
                               value={selected.prezzoUnitario}
-                              onChange={(e) => updatePrezzoUnitario(service.id, parseFloat(e.target.value) || 0)}
+                              onChange={(e) => updatePrezzoUnitario(selected.id, parseFloat(e.target.value) || 0)}
                               onClick={(e) => e.stopPropagation()}
                               className="h-8 text-sm glass-input"
                             />
