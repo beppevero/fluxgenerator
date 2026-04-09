@@ -47,7 +47,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
     'fleet_gold',
     'fleet_plus',
     'fleet_premium',
-    'crono_base',
+    'crono',
     'crono_plus',
     'crono_gold',
     'crono_premium',
