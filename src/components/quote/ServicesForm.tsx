@@ -221,9 +221,11 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                         className={`flex items-start gap-3 ${managed && isChecked ? 'cursor-default' : 'cursor-pointer'}`}
                         onClick={() => !managed && toggleService(service)}
                       >
-                        <div className="mt-0.5 h-5 w-5 rounded border-2 border-accent/60 flex items-center justify-center shrink-0">
-                          {isChecked && !managed && <Check className="w-3 h-3 text-accent" />}
-                          {isChecked && managed && <Lock className="w-3 h-3 text-accent" />}
+                        <div className={`mt-0.5 h-5 w-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
+                          isChecked ? 'bg-accent border-accent' : 'border-accent/60'
+                        }`}>
+                          {isChecked && !managed && <Check className="w-3 h-3 text-white" />}
+                          {isChecked && managed && <Lock className="w-3 h-3 text-white" />}
                         </div>
                         <div className="flex-1 min-w-0 pr-6">
                           <div className="flex items-center gap-2">
