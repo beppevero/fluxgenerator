@@ -30,7 +30,7 @@ function getBaseId(id: string): string {
 
 export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [periodoFilter, setPeriodoFilter] = useState<string | null>(null);
+  
   // Track which periodo the user picked per paired service (keyed by base id)
   const [periodoOverrides, setPeriodoOverrides] = useState<Record<string, 'ANNUALE' | 'MENSILE'>>({});
 
