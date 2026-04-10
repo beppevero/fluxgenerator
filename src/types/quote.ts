@@ -48,7 +48,7 @@ export interface Service {
   id: string;
   nome: string;
   descrizione: string;
-  categoria: 'dispositivi' | 'fleet_vehicles' | 'fleet_truck' | 'servizio_rimorchi' | 'tractor' | 'asset' | 'piattaforme' | 'servizi_aggiuntivi' | 'centrale_operativa' | 'accessori' | 'software' | 'cold' | 'driver';
+  categoria: 'dispositivi' | 'fleet_vehicles' | 'fleet_truck' | 'fleet_trailers' | 'tractor' | 'asset' | 'piattaforme' | 'servizi_aggiuntivi' | 'centrale_operativa' | 'accessori' | 'software' | 'driver';
   prezzoListino: number;
   prezzoScontato?: number;
   prezzoRiservato: number;
