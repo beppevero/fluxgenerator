@@ -56,6 +56,15 @@ export const servicesList: Service[] = [
     prezzoRiservato: 63.00,
     periodo: 'U.T.',
   },
+  {
+    id: 'sensore-portellone',
+    nome: 'SENSORE PORTELLONE',
+    descrizione: "Sensore (in aggiunta a dispositivo GPS) per la rilevazione dell'apertura e chiusura dei portelloni",
+    categoria: 'dispositivi',
+    prezzoListino: 32.00,
+    prezzoRiservato: 20.00,
+    periodo: 'U.T.',
+  },
 
   // GT FLEET 365 BASE
   {
