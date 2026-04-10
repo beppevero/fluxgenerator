@@ -30,7 +30,7 @@ function getBaseId(id: string): string {
 
 export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [periodoFilter, setPeriodoFilter] = useState<string | null>(null);
+  
   // Track which periodo the user picked per paired service (keyed by base id)
   const [periodoOverrides, setPeriodoOverrides] = useState<Record<string, 'ANNUALE' | 'MENSILE'>>({});
 
@@ -55,21 +55,11 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
     return set;
   }, [pairedServiceMap]);
 
-  // Filter services based on search query and periodo filter
   const filteredServices = useMemo(() => {
     let result = servicesList;
     
     // Remove mensile duplicates of paired services (they'll be accessible via toggle)
     result = result.filter(s => !mensileOfPair.has(s.id));
-    
-    if (periodoFilter) {
-      result = result.filter(service => {
-        // For paired services, don't filter by periodo since they support both
-        const pairedId = getPairedId(service.id);
-        if (pairedId && pairedServiceMap.has(pairedId)) return true;
-        return service.periodo === periodoFilter;
-      });
-    }
     
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
@@ -80,7 +70,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
     }
     
     return result;
-  }, [searchQuery, periodoFilter, mensileOfPair, pairedServiceMap]);
+  }, [searchQuery, mensileOfPair, pairedServiceMap]);
 
   const categoryOrder = [
     'dispositivi',
@@ -261,29 +251,6 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
         Servizi e Dispositivi
       </h3>
       
-      {/* Periodo Filter */}
-      <div className="flex items-center gap-2 mb-3 flex-wrap">
-        <span className="text-xs text-muted-foreground font-medium">Filtra per:</span>
-        {([
-          { value: 'U.T.', label: 'Una Tantum' },
-          { value: 'ANNUALE', label: 'Annuale' },
-          { value: 'MENSILE', label: 'Mensile' },
-        ] as const).map(opt => (
-          <button
-            key={opt.value}
-            type="button"
-            onClick={() => setPeriodoFilter(periodoFilter === opt.value ? null : opt.value)}
-            className={`px-3 py-1 rounded-full text-xs font-medium border transition-all duration-300 ${
-              periodoFilter === opt.value
-                ? 'bg-accent text-white border-accent shadow-md'
-                : 'bg-white/50 text-foreground/70 border-black/8 hover:border-accent/40 hover:bg-white/70'
-            }`}
-          >
-            {opt.label}
-          </button>
-        ))}
-      </div>
-
       {/* Search Bar */}
       <div className="relative mb-4">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
