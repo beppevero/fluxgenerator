@@ -615,6 +615,8 @@ export const categorieLabels: Record<string, string> = {
   fleet_vehicles: 'GT Fleet 365 Vehicles',
   fleet_truck: 'GT Fleet 365 Trucks',
   fleet_trailers: 'GT Fleet 365 Trailers',
+  tractor: 'GT Fleet 365 Tractor',
+  asset: 'GT Fleet 365 Asset',
   driver: 'GT Fleet 365 Driver',
   piattaforme: 'Piattaforme Crono',
   software: 'Software Development',
