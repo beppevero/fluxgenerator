@@ -74,10 +74,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
 
   const categoryOrder = [
     'dispositivi',
-    'fleet_base',
-    'fleet_plus',
-    'fleet_gold',
-    'fleet_premium',
+    'fleet_vehicles',
     'crono',
     'crono_plus',
     'crono_gold',
