@@ -54,6 +54,7 @@ export interface Service {
   prezzoRiservato: number;
   periodo: 'MENSILE' | 'ANNUALE' | 'U.T.';
   isCrono?: boolean;
+  inSviluppo?: boolean;
 }
 
 export interface SelectedService extends Service {

@@ -80,10 +80,10 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
     'tractor',
     'asset',
     'driver',
-    'piattaforme',
-    'software',
     'servizi_aggiuntivi',
     'centrale_operativa',
+    'software',
+    'piattaforme',
   ];
 
   const groupedServices = useMemo(() => {
@@ -100,7 +100,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
     );
 
     return Object.fromEntries(sortedEntries);
-  }, [filteredServices]);
+  }, [filteredServices, categoryOrder]);
 
   const isSelected = (serviceId: string) => 
     selectedServices.some(s => s.id === serviceId);
@@ -154,6 +154,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
   };
 
   const toggleService = (service: Service) => {
+    if (service.inSviluppo) return;
     // For paired services, use the active variant
     const activeService = getActiveServiceVariant(service);
     const pairSelected = isPairSelected(service.id);
@@ -281,27 +282,30 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                   const selected = isPaired ? getSelectedPairService(service.id) : getSelectedService(service.id);
                   const isChecked = isPaired ? isPairSelected(service.id) : isSelected(service.id);
                   const managed = isAutoManaged(service.id) || (isPaired && (isAutoManaged(service.id) || isAutoManaged(getPairedId(service.id) || '')));
-                  
+                  const isDisabled = service.inSviluppo;
+
                   return (
                     <div
                       key={service.id}
                       className={`p-3 rounded-xl border transition-all backdrop-blur-sm relative service-row-hover ${
-                        isChecked
-                          ? managed
-                            ? 'border-accent/40 bg-accent/5 shadow-sm opacity-80'
-                            : 'border-accent/60 bg-accent/10 shadow-sm'
-                          : 'border-black/6 bg-white/50 hover:border-accent/30'
+                        isDisabled 
+                          ? 'opacity-50 cursor-not-allowed'
+                          : isChecked
+                            ? managed
+                              ? 'border-accent/40 bg-accent/5 shadow-sm opacity-80'
+                              : 'border-accent/60 bg-accent/10 shadow-sm'
+                            : 'border-black/6 bg-white/50 hover:border-accent/30'
                       }`}
                     >
                       <div 
-                        className={`flex items-start gap-3 ${managed && isChecked ? 'cursor-default' : 'cursor-pointer'}`}
+                        className={`flex items-start gap-3 ${managed && isChecked ? 'cursor-default' : 'cursor-pointer'} ${isDisabled ? 'cursor-not-allowed' : ''}`}
                         onClick={() => !managed && toggleService(service)}
                       >
                         <div className={`mt-0.5 h-5 w-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
-                          isChecked ? 'bg-accent border-accent' : 'border-accent/60'
-                        }`}>
-                          {isChecked && !managed && <Check className="w-3 h-3 text-white" />}
-                          {isChecked && managed && <Lock className="w-3 h-3 text-white" />}
+                          isChecked && !isDisabled ? 'bg-accent border-accent' : 'border-accent/60'
+                        } ${isDisabled ? 'bg-muted-foreground/30 border-muted-foreground/50' : ''}`}>
+                          {isChecked && !managed && !isDisabled && <Check className="w-3 h-3 text-white" />}
+                          {isChecked && managed && !isDisabled && <Lock className="w-3 h-3 text-white" />}
                         </div>
                         <div className="flex-1 min-w-0 pr-6">
                           <div className="flex items-center gap-2">
@@ -316,9 +320,10 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                                 }}
                                 onClick={(e) => e.stopPropagation()}
                                 className="h-7 text-sm glass-input max-w-[300px]"
+                                disabled={isDisabled}
                               />
                             ) : (
-                              <Label htmlFor={service.id} className="cursor-pointer text-sm font-semibold block text-white">
+                              <Label htmlFor={service.id} className={`${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} text-sm font-semibold block text-white`}>
                                 {service.nome}
                               </Label>
                             )}
@@ -333,6 +338,11 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                             {service.isCrono && (
                               <Badge className="bg-accent/20 text-accent border-accent/30 text-xs">
                                 Crono
+                              </Badge>
+                            )}
+                             {service.inSviluppo && (
+                              <Badge variant="outline" className="text-xs border-yellow-500/30 text-yellow-400">
+                                In Sviluppo
                               </Badge>
                             )}
                             {managed && isChecked && (
@@ -359,23 +369,25 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                               >
                                 <button
                                   type="button"
-                                  onClick={() => handlePeriodoToggle(service, 'ANNUALE')}
+                                  onClick={() => !isDisabled && handlePeriodoToggle(service, 'ANNUALE')}
+                                  disabled={isDisabled}
                                   className={`px-2 py-0.5 text-xs font-medium transition-all ${
                                     activePeriodo === 'ANNUALE'
                                       ? 'bg-accent text-white'
                                       : 'bg-white/50 text-foreground/60 hover:bg-white/80'
-                                  }`}
+                                  } ${isDisabled ? 'cursor-not-allowed' : ''}`}
                                 >
                                   Annuale
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={() => handlePeriodoToggle(service, 'MENSILE')}
+                                  onClick={() => !isDisabled && handlePeriodoToggle(service, 'MENSILE')}
+                                  disabled={isDisabled}
                                   className={`px-2 py-0.5 text-xs font-medium transition-all ${
                                     activePeriodo === 'MENSILE'
                                       ? 'bg-accent text-white'
                                       : 'bg-white/50 text-foreground/60 hover:bg-white/80'
-                                  }`}
+                                  } ${isDisabled ? 'cursor-not-allowed' : ''}`}
                                 >
                                   Mensile
                                 </button>
@@ -402,6 +414,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                             }}
                             onClick={(e) => e.stopPropagation()}
                             className="text-sm glass-input min-h-[60px]"
+                            disabled={isDisabled}
                           />
                         </div>
                       )}
@@ -425,6 +438,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                                 onBlur={(e) => handleQuantitaBlur(selected.id, e.target.value)}
                                 onClick={(e) => e.stopPropagation()}
                                 className="h-8 text-sm glass-input"
+                                disabled={isDisabled}
                               />
                             )}
                           </div>
@@ -438,6 +452,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                               onChange={(e) => updatePrezzoUnitario(selected.id, parseFloat(e.target.value) || 0)}
                               onClick={(e) => e.stopPropagation()}
                               className="h-8 text-sm glass-input"
+                              disabled={isDisabled}
                             />
                           </div>
                           <div className="space-y-1">

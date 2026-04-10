@@ -56,15 +56,6 @@ export const servicesList: Service[] = [
     prezzoRiservato: 63.00,
     periodo: 'U.T.',
   },
-  {
-    id: 'sensore-portellone',
-    nome: 'SENSORE PORTELLONE',
-    descrizione: "Sensore (in aggiunta a dispositivo GPS) per la rilevazione dell'apertura e chiusura dei portelloni",
-    categoria: 'dispositivi',
-    prezzoListino: 32.00,
-    prezzoRiservato: 20.00,
-    periodo: 'U.T.',
-  },
 
   // GT FLEET 365 BASE
   {
@@ -314,6 +305,15 @@ export const servicesList: Service[] = [
 
   // GT FLEET 365 COLD
   {
+    id: 'sensore-portellone',
+    nome: 'SENSORE PORTELLONE',
+    descrizione: "Sensore (in aggiunta a dispositivo GPS) per la rilevazione dell'apertura e chiusura dei portelloni",
+    categoria: 'fleet_trailers',
+    prezzoListino: 32.00,
+    prezzoRiservato: 20.00,
+    periodo: 'U.T.',
+  },
+  {
     id: 'sensore-temperatura',
     nome: 'SENSORE TEMPERATURA',
     descrizione: 'Sensore di temperatura/umidità (in aggiunta a dispositivo GPS) per motrice o per rimorchio',
@@ -404,10 +404,11 @@ export const servicesList: Service[] = [
     prezzoListino: 29.00,
     prezzoRiservato: 18.00,
     periodo: 'U.T.',
+    inSviluppo: true,
   },
   {
     id: 'piani-viaggio-annuale',
-    nome: 'GT FLEET 365 - PIANI DI VIAGGIO',
+    nome: 'PIANI DI VIAGGIO',
     descrizione: "Predisposizione piano di viaggio o delle attività via web ed app, Trasmissione piano attività dal web all'app driver, Gestione delle attività attraverso l'app driver, Gestione automatica del piano di viaggio (in auto geo fencing), Gestione referenti notifiche, Reportistica Avanzata Personalizzata, Formazione con Operatore Customer Care, Assistenza con Operatore Customer Care",
     categoria: 'driver',
     prezzoListino: 240.00,
@@ -416,7 +417,7 @@ export const servicesList: Service[] = [
   },
   {
     id: 'piani-viaggio-mensile',
-    nome: 'GT FLEET 365 - PIANI DI VIAGGIO',
+    nome: 'PIANI DI VIAGGIO',
     descrizione: "Predisposizione piano di viaggio o delle attività via web ed app, Trasmissione piano attività dal web all'app driver, Gestione delle attività attraverso l'app driver, Gestione automatica del piano di viaggio (in auto geo fencing), Gestione referenti notifiche, Reportistica Avanzata Personalizzata, Formazione con Operatore Customer Care, Assistenza con Operatore Customer Care",
     categoria: 'driver',
     prezzoListino: 24.00,
@@ -425,7 +426,7 @@ export const servicesList: Service[] = [
   },
   {
     id: 'app-driver-annuale',
-    nome: 'GT FLEET 365 - APP DRIVER',
+    nome: 'APP DRIVER',
     descrizione: 'Canone Gestione App Driver',
     categoria: 'driver',
     prezzoListino: 80.00,
@@ -434,7 +435,7 @@ export const servicesList: Service[] = [
   },
   {
     id: 'app-driver-mensile',
-    nome: 'GT FLEET 365 - APP DRIVER',
+    nome: 'APP DRIVER',
     descrizione: 'Canone Gestione App Driver',
     categoria: 'driver',
     prezzoListino: 8.00,
@@ -443,12 +444,13 @@ export const servicesList: Service[] = [
   },
   {
     id: 'gt-50-app-annuale',
-    nome: 'GT FLEET 365 - GT 5.0.APP',
+    nome: 'GT 5.0.APP',
     descrizione: 'App con Funzione dispositivo GPS per Tracciare persone con smartphone, Funzione riconoscimento operatore o Personale in mobilità',
     categoria: 'driver',
     prezzoListino: 96.00,
     prezzoRiservato: 60.00,
     periodo: 'ANNUALE',
+    inSviluppo: true,
   },
 
   // PIATTAFORME CRONO
@@ -483,6 +485,15 @@ export const servicesList: Service[] = [
     prezzoRiservato: 0,
     periodo: 'U.T.',
   },
+  {
+    id: 'api-key',
+    nome: 'API KEY',
+    descrizione: 'Fornutura chiave API per interscambio dati',
+    categoria: 'software',
+    prezzoListino: 0,
+    prezzoRiservato: 50.00,
+    periodo: 'U.T.',
+  },
 
   // SERVIZI AGGIUNTIVI
   {
@@ -514,8 +525,8 @@ export const servicesList: Service[] = [
   },
   {
     id: 'attivazione-gt-fleet',
-    nome: 'ATTIVAZIONE GT FLEET 365',
-    descrizione: 'Attivazione piattaforma GT FLEET 365',
+    nome: 'ATTIVAZIONE PIATTAFORMA',
+    descrizione: 'Attivazione piattaforma GT FLEET 365 con dispositivi compatibili',
     categoria: 'servizi_aggiuntivi',
     prezzoListino: 0,
     prezzoRiservato: 50.00,
@@ -523,7 +534,7 @@ export const servicesList: Service[] = [
   },
   {
     id: 'carta-aziendale',
-    nome: 'CARTA AZIENDALE CRONO (25 MEZZI)',
+    nome: 'GESTIONE CARTA AZIENDALE CRONO (25 MEZZI)',
     descrizione: 'Gestione copia carta aziendale crono per scarico file .ddd da remoto (ogni 25 mezzi)',
     categoria: 'servizi_aggiuntivi',
     prezzoListino: 0,
