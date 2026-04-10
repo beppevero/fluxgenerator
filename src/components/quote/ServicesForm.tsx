@@ -258,10 +258,6 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
         />
       </div>
       
-      <p className="text-xs text-muted-foreground mb-4 italic">
-        * L'installazione è a carico del cliente
-      </p>
-      
       <div className="space-y-5">
         {Object.keys(groupedServices).length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
