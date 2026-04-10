@@ -261,29 +261,6 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
         Servizi e Dispositivi
       </h3>
       
-      {/* Periodo Filter */}
-      <div className="flex items-center gap-2 mb-3 flex-wrap">
-        <span className="text-xs text-muted-foreground font-medium">Filtra per:</span>
-        {([
-          { value: 'U.T.', label: 'Una Tantum' },
-          { value: 'ANNUALE', label: 'Annuale' },
-          { value: 'MENSILE', label: 'Mensile' },
-        ] as const).map(opt => (
-          <button
-            key={opt.value}
-            type="button"
-            onClick={() => setPeriodoFilter(periodoFilter === opt.value ? null : opt.value)}
-            className={`px-3 py-1 rounded-full text-xs font-medium border transition-all duration-300 ${
-              periodoFilter === opt.value
-                ? 'bg-accent text-white border-accent shadow-md'
-                : 'bg-white/50 text-foreground/70 border-black/8 hover:border-accent/40 hover:bg-white/70'
-            }`}
-          >
-            {opt.label}
-          </button>
-        ))}
-      </div>
-
       {/* Search Bar */}
       <div className="relative mb-4">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
