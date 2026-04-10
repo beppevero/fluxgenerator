@@ -79,6 +79,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
     'fleet_trailers',
     'tractor',
     'asset',
+    'fleet_missioni',
     'driver',
     'servizi_aggiuntivi',
     'centrale_operativa',
