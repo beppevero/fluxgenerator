@@ -55,21 +55,11 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
     return set;
   }, [pairedServiceMap]);
 
-  // Filter services based on search query and periodo filter
   const filteredServices = useMemo(() => {
     let result = servicesList;
     
     // Remove mensile duplicates of paired services (they'll be accessible via toggle)
     result = result.filter(s => !mensileOfPair.has(s.id));
-    
-    if (periodoFilter) {
-      result = result.filter(service => {
-        // For paired services, don't filter by periodo since they support both
-        const pairedId = getPairedId(service.id);
-        if (pairedId && pairedServiceMap.has(pairedId)) return true;
-        return service.periodo === periodoFilter;
-      });
-    }
     
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
@@ -80,7 +70,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
     }
     
     return result;
-  }, [searchQuery, periodoFilter, mensileOfPair, pairedServiceMap]);
+  }, [searchQuery, mensileOfPair, pairedServiceMap]);
 
   const categoryOrder = [
     'dispositivi',
