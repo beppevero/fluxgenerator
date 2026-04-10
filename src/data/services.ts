@@ -613,7 +613,7 @@ export const MEZZI_PER_CARTA = 25; // 1 carta ogni 25 mezzi
 export const categorieLabels: Record<string, string> = {
   dispositivi: 'Dispositivi',
   fleet_vehicles: 'GT Fleet 365 Vehicles',
-  fleet_truck: 'GT Fleet 365 Truck',
+  fleet_truck: 'GT Fleet 365 Trucks',
   servizio_rimorchi: 'GT Fleet 365 Servizio Rimorchi',
   tractor: 'GT Fleet 365 Tractor',
   asset: 'GT Fleet 365 Asset',
