@@ -244,25 +244,6 @@ export const servicesList: Service[] = [
     prezzoRiservato: 9.00,
     periodo: 'MENSILE',
   },
-  {
-    id: 'servizio-rimorchi-annuale',
-    nome: 'GT FLEET 365 TRAILER',
-    descrizione: "Localizzazione Real Time, Percorsi, Soste via WEB (a rimorchio agganciato alla motrice), App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Notifica aggancio rimorchio alla motrice, Notifica sgancio del rimorchio dalla motrice, Localizzazione a rimorchio fermo (sganciato dalla Motrice) 1 dato GPS al giorno, Localizzazione a rimorchio sganciato ma in movimento 1 dato ogni 10 minuti, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione referenti notifiche, Km percorsi, Formazione con Operatore Customer Care, Assistenza con Operatore Customer Care",
-    categoria: 'fleet_trailers',
-    prezzoListino: 192.00,
-    prezzoRiservato: 120.00,
-    periodo: 'ANNUALE',
-  },
-  {
-    id: 'servizio-rimorchi-mensile',
-    nome: 'GT FLEET 365 TRAILER',
-    descrizione: "Localizzazione Real Time, Percorsi, Soste via WEB (a rimorchio agganciato alla motrice), App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Notifica aggancio rimorchio alla motrice, Notifica sgancio del rimorchio dalla motrice, Localizzazione a rimorchio fermo (sganciato dalla Motrice) 1 dato GPS al giorno, Localizzazione a rimorchio sganciato ma in movimento 1 dato ogni 10 minuti, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione referenti notifiche, Km percorsi, Formazione con Operatore Customer Care, Assistenza con Operatore Customer Care",
-    categoria: 'fleet_trailers',
-    prezzoListino: 19.20,
-    prezzoRiservato: 12.00,
-    periodo: 'MENSILE',
-  },
-
   // GT FLEET 365 TRACTOR
   {
     id: 'tractor-annuale',
