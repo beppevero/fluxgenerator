@@ -284,7 +284,8 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
                   return (
                     <div
                       key={service.id}
-                      className={`p-3 rounded-xl border transition-all backdrop-blur-sm relative service-row-hover ${
+                      id={`service-row-${getBaseId(service.id)}`}
+                      className={`p-3 rounded-xl border transition-all backdrop-blur-sm relative service-row-hover scroll-mt-24 ${
                         isDisabled 
                           ? 'opacity-50 cursor-not-allowed'
                           : isChecked
