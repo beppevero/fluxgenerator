@@ -5,6 +5,7 @@ import { FileText, Trash2, Send, ArrowUp, LogOut, Archive, Save, X, AlertTriangl
 import { ClientDataForm } from "@/components/quote/ClientDataForm";
 import { ServicesForm } from "@/components/quote/ServicesForm";
 import { PaymentForm } from "@/components/quote/PaymentForm";
+import { SelectedServicesCart } from "@/components/quote/SelectedServicesCart";
 import { QuotePreview } from "@/components/quote/QuotePreview";
 import { TotalsSummary } from "@/components/quote/TotalsSummary";
 import { ClientData, PaymentInfo, SelectedService, QuoteData, Offerta } from "@/types/quote";
