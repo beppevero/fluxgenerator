@@ -349,19 +349,23 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
               </TableCell>
                   <TableCell className="text-center">{offerta.dataCreazione.toDate().toLocaleDateString("it-IT")}</TableCell>
                   <TableCell className="text-center">
-                    <div className="flex items-center justify-center gap-2">
-                    <Badge className={`${offerta.stato === 'vinta' || offerta.stato === 'persa' ? 'bg-gray-600/80 border border-gray-500/50' : getBadgeColor(offerta.dataScadenza)} text-white`}>
-  {offerta.dataScadenza.toDate().toLocaleDateString("it-IT")}
-</Badge>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button variant="ghost" size="icon" onClick={() => handleOpenModal(offerta)} className="h-6 w-6 group">
-                            <Pencil className="h-4 w-4 text-gray-400 group-hover:text-white transition-colors" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Modifica scadenza</TooltipContent>
-                      </Tooltip>
-                    </div>
+                    {offerta.stato === 'bozza' ? (
+                      <span className="text-muted-foreground">—</span>
+                    ) : (
+                      <div className="flex items-center justify-center gap-2">
+                        <Badge className={`${offerta.stato === 'vinta' || offerta.stato === 'persa' ? 'bg-gray-600/80 border border-gray-500/50' : getBadgeColor(offerta.dataScadenza)} text-white`}>
+                          {offerta.dataScadenza.toDate().toLocaleDateString("it-IT")}
+                        </Badge>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button variant="ghost" size="icon" onClick={() => handleOpenModal(offerta)} className="h-6 w-6 group">
+                              <Pencil className="h-4 w-4 text-gray-400 group-hover:text-white transition-colors" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Modifica scadenza</TooltipContent>
+                        </Tooltip>
+                      </div>
+                    )}
                   </TableCell>
 
                   <TableCell className="text-center">
@@ -541,9 +545,11 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                       <span className="text-sm text-gray-300">
                         {o.dataCreazione.toDate().toLocaleDateString('it-IT')}
                       </span>
-                      <span className="text-xs text-gray-500">
-                        Scadenza: {o.dataScadenza.toDate().toLocaleDateString('it-IT')}
-                      </span>
+                      {o.stato !== 'bozza' && (
+                        <span className="text-xs text-gray-500">
+                          Scadenza: {o.dataScadenza.toDate().toLocaleDateString('it-IT')}
+                        </span>
+                      )}
                     </div>
                     <div className="flex items-center gap-3">
                       {o.totale > 0 && (
