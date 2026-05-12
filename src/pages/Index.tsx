@@ -649,6 +649,7 @@ const Index = () => {
                   <SelectedServicesCart
                     selectedServices={selectedServices}
                     onRemove={(id) => handleServicesChange(selectedServices.filter(s => s.id !== id))}
+                    onQuantityChange={(id, q) => handleServicesChange(selectedServices.map(s => s.id === id ? { ...s, quantita: q } : s))}
                   />
                   <div onFocus={() => triggerScroll('services')} onClick={() => triggerScroll('services')}>
                     <ServicesForm selectedServices={selectedServices} onChange={handleServicesChange} />
