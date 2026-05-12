@@ -646,6 +646,10 @@ const Index = () => {
                       onShowTotalsChange={setShowTotals}
                     />
                   </div>
+                  <SelectedServicesCart
+                    selectedServices={selectedServices}
+                    onRemove={(id) => handleServicesChange(selectedServices.filter(s => s.id !== id))}
+                  />
                   <div onFocus={() => triggerScroll('services')} onClick={() => triggerScroll('services')}>
                     <ServicesForm selectedServices={selectedServices} onChange={handleServicesChange} />
                   </div>
