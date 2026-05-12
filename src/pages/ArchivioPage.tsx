@@ -545,9 +545,11 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                       <span className="text-sm text-gray-300">
                         {o.dataCreazione.toDate().toLocaleDateString('it-IT')}
                       </span>
-                      <span className="text-xs text-gray-500">
-                        Scadenza: {o.dataScadenza.toDate().toLocaleDateString('it-IT')}
-                      </span>
+                      {o.stato !== 'bozza' && (
+                        <span className="text-xs text-gray-500">
+                          Scadenza: {o.dataScadenza.toDate().toLocaleDateString('it-IT')}
+                        </span>
+                      )}
                     </div>
                     <div className="flex items-center gap-3">
                       {o.totale > 0 && (
