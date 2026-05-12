@@ -244,25 +244,6 @@ export const servicesList: Service[] = [
     prezzoRiservato: 9.00,
     periodo: 'MENSILE',
   },
-  {
-    id: 'servizio-rimorchi-annuale',
-    nome: 'GT FLEET 365 TRAILER',
-    descrizione: "Localizzazione Real Time, Percorsi, Soste via WEB (a rimorchio agganciato alla motrice), App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Notifica aggancio rimorchio alla motrice, Notifica sgancio del rimorchio dalla motrice, Localizzazione a rimorchio fermo (sganciato dalla Motrice) 1 dato GPS al giorno, Localizzazione a rimorchio sganciato ma in movimento 1 dato ogni 10 minuti, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione referenti notifiche, Km percorsi, Formazione con Operatore Customer Care, Assistenza con Operatore Customer Care",
-    categoria: 'fleet_trailers',
-    prezzoListino: 192.00,
-    prezzoRiservato: 120.00,
-    periodo: 'ANNUALE',
-  },
-  {
-    id: 'servizio-rimorchi-mensile',
-    nome: 'GT FLEET 365 TRAILER',
-    descrizione: "Localizzazione Real Time, Percorsi, Soste via WEB (a rimorchio agganciato alla motrice), App GT FLEET 365 su store IOS e Android, Gestione Sotto Accessi ai servizi via Web e App, Notifica aggancio rimorchio alla motrice, Notifica sgancio del rimorchio dalla motrice, Localizzazione a rimorchio fermo (sganciato dalla Motrice) 1 dato GPS al giorno, Localizzazione a rimorchio sganciato ma in movimento 1 dato ogni 10 minuti, Ricerca Veicolo più vicino ad un POI, Geofencing con gestione POI, Gestione referenti notifiche, Km percorsi, Formazione con Operatore Customer Care, Assistenza con Operatore Customer Care",
-    categoria: 'fleet_trailers',
-    prezzoListino: 19.20,
-    prezzoRiservato: 12.00,
-    periodo: 'MENSILE',
-  },
-
   // GT FLEET 365 TRACTOR
   {
     id: 'tractor-annuale',
@@ -454,6 +435,15 @@ export const servicesList: Service[] = [
     periodo: 'ANNUALE',
     inSviluppo: true,
   },
+  {
+    id: 'app-fleet-manager-annuale',
+    nome: 'APP FLEET MANAGER',
+    descrizione: 'App GT FLEET 365 su store IOS e Android - Fleet Manager; Gestione Sotto Accessi ai Servizi via App per il Cliente; Infomobilità con possibilità di visualizzazione del traffico; Stato del mezzo (in sosta, in fermata, in movimento);',
+    categoria: 'driver',
+    prezzoListino: 40.00,
+    prezzoRiservato: 25.00,
+    periodo: 'ANNUALE',
+  },
 
   // PIATTAFORME CRONO
   {
@@ -555,11 +545,20 @@ export const servicesList: Service[] = [
   },
   {
     id: 'servizio-manutenzioni-scadenze-annuale',
-    nome: 'SERVIZIO MANUTENZIONI E SCADENZE',
-    descrizione: 'Gestione Avvisi Scadenze (Bolli, assicurazioni, patenti, documenti), Gestione Manutenzioni (per KM, per DATA, per Ore Lavoro Motore), Gestione Referenti Notifiche, Reportistica Avanzata Personalizzata',
+    nome: 'MANUTENZIONI E SCADENZE',
+    descrizione: 'Gestione Avvisi Scadenze (Bolli, Assicurazioni, Patenti, Documenti, …); Gestione Manutenzioni (per KM, per DATA, per Ore Lavoro Motore); Gestione Referenti Notifiche; Reportistica Avanzata Personalizzata;',
     categoria: 'servizi_aggiuntivi',
-    prezzoListino: 0.00,
-    prezzoRiservato: 120.00,
+    prezzoListino: 102.40,
+    prezzoRiservato: 64.00,
+    periodo: 'ANNUALE',
+  },
+  {
+    id: 'formazione-assistenza-annuale',
+    nome: 'FORMAZIONE E ASSISTENZA',
+    descrizione: 'Numero 6 ore di Formazione in un Anno con Operatore Customer Care; Assistenza di 1° e 2° Livello con Apertura Ticket e con Operatore Customer Care;',
+    categoria: 'servizi_aggiuntivi',
+    prezzoListino: 96.00,
+    prezzoRiservato: 60.00,
     periodo: 'ANNUALE',
   },
   {
