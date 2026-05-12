@@ -435,6 +435,15 @@ export const servicesList: Service[] = [
     periodo: 'ANNUALE',
     inSviluppo: true,
   },
+  {
+    id: 'app-fleet-manager-annuale',
+    nome: 'APP FLEET MANAGER',
+    descrizione: 'App GT FLEET 365 su store IOS e Android - Fleet Manager; Gestione Sotto Accessi ai Servizi via App per il Cliente; Infomobilità con possibilità di visualizzazione del traffico; Stato del mezzo (in sosta, in fermata, in movimento);',
+    categoria: 'driver',
+    prezzoListino: 40.00,
+    prezzoRiservato: 25.00,
+    periodo: 'ANNUALE',
+  },
 
   // PIATTAFORME CRONO
   {
