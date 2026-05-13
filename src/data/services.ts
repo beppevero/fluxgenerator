@@ -439,7 +439,7 @@ export const servicesList: Service[] = [
     id: 'app-fleet-manager-annuale',
     nome: 'APP FLEET MANAGER',
     descrizione: "● App GT FLEET 365 su store IOS e Android - Fleet Manager\n● Gestione Sotto Accessi ai Servizi via App per il Cliente\n● Infomobilità con possibilità di visualizzazione del traffico\n● Stato del mezzo (in sosta, in fermata, in movimento)",
-    categoria: 'driver',
+    categoria: 'fleet_missioni',
     prezzoListino: 40.00,
     prezzoRiservato: 25.00,
     periodo: 'ANNUALE',
