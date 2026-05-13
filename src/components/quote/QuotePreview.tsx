@@ -215,7 +215,7 @@ export const QuotePreview = forwardRef<HTMLDivElement, QuotePreviewProps>(({
                         </div>
                       </div>
                     </td>
-                    <td className="p-2 border border-gray-200 text-[8px] text-gray-600 align-middle leading-snug">{service.id === 'custom-service' && service.customDescription ? service.customDescription : service.descrizione}</td>
+                    <td className="p-2 border border-gray-200 text-[8px] text-gray-600 align-middle leading-snug whitespace-pre-line">{service.id === 'custom-service' && service.customDescription ? service.customDescription : service.descrizione}</td>
                     <td className="p-2 border border-gray-200 text-center font-medium align-middle">{service.quantita}</td>
                     <td className="p-2 border border-gray-200 text-center align-middle">{!isUnaTantum ? durataLabel : '—'}</td>
                     <td className="p-2 border border-gray-200 text-right align-middle">
