@@ -32,6 +32,7 @@ export interface ClientData {
   emailCliente: string;
   telefonoCliente: string;
   mezziTrattativa: string;
+  hubspotUrl: string;
   documentType: DocumentType;
   legaleRappresentante: LegaleRappresentante;
   datiAzienda: DatiAzienda;
@@ -89,6 +90,7 @@ export interface Offerta {
     azienda: string;
     partitaIva: string;
     nMezzi: number;
+    hubspotUrl?: string;
   };
   servizi: SelectedService[];
   condizioni: {

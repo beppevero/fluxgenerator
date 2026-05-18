@@ -27,6 +27,7 @@ export function RevisionHistoryDialog({ isOpen, onClose, revision, offerta }: Re
         emailCliente: revision.snapshot.cliente.email,
         telefonoCliente: revision.snapshot.cliente.telefono || "",
         mezziTrattativa: revision.snapshot.cliente.nMezzi.toString(),
+        hubspotUrl: revision.snapshot.cliente.hubspotUrl || "",
         documentType: 'standard',
         legaleRappresentante: { cognome: "", nome: "", luogoDiNascita: "", dataDiNascita: "", codiceFiscale: "" },
         datiAzienda: { partitaIva: "", codiceFiscaleAzienda: "", indirizzo: "", citta: "", cap: "", provincia: "", telefono: "", cellulare: "", pec: "", email: "", codiceUnivoco: "" },

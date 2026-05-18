@@ -180,6 +180,7 @@ const Index = () => {
         emailCliente: offerta.cliente.email,
         telefonoCliente: offerta.cliente.telefono || '',
         mezziTrattativa: offerta.cliente.nMezzi.toString(),
+        hubspotUrl: offerta.cliente.hubspotUrl || '',
       }));
       setPaymentInfo({
         condizioniPagamento: offerta.condizioni.pagamento,
@@ -324,7 +325,8 @@ const Index = () => {
         telefono: clientData.telefonoCliente,
         azienda: clientData.ragioneSociale,
         partitaIva: clientData.partitaIva,
-        nMezzi: parseInt(clientData.mezziTrattativa) || 0
+        nMezzi: parseInt(clientData.mezziTrattativa) || 0,
+        hubspotUrl: clientData.hubspotUrl || ''
       },
       servizi: selectedServices,
       condizioni: {

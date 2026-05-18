@@ -151,6 +151,17 @@ export function ClientDataForm({ clientData, onChange }: ClientDataFormProps) {
                 className="glass-input border-white/20"
               />
             </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="hubspotUrl" className="text-white/90 font-medium">ID Hubspot</Label>
+              <Input
+                id="hubspotUrl"
+                type="url"
+                placeholder="Incolla il link della trattativa Hubspot"
+                value={clientData.hubspotUrl || ""}
+                onChange={(e) => onChange({ ...clientData, hubspotUrl: e.target.value })}
+                className="glass-input border-white/20"
+              />
+            </div>
           </>
         )}
 
