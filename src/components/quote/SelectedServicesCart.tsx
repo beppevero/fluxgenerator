@@ -28,7 +28,7 @@ export function SelectedServicesCart({ selectedServices, onRemove, onQuantityCha
   const formatPrice = (price: number) =>
     new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(price);
 
-  const AUTO_MANAGED_IDS = ['carta-aziendale'];
+  const AUTO_MANAGED_IDS: string[] = [];
 
   return (
     <div className="form-section">
