@@ -90,6 +90,7 @@ export interface Offerta {
     azienda: string;
     partitaIva: string;
     nMezzi: number;
+    hubspotUrl?: string;
   };
   servizi: SelectedService[];
   condizioni: {

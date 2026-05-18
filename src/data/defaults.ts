@@ -30,6 +30,7 @@ export const emptyClientData: ClientData = {
   emailCliente: "",
   telefonoCliente: "",
   mezziTrattativa: "",
+  hubspotUrl: "",
   documentType: "standard",
   legaleRappresentante: { ...emptyLegaleRappresentante },
   datiAzienda: { ...emptyDatiAzienda },
