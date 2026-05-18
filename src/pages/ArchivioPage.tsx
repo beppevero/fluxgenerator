@@ -169,13 +169,16 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
 
   const handleChangeStato = async (offerta: Offerta, nuovoStato: 'bozza' | 'inviata' | 'scaduta' | 'persa' | 'vinta') => {
     if (!offerta.id) return;
+    // Optimistic update locale
+    setOfferte(prev => prev.map(o => o.id === offerta.id ? { ...o, stato: nuovoStato } : o));
     try {
       await updateOfferta(offerta.id, { stato: nuovoStato });
       toast.success("Stato aggiornato.");
-      fetchOfferte();
     } catch (error) {
       console.error("Errore aggiornamento stato:", error);
       toast.error("Aggiornamento stato non riuscito.");
+      // Rollback ricaricando da Firestore
+      fetchOfferte();
     }
   };
 
