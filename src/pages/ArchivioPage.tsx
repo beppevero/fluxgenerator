@@ -281,7 +281,7 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                       : 'bg-black/20 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white'
                   }`}
                 >
-                  {stato === 'tutti' ? 'Tutte' : stato === 'bozza' ? 'Salvata' : stato === 'inviata' ? 'Inviata' : stato === 'scaduta' ? 'Scaduta' : stato === 'persa' ? 'Persa' : 'Vinta'}
+                  {stato === 'tutti' ? 'Tutte' : stato === 'bozza' ? 'In Gestione' : stato === 'inviata' ? 'Inviata' : stato === 'scaduta' ? 'Scaduta' : stato === 'persa' ? 'Persa' : 'Vinta'}
                 </button>
               ))}
             </div>
@@ -382,7 +382,7 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                             offerta.stato === 'vinta' ? 'bg-green-600 text-white hover:bg-green-700' :
                             'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                           }`}>
-                            {offerta.stato === 'bozza' ? 'Salvata' :
+                            {offerta.stato === 'bozza' ? 'In Gestione' :
                            offerta.stato === 'inviata' ? 'Inviata' :
                            offerta.stato === 'scaduta' ? 'Scaduta' :
                            offerta.stato === 'persa' ? 'Persa' :
@@ -392,7 +392,7 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                         </button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="center">
-                        <DropdownMenuItem onClick={() => handleChangeStato(offerta, 'bozza')}>Salvata</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleChangeStato(offerta, 'bozza')}>In Gestione</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleChangeStato(offerta, 'inviata')}>Inviata</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleChangeStato(offerta, 'scaduta')}>Scaduta</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleChangeStato(offerta, 'persa')}>Persa</DropdownMenuItem>
@@ -567,7 +567,7 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                         o.stato === 'vinta' ? 'bg-green-600 text-white' :
                         'bg-secondary text-secondary-foreground'
                       }>
-                        {o.stato === 'bozza' ? 'Salvata' :
+                        {o.stato === 'bozza' ? 'In Gestione' :
                          o.stato === 'inviata' ? 'Inviata' :
                          o.stato === 'scaduta' ? 'Scaduta' :
                          o.stato === 'persa' ? 'Persa' :
