@@ -432,31 +432,33 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                         <TooltipContent>Modifica</TooltipContent>
                       </Tooltip>
 
-                      <DropdownMenu onOpenChange={(open) => open && handleOpenRevisions(offerta)}>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
-                                <Clock className="h-4 w-4 text-gray-400 hover:text-indigo-500 transition-colors" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                          </TooltipTrigger>
-                          <TooltipContent>Storico</TooltipContent>
-                        </Tooltip>
-                        <DropdownMenuContent>
-                          <DropdownMenuLabel>Revisioni Salvate</DropdownMenuLabel>
-                          {revisions.map((rev, index) => (
-                            <DropdownMenuItem key={rev.id} onClick={() => handleViewRevision(rev)}>
-                              <span>{rev.timestamp.toDate().toLocaleString('it-IT')}</span>
-                              {index === 0 && <Badge className="ml-2">attuale</Badge>}
-                            </DropdownMenuItem>
-                          ))}
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem onClick={() => handleSaveCurrentRevision(offerta)}>
-                            Salva revisione corrente
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            disabled={!offerta.cliente.hubspotUrl}
+                            onClick={() => {
+                              if (offerta.cliente.hubspotUrl) {
+                                window.open(offerta.cliente.hubspotUrl, '_blank', 'noopener,noreferrer');
+                              }
+                            }}
+                          >
+                            <svg
+                              viewBox="0 0 32 32"
+                              className={`h-4 w-4 transition-colors ${offerta.cliente.hubspotUrl ? 'text-[#ff7a59] hover:text-[#ff5722]' : 'text-gray-500'}`}
+                              fill="currentColor"
+                              aria-hidden="true"
+                            >
+                              <path d="M22.4 11.55V8.43a2.4 2.4 0 1 0-1.6 0v3.12a6.83 6.83 0 0 0-3.25 1.43L8.96 6.3a2.7 2.7 0 1 0-1.07 1.27l8.45 6.57a6.85 6.85 0 0 0 .1 7.72l-2.57 2.57a2.21 2.21 0 1 0 1.13 1.13l2.54-2.54a6.86 6.86 0 1 0 4.86-11.47Zm-.8 10.3a3.52 3.52 0 1 1 3.52-3.52 3.52 3.52 0 0 1-3.52 3.52Z"/>
+                            </svg>
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          {offerta.cliente.hubspotUrl ? 'Apri trattativa Hubspot' : 'Nessun link Hubspot'}
+                        </TooltipContent>
+                      </Tooltip>
+
 
                       <Tooltip>
                         <TooltipTrigger asChild>
