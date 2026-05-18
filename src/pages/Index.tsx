@@ -240,10 +240,8 @@ const Index = () => {
           changed = true;
         }
       }
-    } else if (cartaIdx >= 0) {
-      updated.splice(cartaIdx, 1);
-      changed = true;
     }
+
 
     const shadowService = updated.find(s => s.id === SHADOW_ID);
     const centraleIdx = updated.findIndex(s => s.id === CENTRALE_ONDEMAND_ANNUALE_ID);
