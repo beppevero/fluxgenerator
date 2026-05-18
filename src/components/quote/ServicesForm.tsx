@@ -236,7 +236,7 @@ export function ServicesForm({ selectedServices, onChange }: ServicesFormProps) 
     }
   };
 
-  const AUTO_MANAGED_IDS = ['carta-aziendale'];
+  const AUTO_MANAGED_IDS: string[] = [];
   const isAutoManaged = (id: string) => AUTO_MANAGED_IDS.includes(id);
 
   return (
