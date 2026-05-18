@@ -14,7 +14,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Home, Pencil, Copy, Trash2, Search, FilePenLine, CalendarPlus, Clock } from 'lucide-react';
+import { Home, Pencil, Copy, Trash2, Search, FilePenLine, CalendarPlus } from 'lucide-react';
 import { 
   Tooltip, 
   TooltipContent, 
@@ -25,8 +25,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { 
@@ -48,16 +46,8 @@ const ArchivioPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filtroStato, setFiltroStato] = useState<'tutti' | 'bozza' | 'inviata' | 'scaduta' | 'persa' | 'vinta'>('tutti');
   const [sortKey, setSortKey] = useState<'azienda' | 'dataCreazione' | 'dataScadenza' | null>(null);
-const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
 
-const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
-  if (sortKey === key) {
-    setSortDir(prev => prev === 'asc' ? 'desc' : 'asc');
-  } else {
-    setSortKey(key);
-    setSortDir('asc');
-  }
-};
   const { user } = useAuth();
   const navigate = useNavigate();
   
@@ -74,6 +64,10 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
   const [clienteStorico, setClienteStorico] = useState<string | null>(null);
   const [isStoricoClienteOpen, setIsStoricoClienteOpen] = useState(false);
 
+  const [isHubspotModalOpen, setIsHubspotModalOpen] = useState(false);
+  const [newHubspotUrl, setNewHubspotUrl] = useState("");
+  const [offertaForHubspot, setOffertaForHubspot] = useState<Offerta | null>(null);
+
   const fetchOfferte = useCallback(async () => {
     if (user) {
       try {
@@ -89,6 +83,15 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
   useEffect(() => {
     fetchOfferte();
   }, [fetchOfferte]);
+
+  const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
+    if (sortKey === key) {
+      setSortDir(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortKey(key);
+      setSortDir('asc');
+    }
+  };
 
   const filteredOfferte = useMemo(() => {
     const filtered = offerte.filter(offerta => {
@@ -169,7 +172,6 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
 
   const handleChangeStato = async (offerta: Offerta, nuovoStato: 'bozza' | 'inviata' | 'scaduta' | 'persa' | 'vinta') => {
     if (!offerta.id) return;
-    // Optimistic update locale
     setOfferte(prev => prev.map(o => o.id === offerta.id ? { ...o, stato: nuovoStato } : o));
     try {
       await updateOfferta(offerta.id, { stato: nuovoStato });
@@ -177,7 +179,6 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
     } catch (error) {
       console.error("Errore aggiornamento stato:", error);
       toast.error("Aggiornamento stato non riuscito.");
-      // Rollback ricaricando da Firestore
       fetchOfferte();
     }
   };
@@ -187,7 +188,6 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
     setIsStoricoClienteOpen(true);
   };
 
-  // MODIFICATA: salva snapshot automatico prima di riaprire, poi naviga sempre
   const riapriOfferta = async (offerta: Offerta) => {
     if (offerta.id && user) {
       try {
@@ -214,23 +214,6 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
       console.error("Errore nel recupero delle revisioni: ", error);
       toast.error("Impossibile caricare lo storico delle revisioni.");
     }
-  };
-
-  const handleSaveCurrentRevision = async (offerta: Offerta) => {
-    if (!offerta.id || !user) return;
-    try {
-      await saveRevision(offerta.id, offerta, user.uid);
-      toast.success("Revisione corrente salvata con successo!");
-      handleOpenRevisions(offerta);
-    } catch (error) {
-      console.error("Errore nel salvataggio della revisione:", error);
-      toast.error("Salvataggio della revisione non riuscito.");
-    }
-  };
-
-  const handleViewRevision = (revision: Revision) => {
-    setSelectedRevision(revision);
-    setIsRevisionDialogOpen(true);
   };
 
   const handleDownloadIcs = (offerta: Offerta) => {
@@ -261,6 +244,32 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
+  
+  const handleOpenHubspotDialog = (offerta: Offerta) => {
+    setOffertaForHubspot(offerta);
+    setNewHubspotUrl(offerta.cliente.hubspotUrl || "");
+    setIsHubspotModalOpen(true);
+  };
+
+  const handleUpdateHubspotLink = async () => {
+    if (!offertaForHubspot || !offertaForHubspot.id) return;
+    try {
+      await updateOfferta(offertaForHubspot.id, { 
+        cliente: {
+          ...offertaForHubspot.cliente,
+          hubspotUrl: newHubspotUrl,
+        }
+      });
+      toast.success("Link Hubspot aggiornato.");
+      fetchOfferte();
+      setIsHubspotModalOpen(false);
+      setOffertaForHubspot(null);
+      setNewHubspotUrl("");
+    } catch (error) {
+      console.error("Errore nell'aggiornamento del link Hubspot: ", error);
+      toast.error("Aggiornamento non riuscito.");
+    }
+  };
 
   const glassButtonBaseStyle = "px-5 py-2.5 text-sm font-medium rounded-xl flex items-center justify-center gap-2 transition-all duration-200 ease-in-out shadow-lg backdrop-filter backdrop-blur-lg border hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg";
 
@@ -270,8 +279,8 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Archivio</h1>
           <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-          {(['tutti', 'bozza', 'inviata', 'scaduta', 'persa', 'vinta'] as const).map((stato) => (
+            <div className="flex items-center gap-2">
+              {(['tutti', 'bozza', 'inviata', 'scaduta', 'persa', 'vinta'] as const).map((stato) => (
                 <button
                   key={stato}
                   onClick={() => setFiltroStato(stato)}
@@ -307,49 +316,37 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
         <div className="rounded-lg border border-white/10 bg-black/20 p-4 shadow-lg backdrop-blur-lg">
           <Table>
             <TableHeader>
-            <TableRow className="border-white/10 hover:bg-white/5 bg-white/5">
-                <TableHead
-                  className="text-white cursor-pointer hover:text-white/70 transition-colors select-none"
-                  onClick={() => handleSort('azienda')}
-                >
+              <TableRow className="border-white/10 hover:bg-white/5 bg-white/5">
+                <TableHead className="text-white cursor-pointer hover:text-white/70 transition-colors select-none" onClick={() => handleSort('azienda')}>
                   Cliente / Azienda {sortKey === 'azienda' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
                 </TableHead>
-                <TableHead
-                  className="text-white text-center cursor-pointer hover:text-white/70 transition-colors select-none"
-                  onClick={() => handleSort('dataCreazione')}
-                >
+                <TableHead className="text-white text-center cursor-pointer hover:text-white/70 transition-colors select-none" onClick={() => handleSort('dataCreazione')}>
                   Data Creazione {sortKey === 'dataCreazione' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
                 </TableHead>
-                <TableHead
-                  className="text-white text-center cursor-pointer hover:text-white/70 transition-colors select-none"
-                  onClick={() => handleSort('dataScadenza')}
-                >
+                <TableHead className="text-white text-center cursor-pointer hover:text-white/70 transition-colors select-none" onClick={() => handleSort('dataScadenza')}>
                   Data Scadenza {sortKey === 'dataScadenza' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
                 </TableHead>
                 <TableHead className="text-white text-center">Stato</TableHead>
-<TableHead className="text-white text-center">Valore</TableHead>
-<TableHead className="text-white text-center">Azioni</TableHead>
+                <TableHead className="text-white text-center">Valore</TableHead>
+                <TableHead className="text-white text-center">Azioni</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredOfferte.map((offerta) => (
                 <TableRow key={offerta.id} className={`border-white/10 hover:bg-white/10 transition-colors ${filteredOfferte.indexOf(offerta) % 2 === 0 ? 'bg-white/5' : 'bg-transparent'}`}>
-                <TableCell className="font-medium">
-                <div className="flex items-center gap-2">
-                  {(() => {
-                    const oggi = new Date();
-                    const creazione = offerta.dataCreazione.toDate();
-                    const isOggi = creazione.toDateString() === oggi.toDateString();
-                    return isOggi ? <span className="w-2 h-2 rounded-full bg-green-400 shrink-0" /> : null;
-                  })()}
-                  <button
-                    onClick={() => handleOpenStorico(offerta.cliente.azienda)}
-                    className="hover:text-blue-400 transition-colors text-left"
-                  >
-                    {offerta.cliente.azienda}
-                  </button>
-                </div>
-              </TableCell>
+                  <TableCell className="font-medium">
+                    <div className="flex items-center gap-2">
+                      {(() => {
+                        const oggi = new Date();
+                        const creazione = offerta.dataCreazione.toDate();
+                        const isOggi = creazione.toDateString() === oggi.toDateString();
+                        return isOggi ? <span className="w-2 h-2 rounded-full bg-green-400 shrink-0" /> : null;
+                      })()}
+                      <button onClick={() => handleOpenStorico(offerta.cliente.azienda)} className="hover:text-blue-400 transition-colors text-left">
+                        {offerta.cliente.azienda}
+                      </button>
+                    </div>
+                  </TableCell>
                   <TableCell className="text-center">{offerta.dataCreazione.toDate().toLocaleDateString("it-IT")}</TableCell>
                   <TableCell className="text-center">
                     {offerta.stato === 'bozza' ? (
@@ -370,10 +367,9 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                       </div>
                     )}
                   </TableCell>
-
                   <TableCell className="text-center">
                     <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
+                      <DropdownMenuTrigger asChild>
                         <button className="focus:outline-none">
                           <Badge className={`cursor-pointer ${
                             offerta.stato === 'inviata' ? 'bg-blue-600 text-white hover:bg-blue-700' :
@@ -387,7 +383,6 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                            offerta.stato === 'scaduta' ? 'Scaduta' :
                            offerta.stato === 'persa' ? 'Persa' :
                            offerta.stato === 'vinta' ? 'Vinta' : offerta.stato}
-                          
                           </Badge>
                         </button>
                       </DropdownMenuTrigger>
@@ -401,9 +396,7 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                     </DropdownMenu>
                   </TableCell>
                   <TableCell className="text-center text-sm">
-                    {offerta.totale > 0
-                      ? `€ ${offerta.totale.toLocaleString('it-IT', { minimumFractionDigits: 2 })}`
-                      : '—'}
+                    {offerta.totale > 0 ? `€ ${offerta.totale.toLocaleString('it-IT', { minimumFractionDigits: 2 })}` : '—'}
                   </TableCell>
                   <TableCell className="text-center">
                     <div className="flex items-center justify-center gap-1">
@@ -431,22 +424,22 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                         </TooltipTrigger>
                         <TooltipContent>Modifica</TooltipContent>
                       </Tooltip>
-
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button
+                           <Button
                             variant="ghost"
                             size="icon"
-                            disabled={!offerta.cliente.hubspotUrl}
                             onClick={() => {
                               if (offerta.cliente.hubspotUrl) {
                                 window.open(offerta.cliente.hubspotUrl, '_blank', 'noopener,noreferrer');
+                              } else {
+                                handleOpenHubspotDialog(offerta);
                               }
                             }}
                           >
                             <svg
                               viewBox="0 0 32 32"
-                              className={`h-4 w-4 transition-colors ${offerta.cliente.hubspotUrl ? 'text-[#ff7a59] hover:text-[#ff5722]' : 'text-gray-500'}`}
+                              className={`h-4 w-4 transition-colors ${offerta.cliente.hubspotUrl ? 'text-[#ff7a59] hover:text-[#ff5722]' : 'text-gray-500 hover:text-gray-400'}`}
                               fill="currentColor"
                               aria-hidden="true"
                             >
@@ -455,11 +448,9 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
                           </Button>
                         </TooltipTrigger>
                         <TooltipContent>
-                          {offerta.cliente.hubspotUrl ? 'Apri trattativa Hubspot' : 'Nessun link Hubspot'}
+                          {offerta.cliente.hubspotUrl ? 'Apri trattativa Hubspot' : 'Aggiungi link Hubspot'}
                         </TooltipContent>
                       </Tooltip>
-
-
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button variant="ghost" size="icon" onClick={() => handleOpenDeleteDialog(offerta)}>
@@ -476,7 +467,6 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
           </Table>
         </div>
 
-        {/* Modal Modifica Scadenza */}
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
           <DialogContent className="sm:max-w-[425px] bg-gray-900/80 border-gray-700/50 backdrop-blur-lg text-white">
             <DialogHeader>
@@ -503,7 +493,6 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
           </DialogContent>
         </Dialog>
 
-        {/* Modal Conferma Eliminazione */}
         <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
           <DialogContent className="sm:max-w-[425px] bg-gray-900/80 border-gray-700/50 backdrop-blur-lg text-white">
             <DialogHeader>
@@ -521,7 +510,6 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
           </DialogContent>
         </Dialog>
 
-        {/* Revision History Dialog */}
         {currentOffertaForRevision && (
           <RevisionHistoryDialog
             isOpen={isRevisionDialogOpen}
@@ -531,8 +519,7 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
           />
         )}
 
-{/* Dialog Storico Cliente */}
-<Dialog open={isStoricoClienteOpen} onOpenChange={setIsStoricoClienteOpen}>
+        <Dialog open={isStoricoClienteOpen} onOpenChange={setIsStoricoClienteOpen}>
           <DialogContent className="sm:max-w-[600px] bg-gray-900/80 border-gray-700/50 backdrop-blur-lg text-white">
             <DialogHeader>
               <DialogTitle>Storico — {clienteStorico}</DialogTitle>
@@ -585,6 +572,31 @@ const handleSort = (key: 'azienda' | 'dataCreazione' | 'dataScadenza') => {
               </DialogClose>
             </DialogFooter>
           </DialogContent>
+        </Dialog>
+        
+        <Dialog open={isHubspotModalOpen} onOpenChange={setIsHubspotModalOpen}>
+            <DialogContent className="sm:max-w-[500px] bg-gray-900/80 border-gray-700/50 backdrop-blur-lg text-white">
+                <DialogHeader>
+                <DialogTitle>Aggiungi Link Hubspot</DialogTitle>
+                <DialogDescription className="text-gray-400">
+                    Inserisci l'URL della trattativa su Hubspot per <span className="font-semibold text-white">{offertaForHubspot?.cliente.azienda}</span>.
+                </DialogDescription>
+                </DialogHeader>
+                <div className="py-4">
+                <Input
+                    placeholder="https://app.hubspot.com/..."
+                    value={newHubspotUrl}
+                    onChange={(e) => setNewHubspotUrl(e.target.value)}
+                    className="bg-black/20 border-white/10 text-white"
+                />
+                </div>
+                <DialogFooter>
+                <DialogClose asChild>
+                    <Button type="button" variant="ghost">Annulla</Button>
+                </DialogClose>
+                <Button type="submit" onClick={handleUpdateHubspotLink}>Salva Link</Button>
+                </DialogFooter>
+            </DialogContent>
         </Dialog>
       </div>
     </TooltipProvider>
