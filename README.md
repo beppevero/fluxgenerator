@@ -4,6 +4,7 @@ Quoty è un generatore di preventivi commerciali progettato per semplificare e v
 
 #Funzionalità principali
 
+
 Configurazione rapida di servizi e dispositivi con prezzi riservati e di listino
 Generazione automatica del PDF con layout professionale
 Esportazione e invio diretto al cliente
