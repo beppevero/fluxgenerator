@@ -32,6 +32,7 @@ export interface ClientData {
   emailCliente: string;
   telefonoCliente: string;
   mezziTrattativa: string;
+  hubspotUrl: string;
   documentType: DocumentType;
   legaleRappresentante: LegaleRappresentante;
   datiAzienda: DatiAzienda;
